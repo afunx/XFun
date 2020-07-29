@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
-        applicationId "me.afunx.xfun"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId rootProject.applicationId
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
+        testInstrumentationRunner rootProject.testInstrumentationRunner
     }
     buildTypes {
         release {
@@ -20,9 +20,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta8'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0-rc02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-rc02'
+    implementation rootProject.lib_appcompat
+    implementation rootProject.lib_constraintlayout
+    testImplementation rootProject.lib_juint
+    androidTestImplementation rootProject.lib_text_runner
+    androidTestImplementation rootProject.lib_text_espresso
 }

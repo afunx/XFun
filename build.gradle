@@ -31,3 +31,21 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    compileSdkVersion           =   28
+    applicationId               =   "me.afunx.xfun"
+    minSdkVersion               =   21
+    targetSdkVersion            =   28
+    versionCode                 =   1
+    versionName                 =   "v1.0"
+    testInstrumentationRunner   =   "androidx.test.runner.AndroidJUnitRunner"
+}
+
+ext {
+    lib_appcompat               =   "androidx.appcompat:appcompat:1.3.0-alpha01"
+    lib_constraintlayout        =   "androidx.constraintlayout:constraintlayout:2.0.0-beta8"
+    lib_juint                   =   "junit:junit:4.12"
+    lib_text_runner             =   "androidx.test:runner:1.3.0-rc02"
+    lib_text_espresso           =   "androidx.test.espresso:espresso-core:3.3.0-rc02"
+}
