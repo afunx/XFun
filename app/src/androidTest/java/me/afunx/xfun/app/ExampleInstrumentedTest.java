@@ -1,4 +1,4 @@
-package me.afunx.xfun;
+package me.afunx.xfun.app;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;
