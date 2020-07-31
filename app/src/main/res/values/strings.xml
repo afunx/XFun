@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">XFun</string>
+    <string name="title_goto_demo">Go to Demo</string>
 </resources>

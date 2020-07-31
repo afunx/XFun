@@ -34,7 +34,7 @@ task clean(type: Delete) {
 
 ext {
     compileSdkVersion           =   28
-    applicationId               =   "me.afunx.xfun"
+    applicationId               =   "me.afunx.xfun.app"
     minSdkVersion               =   21
     targetSdkVersion            =   28
     versionCode                 =   1
