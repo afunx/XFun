@@ -25,4 +25,6 @@ dependencies {
     testImplementation rootProject.lib_juint
     androidTestImplementation rootProject.lib_text_runner
     androidTestImplementation rootProject.lib_text_espresso
+
+    implementation project(':common')
 }
