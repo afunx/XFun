@@ -1,24 +1,20 @@
 package me.afunx.xfun.app;
 
-import androidx.appcompat.app.AppCompatActivity;
 import me.afunx.xfun.demo.DemoMainActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import com.afunx.xfun.common.base.BaseActivity;
 
-    private static final String TAG = "MainActivity";
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_goto_demo).setOnClickListener(this);
-
     }
 
     @Override

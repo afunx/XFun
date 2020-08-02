@@ -10,7 +10,7 @@ public class LogUtils {
         throw new IllegalStateException("It can't be instantiated!");
     }
 
-    private static boolean sDebug = false;
+    private static boolean sDebug = true;
 
     public static void setDebug(boolean debug) {
         sDebug = debug;

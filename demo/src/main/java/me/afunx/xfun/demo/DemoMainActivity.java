@@ -2,21 +2,17 @@ package me.afunx.xfun.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.afunx.xfun.common.base.BaseActivity;
 
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 
-public class DemoMainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String TAG = "DemoMainActivity";
+public class DemoMainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
         setContentView(R.layout.activity_demo_main);
         findViewById(R.id.btn_goto_demo_list_view).setOnClickListener(this);
     }
