@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.afunx.xfun.common.base.BaseActivity;
 
+import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 
 public class DemoMainActivity extends BaseActivity implements View.OnClickListener {
@@ -15,12 +16,16 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo_main);
         findViewById(R.id.btn_goto_demo_list_view).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_fragment).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_goto_demo_list_view) {
             Intent intent = new Intent(this, DemoListViewActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_fragment) {
+            Intent intent = new Intent(this, DemoFragmentActivity.class);
             startActivity(intent);
         }
     }

@@ -57,4 +57,18 @@ public class BaseActivity extends AppCompatActivity {
         super.onRestart();
         LogUtils.i(getClass().getSimpleName(), "onRestart() taskId: " + getTaskId() + ", this: " + this);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        LogUtils.i(getClass().getSimpleName(), "onSaveInstanceState() taskId: " + getTaskId() + ", this: " + this
+                + ", outState: " + outState + ", outPersistentState: " + outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.i(getClass().getSimpleName(), "onRestoreInstanceState() taskId: " + getTaskId() + ", this: " + this
+                + ", savedInstanceState: " + savedInstanceState);
+    }
 }
