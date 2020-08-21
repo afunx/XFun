@@ -23,4 +23,12 @@
         android:layout_marginTop="30dp"
         android:text="@string/btn_goto_demo_fragment" />
 
+    <Button
+        android:id="@+id/btn_goto_demo_mvvm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="@string/btn_goto_demo_mvvm" />
+
 </LinearLayout>
