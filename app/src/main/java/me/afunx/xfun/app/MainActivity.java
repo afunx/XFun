@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.afunx.xfun.common.base.BaseActivity;
+import com.ubtechinc.aimbothumming.network.monitor.NetworkMonitorImpl;
 import com.ubtechinc.aimbothumming.receiver.HummingReceiver;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 
@@ -19,6 +20,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String BROADCAST_HUMMING_ENABLED = "humming_enabled";
 
     private BroadcastReceiver mBroadcastReceiver = new HummingReceiver();
+    private NetworkMonitorImpl mNetworkMonitor = new NetworkMonitorImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_start) {
-            startHumming();
+//            startHumming();
+            enableNetworkMonitor();
         } else if (v.getId() == R.id.btn_stop) {
-            stopHumming();
+//            stopHumming();
+            disableNetworkMonitor();
         }
     }
 
@@ -49,7 +53,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = new Intent(BROADCAST_HUMMING_ACTION);
         intent.putExtra(BROADCAST_HUMMING_ENABLED, true);
         getApplicationContext().sendBroadcast(intent);
-
     }
 
     private void stopHumming() {
@@ -59,4 +62,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         getApplicationContext().sendBroadcast(intent);
     }
 
+    private void enableNetworkMonitor() {
+        mNetworkMonitor.setNetworkAvailable(true);
+    }
+
+    private void disableNetworkMonitor() {
+        mNetworkMonitor.setNetworkAvailable(false);
+        mNetworkMonitor.setDisconnected();
+        new Thread() {
+            @Override
+            public void run() {
+                LogUtils.ee(TAG, "wait E");
+                mNetworkMonitor.waitAvailable();
+                LogUtils.ee(TAG, "wait X");
+            }
+        }.start();
+    }
 }
