@@ -23,7 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     private static final String TAG = "ApiClient";
-    private static final String BASE_URL = "http://10.10.1.140:8090";
+    // TODO 临时修改为外网调试地址
+    private static final String BASE_URL = "https://prerelease.ubtrobot.com/";
     private static final long READ_TIMEOUT = 10;
     private static final long CONNECT_TIMEOUT = 10;
     private static final boolean DEBUG = true;
