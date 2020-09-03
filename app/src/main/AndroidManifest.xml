@@ -3,6 +3,7 @@
     package="me.afunx.xfun.app">
 
     <application
+        android:name="com.ubtechinc.aimbothumming.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +17,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.ubtechinc.aimbothumming.receiver.HummingReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.ubtechinc.aimbothumming.action.enable"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.ubtechinc.aimbothumming.service.HummingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.ubtechinc.aimbot.humming" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
