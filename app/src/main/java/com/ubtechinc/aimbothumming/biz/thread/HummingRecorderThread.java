@@ -38,7 +38,6 @@ public class HummingRecorderThread extends AbstractTaskThread {
         Runnable taskRunnable = new Runnable() {
             @Override
             public void run() {
-                LogUtils.ii(TAG, "HummingRecorderThread run()");
                 mAudioRecord.read(mRecordBuffer, 0, mRecordBufSize);
 
                 Location location = LocationSnapshot.get().getCurrentLocation();

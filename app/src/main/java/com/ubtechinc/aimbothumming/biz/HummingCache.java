@@ -22,7 +22,7 @@ public interface HummingCache {
     boolean isStopped();
 
     /**
-     * 添加 "一帧" 音频数据及定位到缓存尾部
+     * 添加 "一帧" 音频数据及相关信息到缓存尾部
      *
      * @param oneFrameBytes 音频数据
      * @param location      位置
@@ -48,4 +48,11 @@ public interface HummingCache {
      * 释放TempCacheFrames（目前是在发送给服务器成功后调用）
      */
     void releaseTempCacheFrames();
+
+    /**
+     * 设置HummingStorage用于数据持久化
+     *
+     * @param hummingStorage
+     */
+    void setStorage(HummingStorage hummingStorage);
 }

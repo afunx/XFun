@@ -40,11 +40,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_start) {
-//            startHumming();
-            enableNetworkMonitor();
+            startHumming();
+//            enableNetworkMonitor();
         } else if (v.getId() == R.id.btn_stop) {
-//            stopHumming();
-            disableNetworkMonitor();
+            stopHumming();
+//            disableNetworkMonitor();
         }
     }
 
