@@ -3,6 +3,7 @@ package com.ubtechinc.aimbothumming.biz.thread;
 import android.content.Context;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
+import com.ubtechinc.aimbothumming.biz.HummingFrameFilesPath;
 import com.ubtechinc.aimbothumming.biz.HummingFrameRouter;
 import com.ubtechinc.aimbothumming.biz.impl.HummingFrameRouterImpl;
 import com.ubtechinc.aimbothumming.network.UploadHummingRespository;
@@ -44,10 +45,12 @@ public class HummingUploadThread extends AbstractTaskThread {
         mContext = context;
         Runnable taskRunnable = new Runnable() {
 
-            @Override
-            public void run() {
-                // TODO StorageCache优先处理
-                HummingFrame[] frames = mHummingFrameRouter.getUploadHummingFrames();
+            private void uploadHummingFiles(HummingFrameFilesPath frameFilePath) {
+                LogUtils.dd(TAG, "uploadHummingFiles()");
+            }
+
+            private void uploadHummingFrames(HummingFrame[] frames) {
+                LogUtils.dd(TAG, "uploadHummingFrames()");
                 if (frames == null) {
                     return;
                 }
@@ -63,6 +66,22 @@ public class HummingUploadThread extends AbstractTaskThread {
                     mHummingFrameRouter.doUploadSuc();
                 } else {
                     mHummingFrameRouter.doUploadFail();
+                }
+            }
+
+            @Override
+            public void run() {
+                // 等待网络可用
+                mHummingFrameRouter.waitNetworkAvailable();
+
+                HummingFrameFilesPath frameFilePath = mHummingFrameRouter.getFrameFilePath();
+                if (frameFilePath != null) {
+                    // 优先传输文件
+                    uploadHummingFiles(frameFilePath);
+                } else {
+                    // 再使用缓存
+                    HummingFrame[] frames = mHummingFrameRouter.getUploadHummingFrames();
+                    uploadHummingFrames(frames);
                 }
             }
         };

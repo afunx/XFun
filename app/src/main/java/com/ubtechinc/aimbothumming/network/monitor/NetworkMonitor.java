@@ -8,6 +8,32 @@ public abstract class NetworkMonitor {
 
     private static final long CHECK_NETWORK_INTERVAL_MILLI = 100L;
     private volatile boolean isAvailable = true;
+    private volatile boolean isInterrupted = false;
+
+    /**
+     * 查询当前网络是否可用
+     *
+     * @return  当前网络是否可用
+     */
+    public synchronized boolean isNetworkAvailable() {
+        return isAvailable;
+    }
+
+    /**
+     * 查询是否被中断
+     *
+     * @return  是否被中断
+     */
+    public synchronized boolean isInterrupted() {
+        return isInterrupted;
+    }
+
+    /**
+     * 清楚中断标志位
+     */
+    public synchronized void clearInterrupted() {
+        isInterrupted = false;
+    }
 
     /**
      * 设网络状态为不可用
@@ -32,11 +58,15 @@ public abstract class NetworkMonitor {
         }
     }
 
-    private void notifyNetworkAvailable() {
+    public synchronized void interrupt() {
+        LogUtils.dd(TAG, "interrupt()");
+        isInterrupted = true;
+        this.notify();
+    }
+
+    private synchronized void notifyNetworkAvailable() {
         LogUtils.dd(TAG, "notifyNetworkAvailable()");
-        synchronized (this) {
-            this.notify();
-        }
+        this.notify();
     }
 
     private void startNetworkCheckThread() {

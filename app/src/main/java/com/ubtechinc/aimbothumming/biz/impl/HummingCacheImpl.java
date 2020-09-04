@@ -18,14 +18,26 @@ public class HummingCacheImpl implements HummingCache {
     private Deque<HummingFrame> mHummingFrames = new ArrayDeque<>();
     private HummingFramePool mFramePool = HummingFramePool.get();
 
-    private volatile int size = 0;
+    private volatile int cacheSize = 0;
 
     private final AtomicBoolean isInterrupted = new AtomicBoolean(false);
 
     @Override
-    public synchronized void setFrameSize(int size) {
+    public synchronized void setCacheSize(int size) {
         LogUtils.ii(TAG, "setFrameSize() size: " + size);
-        this.size = size;
+        this.cacheSize = size;
+    }
+
+    @NonNull
+    @Override
+    public synchronized HummingFrame[] getAllFrames() {
+        int size = mHummingFrames.size();
+        HummingFrame[] allFrames = new HummingFrame[size];
+        int i = 0;
+        while (!mHummingFrames.isEmpty()) {
+            allFrames[i++] = mHummingFrames.removeFirst();
+        }
+        return allFrames;
     }
 
     @Override
@@ -44,7 +56,7 @@ public class HummingCacheImpl implements HummingCache {
     @Override
     public synchronized void putOneFrameAtTail(@NonNull HummingFrame hummingFrame) {
         // 删除冗余
-        while (mHummingFrames.size() >= size) {
+        while (mHummingFrames.size() >= cacheSize) {
             HummingFrame removedFrame = mHummingFrames.removeFirst();
             LogUtils.dd(TAG, "putFramesAtTail() removeFirst release timestamp: " + hummingFrame.getTimestamp());
             mFramePool.release(removedFrame);
@@ -87,10 +99,21 @@ public class HummingCacheImpl implements HummingCache {
         return isInterrupted.get();
     }
 
+    @Override
+    public synchronized boolean pollFramesFromHead(@NonNull HummingFrame[] hummingFrames) {
+        if (mHummingFrames.size() < hummingFrames.length) {
+            return false;
+        }
+        for (int i = 0; i < hummingFrames.length; i++) {
+            hummingFrames[i] = mHummingFrames.removeFirst();
+        }
+        return true;
+    }
+
     private void returnCacheFrames(HummingFrame[] hummingFrames, int offset, int count) {
         LogUtils.ii(TAG, "returnCacheFrames() offset: " + offset + ", count: " + count);
         for (int i = 0; i < count; i++) {
-            if (mHummingFrames.size() < size) {
+            if (mHummingFrames.size() < cacheSize) {
                 LogUtils.i(TAG, "returnCacheFrames() addFirst i: " + i + ", offset: " + offset + ", count: " + count + ", timestamp: " + hummingFrames[i + offset].getTimestamp());
                 mHummingFrames.addFirst(hummingFrames[i + offset]);
                 hummingFrames[i + offset] = null;
