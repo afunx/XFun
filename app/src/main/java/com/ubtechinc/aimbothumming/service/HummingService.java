@@ -7,8 +7,9 @@ import android.os.IBinder;
 
 import androidx.annotation.NonNull;
 
+import com.ubtechinc.aimbothumming.biz.HummingFrameRouter;
 import com.ubtechinc.aimbothumming.biz.LocationSnapshot;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
+import com.ubtechinc.aimbothumming.biz.impl.HummingFrameRouterImpl;
 import com.ubtechinc.aimbothumming.biz.thread.HummingRecorderThread;
 import com.ubtechinc.aimbothumming.biz.thread.HummingUploadThread;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
@@ -31,7 +32,7 @@ public class HummingService extends Service {
 
     private LocationSnapshot mLocationSnapshot = LocationSnapshot.get();
     private HummingRecorderThread mHummingRecorder = HummingRecorderThread.get();
-    private HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
+    private HummingFrameRouter mHummingFrameRouter = HummingFrameRouterImpl.get();
     private HummingUploadThread mHummingUploadThread;
 
 
@@ -49,14 +50,14 @@ public class HummingService extends Service {
 
     private void startBackgroundThread() {
         LogUtils.ii(TAG, "startBackgroundThread()");
-        mHummingCache.start();
+        mHummingFrameRouter.start();
         mHummingUploadThread = new HummingUploadThread(getApplicationContext());
         mHummingUploadThread.start();
     }
 
     private void stopBackgroundThread() {
         LogUtils.ii(TAG, "stopBackgroundThread()");
-        mHummingCache.stop();
+        mHummingFrameRouter.stop();
         if (mHummingUploadThread != null) {
             mHummingUploadThread.stop();
             mHummingUploadThread = null;

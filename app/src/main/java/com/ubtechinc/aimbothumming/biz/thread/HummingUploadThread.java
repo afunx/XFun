@@ -3,7 +3,8 @@ package com.ubtechinc.aimbothumming.biz.thread;
 import android.content.Context;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
+import com.ubtechinc.aimbothumming.biz.HummingFrameRouter;
+import com.ubtechinc.aimbothumming.biz.impl.HummingFrameRouterImpl;
 import com.ubtechinc.aimbothumming.network.UploadHummingRespository;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 //import com.ubtrobot.Robot;
@@ -17,13 +18,15 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.ubtechinc.aimbothumming.biz.HummingFrameRouter.UPLOAD_HUMMING_FRAME_COUNT;
+
 public class HummingUploadThread extends AbstractTaskThread {
 
     private static final String TAG = "HummingUploadThread";
 
     private static String sSerialNumber = null;
 
-    private HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
+    private HummingFrameRouter mHummingFrameRouter = HummingFrameRouterImpl.get();
     private Call<ResponseBody> mBodyCall;
 
     private int detectType;
@@ -33,10 +36,6 @@ public class HummingUploadThread extends AbstractTaskThread {
     private double y;
     private byte[] buffer = null;
     private Context mContext;
-
-    // count = 1 表示 125ms，1 min / 125 ms = 60 * 1000 / 125 = 480
-    // count = 1 表示 125ms，10 s / 125 ms = 10 * 1000 / 125 = 80
-    private static final int UPLOAD_HUMMING_FRAME_COUNT = 80;
 
     private String sn;
 
@@ -48,7 +47,7 @@ public class HummingUploadThread extends AbstractTaskThread {
             @Override
             public void run() {
                 // TODO StorageCache优先处理
-                HummingFrame[] frames = mHummingCache.getTempCacheFramesFromHead(UPLOAD_HUMMING_FRAME_COUNT);
+                HummingFrame[] frames = mHummingFrameRouter.getUploadHummingFrames();
                 if (frames == null) {
                     return;
                 }
@@ -61,9 +60,9 @@ public class HummingUploadThread extends AbstractTaskThread {
                 }
                 boolean suc = postFramesToServer();
                 if (suc) {
-                    mHummingCache.releaseTempCacheFrames();
+                    mHummingFrameRouter.doUploadSuc();
                 } else {
-                    mHummingCache.returnTempCacheFrames();
+                    mHummingFrameRouter.doUploadFail();
                 }
             }
         };

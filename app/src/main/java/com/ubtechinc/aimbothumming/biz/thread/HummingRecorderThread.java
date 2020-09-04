@@ -5,8 +5,9 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
+import com.ubtechinc.aimbothumming.biz.HummingFrameRouter;
 import com.ubtechinc.aimbothumming.biz.LocationSnapshot;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
+import com.ubtechinc.aimbothumming.biz.impl.HummingFrameRouterImpl;
 import com.ubtechinc.aimbothumming.biz.mock.Location;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 //import com.ubtrobot.navigation.Location;
@@ -29,7 +30,7 @@ public class HummingRecorderThread extends AbstractTaskThread {
 
     private byte[] mRecordBuffer;
 
-    private final HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
+    private final HummingFrameRouter mHummingFrameRouter = HummingFrameRouterImpl.get();
 
     private volatile int mDetectType;
 
@@ -42,7 +43,7 @@ public class HummingRecorderThread extends AbstractTaskThread {
 
                 Location location = LocationSnapshot.get().getCurrentLocation();
                 String mapName = LocationSnapshot.get().getCurrentMapName();
-                mHummingCache.putOneFrameAtTail(mRecordBuffer, location, mDetectType, mapName);
+                mHummingFrameRouter.addOneFrame(mRecordBuffer, location, mDetectType, mapName);
             }
         };
         setRunnable(taskRunnable);
@@ -85,7 +86,7 @@ public class HummingRecorderThread extends AbstractTaskThread {
         boolean initSuccess = initAudioRecord();
         if (!initSuccess) {
             LogUtils.ee(TAG, "onStart() init fail");
-            mHummingCache.stop();
+            mHummingFrameRouter.stop();
             return;
         }
 
