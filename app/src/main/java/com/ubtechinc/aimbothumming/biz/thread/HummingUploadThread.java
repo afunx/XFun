@@ -1,7 +1,6 @@
 package com.ubtechinc.aimbothumming.biz.thread;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
 import com.ubtechinc.aimbothumming.biz.impl.HummingCacheImpl;
@@ -56,7 +55,16 @@ public class HummingUploadThread extends AbstractTaskThread {
                 allocBuffer(frames);
                 updateBuffer(frames);
                 updateOthers(frames);
-                postFramesToServer();
+                if (detectType == 0) {
+                    LogUtils.ii(TAG, "run() detectType=0");
+                    return;
+                }
+                boolean suc = postFramesToServer();
+                if (suc) {
+                    mHummingCache.releaseTempCacheFrames();
+                } else {
+                    mHummingCache.returnTempCacheFrames();
+                }
             }
         };
         setRunnable(taskRunnable);
@@ -81,11 +89,7 @@ public class HummingUploadThread extends AbstractTaskThread {
         LogUtils.dd(TAG, "updateOthers() timestamp: " + timestamp + ", detectType: " + detectType + ", x: " + x + ", y: " + y);
     }
 
-    private void postFramesToServer() {
-        if (detectType == 0) {
-            LogUtils.ii(TAG, "postFramesToServer() detectType=0");
-            return;
-        }
+    private boolean postFramesToServer() {
         Call<ResponseBody> bodyCall = UploadHummingRespository.uploadHumming(mContext, buffer, sn, timestamp, locationFlag, x, y, detectType);
         mBodyCall = bodyCall;
 
@@ -96,11 +100,7 @@ public class HummingUploadThread extends AbstractTaskThread {
             e.printStackTrace();
         }
         LogUtils.ii(TAG, "postFramesToServer() response: " + response);
-        if (response != null && response.code() == 200) {
-            mHummingCache.releaseTempCacheFrames();
-        } else {
-            mHummingCache.returnTempCacheFrames();
-        }
+        return response != null && response.code() == 200;
     }
 
     private void allocBuffer(HummingFrame[] frames) {

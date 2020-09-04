@@ -3,7 +3,6 @@ package com.ubtechinc.aimbothumming.biz.impl;
 import com.ubtechinc.aimbothumming.biz.HummingCache;
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
 import com.ubtechinc.aimbothumming.biz.HummingFramePool;
-import com.ubtechinc.aimbothumming.biz.HummingStorage;
 import com.ubtechinc.aimbothumming.biz.mock.Location;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 //import com.ubtrobot.navigation.Location;
@@ -19,7 +18,6 @@ public class HummingCacheImpl implements HummingCache {
     private Deque<HummingFrame> mHummingFrames = new ArrayDeque<>();
     private HummingFramePool mFramePool = HummingFramePool.get();
     private HummingFrame[] mTempCacheFrames = null;
-    private HummingStorage mHummingStorage = null;
 
     private final AtomicBoolean mIsStopped = new AtomicBoolean(true);
 
@@ -66,7 +64,6 @@ public class HummingCacheImpl implements HummingCache {
         while (mHummingFrames.size() >= MAX_SIZE) {
             HummingFrame hummingFrame = mHummingFrames.removeFirst();
             LogUtils.dd(TAG, "putFramesAtTail() removeFirst release timestamp: " + hummingFrame.getTimestamp());
-            deepCopyToStorage(hummingFrame);
             mFramePool.release(hummingFrame);
         }
         // 添加新Frame
@@ -133,7 +130,6 @@ public class HummingCacheImpl implements HummingCache {
                 mTempCacheFrames[i + offset] = null;
             } else {
                 LogUtils.i(TAG, "returnTempCacheFrames() release i: " + i + ", offset: " + offset + ", count: " + count + ", timestamp: " + mTempCacheFrames[i + offset].getTimestamp());
-                deepCopyToStorage(mTempCacheFrames[i + offset]);
                 mFramePool.release(mTempCacheFrames[i + offset]);
                 mTempCacheFrames[i + offset] = null;
             }
@@ -166,18 +162,6 @@ public class HummingCacheImpl implements HummingCache {
     public synchronized void releaseTempCacheFrames() {
         if (mTempCacheFrames != null) {
             releaseTempCacheFrames(0, mTempCacheFrames.length);
-        }
-    }
-
-    @Override
-    public void setStorage(HummingStorage hummingStorage) {
-        mHummingStorage = hummingStorage;
-    }
-
-    private void deepCopyToStorage(HummingFrame hummingFrame) {
-        if (mHummingStorage != null) {
-            LogUtils.d(TAG, "deepCopyToStorage() hummingFrame: " + hummingFrame);
-            mHummingStorage.deepCopyOneFrameAtTail(hummingFrame);
         }
     }
 

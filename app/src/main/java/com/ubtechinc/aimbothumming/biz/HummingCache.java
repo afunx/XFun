@@ -48,11 +48,4 @@ public interface HummingCache {
      * 释放TempCacheFrames（目前是在发送给服务器成功后调用）
      */
     void releaseTempCacheFrames();
-
-    /**
-     * 设置HummingStorage用于数据持久化
-     *
-     * @param hummingStorage
-     */
-    void setStorage(HummingStorage hummingStorage);
 }
