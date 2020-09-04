@@ -1,6 +1,6 @@
 package com.ubtechinc.aimbothumming.biz.impl;
 
-import com.ubtechinc.aimbothumming.biz.HummingCache;
+import com.ubtechinc.aimbothumming.biz.HummingCacheOld;
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
 import com.ubtechinc.aimbothumming.biz.HummingFramePool;
 import com.ubtechinc.aimbothumming.biz.mock.Location;
@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class HummingCacheImpl implements HummingCache {
+public class HummingCacheOldImpl implements HummingCacheOld {
 
     private static final String TAG = "HummingCacheImpl";
 
@@ -27,10 +27,10 @@ public class HummingCacheImpl implements HummingCache {
     private volatile int mCount = 0;
 
     private static class Singleton {
-        private static HummingCacheImpl instance = new HummingCacheImpl();
+        private static HummingCacheOldImpl instance = new HummingCacheOldImpl();
     }
 
-    public static HummingCacheImpl get() {
+    public static HummingCacheOldImpl get() {
         return Singleton.instance;
     }
 

@@ -6,7 +6,7 @@ import android.media.MediaRecorder;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
 import com.ubtechinc.aimbothumming.biz.LocationSnapshot;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheImpl;
+import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
 import com.ubtechinc.aimbothumming.biz.mock.Location;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 //import com.ubtrobot.navigation.Location;
@@ -29,7 +29,7 @@ public class HummingRecorderThread extends AbstractTaskThread {
 
     private byte[] mRecordBuffer;
 
-    private final HummingCacheImpl mHummingCache = HummingCacheImpl.get();
+    private final HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
 
     private volatile int mDetectType;
 

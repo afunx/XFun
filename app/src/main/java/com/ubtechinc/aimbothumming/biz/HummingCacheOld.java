@@ -2,7 +2,7 @@ package com.ubtechinc.aimbothumming.biz;
 
 import com.ubtechinc.aimbothumming.biz.mock.Location;
 
-public interface HummingCache {
+public interface HummingCacheOld {
 
     /**
      * HummingCache开始运行

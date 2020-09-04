@@ -8,7 +8,7 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 
 import com.ubtechinc.aimbothumming.biz.LocationSnapshot;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheImpl;
+import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
 import com.ubtechinc.aimbothumming.biz.thread.HummingRecorderThread;
 import com.ubtechinc.aimbothumming.biz.thread.HummingUploadThread;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
@@ -31,7 +31,7 @@ public class HummingService extends Service {
 
     private LocationSnapshot mLocationSnapshot = LocationSnapshot.get();
     private HummingRecorderThread mHummingRecorder = HummingRecorderThread.get();
-    private HummingCacheImpl mHummingCache = HummingCacheImpl.get();
+    private HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
     private HummingUploadThread mHummingUploadThread;
 
 

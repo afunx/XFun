@@ -3,7 +3,7 @@ package com.ubtechinc.aimbothumming.biz.thread;
 import android.content.Context;
 
 import com.ubtechinc.aimbothumming.biz.HummingFrame;
-import com.ubtechinc.aimbothumming.biz.impl.HummingCacheImpl;
+import com.ubtechinc.aimbothumming.biz.impl.HummingCacheOldImpl;
 import com.ubtechinc.aimbothumming.network.UploadHummingRespository;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 //import com.ubtrobot.Robot;
@@ -23,7 +23,7 @@ public class HummingUploadThread extends AbstractTaskThread {
 
     private static String sSerialNumber = null;
 
-    private HummingCacheImpl mHummingCache = HummingCacheImpl.get();
+    private HummingCacheOldImpl mHummingCache = HummingCacheOldImpl.get();
     private Call<ResponseBody> mBodyCall;
 
     private int detectType;
