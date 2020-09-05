@@ -1,5 +1,10 @@
 package com.ubtechinc.aimbothumming.network.monitor;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import com.ubtechinc.aimbothumming.App;
 import com.ubtechinc.aimbothumming.utils.LogUtils;
 
 public class NetworkMonitorImpl extends NetworkMonitor {
@@ -17,6 +22,9 @@ public class NetworkMonitorImpl extends NetworkMonitor {
     // TODO 使用真实的网络请求
     @Override
     protected boolean checkNetworkAvailable() {
-        return networkAvailable;
+        Context context = App.getApplication();
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return networkInfo!=null && networkInfo.isConnected();
     }
 }

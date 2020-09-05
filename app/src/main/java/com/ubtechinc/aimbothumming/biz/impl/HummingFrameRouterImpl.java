@@ -145,7 +145,7 @@ public class HummingFrameRouterImpl implements HummingFrameRouter {
         if (hummingFrames.length == 0) {
             return;
         }
-        LogUtils.ee(TAG, "===================保存数据=================== sync: " + sync);
+        LogUtils.ii(TAG, "saveHummingFrames() sync: " + sync);
         SaveHummingFramesRunnable saveHummingFramesRunnable = new SaveHummingFramesRunnable(hummingFrames);
         if (sync) {
             // 同步
@@ -167,7 +167,7 @@ public class HummingFrameRouterImpl implements HummingFrameRouter {
 
         @Override
         public void run() {
-            LogUtils.ee(TAG, "===================保存数据=================== size: " + hummingFrames.length);
+            LogUtils.ii(TAG, "SaveHummingFramesRunnable save humming frames, size: " + hummingFrames.length);
         }
     }
 }
