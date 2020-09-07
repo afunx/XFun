@@ -29,6 +29,27 @@ public class FileUtils {
      */
     public static long getExternalStorageAvailableBytes() {
         final StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
-        return statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong();
+        return statFs.getAvailableBytes();
     }
+
+    /**
+     * 获取外部存储总大小（单位：字节）
+     *
+     * @return              外部存储总大小（单位：字节）
+     */
+    public static long getExternalStorageTotalBytes() {
+        final StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        return statFs.getTotalBytes();
+    }
+
+    /**
+     * 判断Android系统是否已挂载sdcard
+     *
+     * @return              Android系统是否已挂载sdcard
+     */
+    public static boolean isSdcardMounted() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+
 }
