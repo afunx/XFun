@@ -3,4 +3,5 @@
     <string name="title_goto_demo_list_view">Go to Demo ListView</string>
     <string name="btn_goto_demo_fragment">Go to Demo Fragment</string>
     <string name="btn_goto_demo_mvvm">Go to Demo MVVM</string>
+    <string name="btn_goto_demo_recyclerview">Go to Demo RecyclerView</string>
 </resources>

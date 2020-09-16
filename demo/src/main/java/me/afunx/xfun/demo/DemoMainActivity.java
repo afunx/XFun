@@ -9,6 +9,7 @@ import com.afunx.xfun.common.base.BaseActivity;
 import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 import me.afunx.xfun.demo.mvvm.DemoMVVMActivity;
+import me.afunx.xfun.demo.recyclerview.DemoRecyclerViewActivity;
 
 public class DemoMainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -19,6 +20,7 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_goto_demo_list_view).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_fragment).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_mvvm).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_recyclerview).setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +33,9 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
             startActivity(intent);
         } else if (view.getId() == R.id.btn_goto_demo_mvvm) {
             Intent intent = new Intent(this, DemoMVVMActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_recyclerview) {
+            Intent intent = new Intent(this, DemoRecyclerViewActivity.class);
             startActivity(intent);
         }
     }
