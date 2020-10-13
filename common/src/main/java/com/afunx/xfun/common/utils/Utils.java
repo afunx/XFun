@@ -13,10 +13,9 @@ public class Utils {
             m.setAccessible(true);
             m.invoke(v, View.MeasureSpec.makeMeasureSpec(
                     ((View) v.getParent()).getMeasuredWidth(),
-                    View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0,
+                    View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0,
                     View.MeasureSpec.UNSPECIFIED));
         } catch (Exception e) {
-
         }
         return v.getMeasuredHeight();
     }
