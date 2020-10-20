@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.afunx.xfun.common.base.BaseActivity;
 
+import me.afunx.xfun.demo.animate.DemoAnimateActivity;
 import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 import me.afunx.xfun.demo.mvvm.DemoMVVMActivity;
@@ -21,6 +22,7 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_goto_demo_fragment).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_mvvm).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_recyclerview).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_animate).setOnClickListener(this);
     }
 
     @Override
@@ -36,6 +38,9 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
             startActivity(intent);
         } else if (view.getId() == R.id.btn_goto_demo_recyclerview) {
             Intent intent = new Intent(this, DemoRecyclerViewActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_animate) {
+            Intent intent = new Intent(this, DemoAnimateActivity.class);
             startActivity(intent);
         }
     }

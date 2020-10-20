@@ -4,4 +4,7 @@
     <string name="btn_goto_demo_fragment">Go to Demo Fragment</string>
     <string name="btn_goto_demo_mvvm">Go to Demo MVVM</string>
     <string name="btn_goto_demo_recyclerview">Go to Demo RecyclerView</string>
+    <string name="btn_goto_demo_animate">Go to Demo Animate</string>
+
+    <string name="btn_goto_demo_animate_frame">Go to Demo Frame Animate</string>
 </resources>
