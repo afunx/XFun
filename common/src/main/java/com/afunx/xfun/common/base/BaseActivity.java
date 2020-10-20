@@ -71,4 +71,10 @@ public class BaseActivity extends AppCompatActivity {
         LogUtils.i(getClass().getSimpleName(), "onRestoreInstanceState() taskId: " + getTaskId() + ", this: " + this
                 + ", savedInstanceState: " + savedInstanceState);
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        LogUtils.i(getClass().getSimpleName(), "onWindowFocusChanged() hasFocus: " + hasFocus);
+    }
 }
