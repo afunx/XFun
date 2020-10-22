@@ -11,6 +11,7 @@ import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 import me.afunx.xfun.demo.mvvm.DemoMVVMActivity;
 import me.afunx.xfun.demo.recyclerview.DemoRecyclerViewActivity;
+import me.afunx.xfun.demo.soundmeter.DemoSoundMeterActivity;
 
 public class DemoMainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -23,6 +24,7 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_goto_demo_mvvm).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_recyclerview).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_animate).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_sound_meter).setOnClickListener(this);
     }
 
     @Override
@@ -41,6 +43,9 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
             startActivity(intent);
         } else if (view.getId() == R.id.btn_goto_demo_animate) {
             Intent intent = new Intent(this, DemoAnimateActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_sound_meter) {
+            Intent intent = new Intent(this, DemoSoundMeterActivity.class);
             startActivity(intent);
         }
     }
