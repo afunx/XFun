@@ -12,20 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".soundmeter.DemoSoundMeterActivity"></activity>
+        <activity android:name=".soundmeter.DemoSoundMeterActivity" />
         <activity android:name=".animate.frame.DemoAnimateFrameActivity" />
         <activity android:name=".animate.DemoAnimateActivity" />
         <activity android:name=".recyclerview.DemoRecyclerViewActivity" />
         <activity android:name=".mvvm.DemoMVVMActivity" />
         <activity android:name=".fragment.DemoFragmentActivity" />
         <activity android:name=".listview.DemoListViewActivity" />
-        <activity android:name=".DemoMainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".DemoMainActivity" />
     </application>
 
 </manifest>
