@@ -2,6 +2,12 @@ package com.afunx.xfun.common.utils;
 
 public class ByteUtils {
 
+    private static final char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+    private static final char SPACE = ' ';
+
+    private static final char LINE_FEED = '\n';
+
     private static final int BITS_OF_BYTE = 8;
 
     private static final int BYTES_OF_SHORT = 2;
@@ -15,6 +21,47 @@ public class ByteUtils {
         return s;
     }
 
+    public static void short2byte(short s, byte[] bytes, int offset, boolean bigEndian) {
+        for (int i = bigEndian ? 0 : BYTES_OF_SHORT - 1; (bigEndian ? i < BYTES_OF_SHORT : i >= 0); i += (bigEndian ? 1 : -1)) {
+            bytes[offset + BYTES_OF_SHORT-1 - i] = (byte)(s & 0xff);
+            s >>>= BITS_OF_BYTE;
+        }
+    }
+
+    public static String bytes2hexString(byte[] bytes) {
+        return bytes2hexString(bytes, 0, bytes.length);
+    }
+
+    public static String bytes2hexString(byte[] bytes, int offset, int count) {
+        char[] buf = new char[count << 1];
+        for (int i = 0; i < count; i++) {
+            buf[(i + offset) << 1] = HEX_CHAR[bytes[i] >>> 4 & 0x0f];
+            buf[((i + offset) << 1) + 1] = HEX_CHAR[bytes[i] & 0x0f];
+        }
+        return new String(buf);
+    }
+
+    public static String bytes2hexStringFormat(int column, byte[] bytes) {
+        return bytes2hexStringFormat(column, bytes, 0, bytes.length);
+    }
+
+    public static String bytes2hexStringFormat(int column, byte[] bytes, int offset, int count) {
+        char[] buf = new char[(count << 1) + count - 1];
+        int index = 0;
+        for (int i = 0; i < count; i++) {
+            if (i != 0) {
+                if (i % column == 0) {
+                    buf[index++] = LINE_FEED;
+                } else {
+                    buf[index++] = SPACE;
+                }
+            }
+            buf[index++] = HEX_CHAR[bytes[i] >>> 4 & 0x0f];
+            buf[index++] = HEX_CHAR[bytes[i] & 0x0f];
+        }
+        return new String(buf);
+    }
+
     private static void testbytes2short() {
         byte b0 = (byte) 0xff;
         byte b1 = (byte) 0xfe;
@@ -26,13 +73,6 @@ public class ByteUtils {
             System.out.println("testbytes2short() pass");
         } else {
             System.out.println("testbytes2short() fail");
-        }
-    }
-
-    public static void short2byte(short s, byte[] bytes, int offset, boolean bigEndian) {
-        for (int i = bigEndian ? 0 : BYTES_OF_SHORT - 1; (bigEndian ? i < BYTES_OF_SHORT : i >= 0); i += (bigEndian ? 1 : -1)) {
-            bytes[offset + BYTES_OF_SHORT-1 - i] = (byte)(s & 0xff);
-            s >>>= BITS_OF_BYTE;
         }
     }
 
