@@ -3,6 +3,7 @@ package com.afunx.xfun.common.base;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -63,6 +64,13 @@ public class BaseActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState, outPersistentState);
         LogUtils.i(getClass().getSimpleName(), "onSaveInstanceState() taskId: " + getTaskId() + ", this: " + this
                 + ", outState: " + outState + ", outPersistentState: " + outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogUtils.i(getClass().getSimpleName(), "onSaveInstanceState() taskId: " + getTaskId() + ", this: " + this
+                + ", outState: " + outState);
     }
 
     @Override
