@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.afunx.xfun.demo.touchevent.view.TouchDemoViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".touchevent.TouchEventMainActivity">
+
+    <me.afunx.xfun.demo.touchevent.view.TouchDemoView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/holo_orange_dark"
+        android:padding="30dp"
+        android:text="@string/text_touch_demo_view"
+        android:textSize="20sp" />
+
+</me.afunx.xfun.demo.touchevent.view.TouchDemoViewGroup>

@@ -55,4 +55,11 @@
         android:layout_marginTop="30dp"
         android:text="@string/btn_goto_demo_sound_meter" />
 
+    <Button
+        android:id="@+id/btn_goto_demo_touch_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="@string/btn_goto_demo_touch_event" />
 </LinearLayout>

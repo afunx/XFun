@@ -6,6 +6,8 @@
     <string name="btn_goto_demo_recyclerview">Go to Demo RecyclerView</string>
     <string name="btn_goto_demo_animate">Go to Demo Animate</string>
     <string name="btn_goto_demo_sound_meter">Go to Demo Sound Meter</string>
+    <string name="btn_goto_demo_touch_event">Go to Demo Touch Event</string>
 
     <string name="btn_goto_demo_animate_frame">Go to Demo Frame Animate</string>
+    <string name="text_touch_demo_view">Touch Demo View</string>
 </resources>
