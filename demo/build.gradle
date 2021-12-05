@@ -21,6 +21,12 @@ android {
 }
 
 dependencies {
+    if (JavaVersion.current().ordinal() >= JavaVersion.VERSION_1_9.ordinal()) {
+        // JAX-B dependencies for JDK 9+
+        annotationProcessor "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+        annotationProcessor "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    }
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.lib_appcompat
     implementation rootProject.lib_constraintlayout

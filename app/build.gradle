@@ -22,6 +22,14 @@ android {
 }
 
 dependencies {
+    if (JavaVersion.current().ordinal() >= JavaVersion.VERSION_1_9.ordinal()) {
+        compileOnly "com.github.pengrad:jdk9-deps:1.0"
+        compileOnly "javax.annotation:javax.annotation-api:1.3.2"
+
+        // JAX-B dependencies for JDK 9+
+        annotationProcessor "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+        annotationProcessor "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    }
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.lib_appcompat
     implementation rootProject.lib_constraintlayout
