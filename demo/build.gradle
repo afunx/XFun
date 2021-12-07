@@ -31,6 +31,7 @@ dependencies {
     implementation rootProject.lib_appcompat
     implementation rootProject.lib_constraintlayout
     implementation rootProject.lib_recyclerview
+    implementation 'com.google.android.material:material:1.2.1'
     testImplementation rootProject.lib_juint
     androidTestImplementation rootProject.lib_text_runner
     androidTestImplementation rootProject.lib_text_espresso

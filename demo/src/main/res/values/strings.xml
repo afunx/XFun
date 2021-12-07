@@ -7,7 +7,10 @@
     <string name="btn_goto_demo_animate">Go to Demo Animate</string>
     <string name="btn_goto_demo_sound_meter">Go to Demo Sound Meter</string>
     <string name="btn_goto_demo_touch_event">Go to Demo Touch Event</string>
+    <string name="btn_goto_demo_memory_leak">Go to Demo Memory Leak</string>
 
     <string name="btn_goto_demo_animate_frame">Go to Demo Frame Animate</string>
     <string name="text_touch_demo_view">Touch Demo View</string>
+    <string name="btn_goto_demo_sub_memory_leak_activity">Go to MemoryLeak SubActivity</string>
+    <string name="btn_goto_demo_main_memory_leak_activity">Go to MemoryLeak MainActivity</string>
 </resources>

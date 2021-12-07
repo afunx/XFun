@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".touchevent.TouchEventMainActivity"></activity>
+        <activity android:name=".memoryleak.MemoryLeakMainActivity"></activity>
+        <activity android:name=".memoryleak.MemoryLeakSubActivity" />
+        <activity android:name=".touchevent.TouchEventMainActivity" />
         <activity android:name=".soundmeter.DemoSoundMeterActivity" />
         <activity android:name=".animate.frame.DemoAnimateFrameActivity" />
         <activity android:name=".animate.DemoAnimateActivity" />
