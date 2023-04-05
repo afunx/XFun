@@ -11,6 +11,7 @@ import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 import me.afunx.xfun.demo.mvvm.DemoMVVMActivity;
 import me.afunx.xfun.demo.recyclerview.DemoRecyclerViewActivity;
+import me.afunx.xfun.demo.service.DemoServiceActivity;
 import me.afunx.xfun.demo.soundmeter.DemoSoundMeterActivity;
 import me.afunx.xfun.demo.touchevent.TouchEventMainActivity;
 
@@ -27,6 +28,7 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_goto_demo_animate).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_sound_meter).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_touch_event).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_service).setOnClickListener(this);
     }
 
     @Override
@@ -49,8 +51,11 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         } else if (view.getId() == R.id.btn_goto_demo_sound_meter) {
             Intent intent = new Intent(this, DemoSoundMeterActivity.class);
             startActivity(intent);
-        }  else if (view.getId() == R.id.btn_goto_demo_touch_event) {
+        } else if (view.getId() == R.id.btn_goto_demo_touch_event) {
             Intent intent = new Intent(this, TouchEventMainActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_service) {
+            Intent intent = new Intent(this, DemoServiceActivity.class);
             startActivity(intent);
         }
     }

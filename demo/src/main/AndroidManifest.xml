@@ -12,7 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".touchevent.TouchEventMainActivity"></activity>
+        <service
+            android:name=".service.DemoService"
+            android:enabled="true"
+            android:exported="false" />
+        <activity android:name=".service.DemoServiceActivity"/>
+        <activity android:name=".touchevent.TouchEventMainActivity" />
         <activity android:name=".soundmeter.DemoSoundMeterActivity" />
         <activity android:name=".animate.frame.DemoAnimateFrameActivity" />
         <activity android:name=".animate.DemoAnimateActivity" />
