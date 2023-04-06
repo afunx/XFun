@@ -7,6 +7,7 @@ import android.view.View;
 import com.afunx.xfun.common.base.BaseActivity;
 
 import me.afunx.xfun.demo.animate.DemoAnimateActivity;
+import me.afunx.xfun.demo.dialogfragment.DialogFragmentActivity;
 import me.afunx.xfun.demo.fragment.DemoFragmentActivity;
 import me.afunx.xfun.demo.listview.DemoListViewActivity;
 import me.afunx.xfun.demo.mvvm.DemoMVVMActivity;
@@ -29,6 +30,7 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_goto_demo_sound_meter).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_touch_event).setOnClickListener(this);
         findViewById(R.id.btn_goto_demo_service).setOnClickListener(this);
+        findViewById(R.id.btn_goto_demo_dialog_fragment).setOnClickListener(this);
     }
 
     @Override
@@ -56,6 +58,9 @@ public class DemoMainActivity extends BaseActivity implements View.OnClickListen
             startActivity(intent);
         } else if (view.getId() == R.id.btn_goto_demo_service) {
             Intent intent = new Intent(this, DemoServiceActivity.class);
+            startActivity(intent);
+        } else if (view.getId() == R.id.btn_goto_demo_dialog_fragment) {
+            Intent intent = new Intent(this, DialogFragmentActivity.class);
             startActivity(intent);
         }
     }

@@ -17,6 +17,7 @@
             android:enabled="true"
             android:exported="false" />
         <activity android:name=".service.DemoServiceActivity"/>
+        <activity android:name=".dialogfragment.DialogFragmentActivity" />
         <activity android:name=".touchevent.TouchEventMainActivity" />
         <activity android:name=".soundmeter.DemoSoundMeterActivity" />
         <activity android:name=".animate.frame.DemoAnimateFrameActivity" />
