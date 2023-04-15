@@ -5,7 +5,6 @@ import android.graphics.PointF;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LineUtils {
@@ -72,8 +71,38 @@ public class LineUtils {
      * @return 四维Point数组表示膨胀之后的四边形
      */
     public static Point[] parsePolygon(@NonNull Point point0, @NonNull Point point1, boolean shrink, int expandRadius) {
+        if (expandRadius < 0) {
+            throw new IllegalArgumentException("expandRadius: " + expandRadius + " < 0");
+        }
+        final PointPool pointPool = PointPool.get();
         final Point[] points = new Point[4];
+        points[0] = pointPool.acquire();
+        points[1] = pointPool.acquire();
+        points[2] = pointPool.acquire();
+        points[3] = pointPool.acquire();
+        // 直线与y轴平行
         if (point0.x == point1.x) {
+            points[0].x = point0.x - expandRadius;
+            points[0].y = point0.y;
+            points[1].x = point0.x + expandRadius;
+            points[1].y = point0.y;
+            points[2].x = point1.x + expandRadius;
+            points[2].y = point1.y;
+            points[3].x = point1.x - expandRadius;
+            points[3].y = point1.y;
+            return points;
+        }
+        // 直线与x轴平行
+        if (point0.y == point1.y) {
+            points[0].x = point0.x;
+            points[0].y = point0.y - expandRadius;
+            points[1].x = point0.x;
+            points[1].y = point0.y + expandRadius;
+            points[2].x = point1.x;
+            points[2].y = point1.y + expandRadius;
+            points[3].x = point1.x;
+            points[3].y = point1.y - expandRadius;
+            return points;
         }
         return points;
     }
@@ -89,6 +118,7 @@ public class LineUtils {
         if (!pointList.isEmpty()) {
             throw new IllegalStateException("pointList should be empty");
         }
+        final PointPool pointPool = PointPool.get();
         // 直线与y轴平行
         if (point0.x == point1.x) {
             final int minY;
@@ -101,7 +131,7 @@ public class LineUtils {
                 maxY = point1.y;
             }
             for (int y = minY; y <= maxY; y++) {
-                Point point = PointPool.get().acquire();
+                Point point = pointPool.acquire();
                 point.x = point0.x;
                 point.y = y;
                 pointList.add(point);
@@ -120,7 +150,7 @@ public class LineUtils {
                 maxX = point1.x;
             }
             for (int x = minX; x <= maxX; x++) {
-                Point point = PointPool.get().acquire();
+                Point point = pointPool.acquire();
                 point.x = x;
                 point.y = point0.y;
                 pointList.add(point);
@@ -141,7 +171,7 @@ public class LineUtils {
                 maxX = point1.x;
             }
             for (int x = minX; x <= maxX; x++) {
-                Point point = PointPool.get().acquire();
+                Point point = pointPool.acquire();
                 point.x = x;
                 point.y = Math.round(functionKB.calculateY(x));
                 pointList.add(point);
@@ -157,7 +187,7 @@ public class LineUtils {
                 maxY = point1.y;
             }
             for (int y = minY; y <= maxY; y++) {
-                Point point = PointPool.get().acquire();
+                Point point = pointPool.acquire();
                 point.x = Math.round(functionKB.calculateX(y));
                 point.y = y;
                 pointList.add(point);

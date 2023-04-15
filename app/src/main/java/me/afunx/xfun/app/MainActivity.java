@@ -1,5 +1,6 @@
 package me.afunx.xfun.app;
 
+import me.afunx.xfun.app.utils.FillUtils;
 import me.afunx.xfun.app.utils.FunctionKB;
 import me.afunx.xfun.app.utils.FunctionNormal;
 import me.afunx.xfun.app.utils.LineUtils;
@@ -16,6 +17,7 @@ import com.afunx.xfun.common.base.BaseActivity;
 import com.afunx.xfun.common.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -27,6 +29,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_goto_demo).setOnClickListener(this);
+
+        testParsePolygon();
+    }
+
+    private void testPolygonScan() {
         Point[] points = new Point[]{new Point(2, 2), new Point(5, 1), new Point(11, 3),
                 new Point(11, 8), new Point(5, 5), new Point(2, 7)};
         Point[] points1 = new Point[]{new Point(2, 7), new Point(5, 5), new Point(11, 8),
@@ -35,15 +42,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 new Point(0, 2)};
         Point[] points3 = new Point[]{new Point(0, 0), new Point(5, 0), new Point(5, 1),
                 new Point(0, 1)};
-        //FillUtils.polygonScan(points3);
+        FillUtils.polygonScan(points3);
+    }
+
+    private void testParseFunction() {
+        PointF p0 = new PointF(0, 0);
+        PointF p1 = new PointF(1, 1);
+        FunctionKB functionKB = LineUtils.parseFunctionKB(p0, p1);
+        LogUtils.e(TAG, functionKB.toString());
+        LogUtils.e(TAG, "" + functionKB.calculateY(10f));
+        FunctionNormal functionNormal = LineUtils.parseFunctionNormal(functionKB.k, p1);
+        LogUtils.e(TAG, functionNormal.toString());
+        LogUtils.e(TAG, "" + functionNormal.calculateY(10f));
+    }
+
+    private void testParseLine() {
         Point p0 = new Point(0, 0);
         Point p1 = new Point(1, 1);
-        //FunctionKB functionKB = LineUtils.parseFunctionKB(p0, p1);
-        //LogUtils.e(TAG, functionKB.toString());
-        //LogUtils.e(TAG, "" + functionKB.calculateY(10f));
-        //FunctionNormal functionNormal = LineUtils.parseFunctionNormal(functionKB.k, p1);
-        //LogUtils.e(TAG, functionNormal.toString());
-        //LogUtils.e(TAG, "" + functionNormal.calculateY(10f));
         p1.x = 10;
         p1.y = 0;
         List<Point> pointList = new ArrayList<>();
@@ -59,6 +74,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         pointList.clear();
         LineUtils.parseLine(p0, p1, pointList);
         LogUtils.e(TAG, pointList.toString());
+    }
+
+    private void testParsePolygon() {
+        //public static Point[] parsePolygon(@NonNull Point point0, @NonNull Point point1, boolean shrink, int expandRadius)
+        final int expandRadius = 6;
+        final boolean shrink = true;
+        Point point0 = new Point(3,-2);
+        Point point1 = new Point(3,4);
+        Point[] points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
+        LogUtils.e(TAG, Arrays.deepToString(points));
+        point0.x = 4;
+        point0.y = -2;
+        point1.x = -1;
+        point1.y = -2;
+        points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
+        LogUtils.e(TAG, Arrays.deepToString(points));
     }
 
     @Override
