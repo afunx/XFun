@@ -101,8 +101,10 @@ public class LineUtils {
                 maxY = point1.y;
             }
             for (int y = minY; y <= maxY; y++) {
-                // TODO afunx 对象池
-                pointList.add(new Point(point0.x, y));
+                Point point = PointPool.get().acquire();
+                point.x = point0.x;
+                point.y = y;
+                pointList.add(point);
             }
             return;
         }
@@ -118,8 +120,10 @@ public class LineUtils {
                 maxX = point1.x;
             }
             for (int x = minX; x <= maxX; x++) {
-                // TODO afunx 对象池
-                pointList.add(new Point(x, point0.y));
+                Point point = PointPool.get().acquire();
+                point.x = x;
+                point.y = point0.y;
+                pointList.add(point);
             }
             return;
         }
@@ -137,8 +141,10 @@ public class LineUtils {
                 maxX = point1.x;
             }
             for (int x = minX; x <= maxX; x++) {
-                // TODO afunx 对象池
-                pointList.add(new Point(x, Math.round(functionKB.calculateY(x))));
+                Point point = PointPool.get().acquire();
+                point.x = x;
+                point.y = Math.round(functionKB.calculateY(x));
+                pointList.add(point);
             }
         } else {
             final int minY;
@@ -151,8 +157,10 @@ public class LineUtils {
                 maxY = point1.y;
             }
             for (int y = minY; y <= maxY; y++) {
-                // TODO afunx 对象池
-                pointList.add(new Point(Math.round(functionKB.calculateX(y)), y));
+                Point point = PointPool.get().acquire();
+                point.x = Math.round(functionKB.calculateX(y));
+                point.y = y;
+                pointList.add(point);
             }
         }
     }
