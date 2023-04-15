@@ -1,5 +1,7 @@
 package me.afunx.xfun.app.utils;
 
+import android.graphics.Point;
+
 import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
