@@ -159,9 +159,9 @@ public class LineUtils {
         if (DEBUG) {
             LogUtils.i(TAG, "parsePolygon() k: " + k + ", m: " + m + ", n: " + n);
         }
-        // |k| <= 1 时，结果按照x收缩；否则，结果按照y收缩
+        // |k| >= 1 时，结果按照x收缩；否则，结果按照y收缩
         int x, y;
-        if (Math.abs(k) <= 1.0f) {
+        if (Math.abs(k) >= 1.0f) {
             int x1 = (int) Math.floor(m + point0.x);
             int x2 = (int) Math.ceil(m + point0.x);
             if (Math.abs(x1 - point0.x) <= Math.abs(x2 - point0.x)) {
@@ -189,12 +189,13 @@ public class LineUtils {
         // 已知点P(x,y)求它经过中垂线的点Q。已知P、Q的中垂线经过point0和point1
         // 联立方程组: y=k*x+b, (y-y0)/(x-x0) = -1/k
         // (k*x+b-y0)/(x-x0)=-1/k，得:
-        // x = (y0-b+x0/k)/(1+1/k)
+        // x = (y0-b+x0/k)/(k+1/k)
         // (xq, pq)为PQ的中垂线与y=kx+b的交点
-        float xq = (point0.y - b + point0.x / k) / (1 + 1 / k);
+        float xq = (point0.y - b + point0.x / k) / (k + 1 / k);
         float yq = functionKB.calculateX(xq);
+        float _yq = functionNormal.calculateX(xq);
         if (DEBUG) {
-            LogUtils.i(TAG, "parsePolygon() xq: " + xq + ", yq: " + yq);
+            LogUtils.i(TAG, "parsePolygon() xq: " + xq + ", yq: " + yq + ", _yq: " + _yq);
         }
         // 向量: x - xq
         int dx = Math.round(x - xq);
