@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.btn_goto_demo).setOnClickListener(this);
 
         testAllProgress();
+        //testPolygonScan();
     }
 
     private void testPolygonScan() {
@@ -40,9 +41,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 new Point(11, 3), new Point(5, 1), new Point(2, 2)};
         Point[] points2 = new Point[]{new Point(0, 0), new Point(2, 0), new Point(3, 3),
                 new Point(0, 2)};
-        Point[] points3 = new Point[]{new Point(0, 0), new Point(5, 0), new Point(5, 1),
-                new Point(0, 1)};
-        FillUtils.polygonScan(points3);
+        Point[] points3 = new Point[]{new Point(6, 0), new Point(8, 1), new Point(2, 11),
+                new Point(0, 10)};
+        List<Point> pointList = new ArrayList<>();
+        FillUtils.polygonScan(points, pointList);
+        LogUtils.e(TAG, "testPolygonScan() " + pointList);
     }
 
     private void testParseFunction() {
@@ -100,10 +103,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void testAllProgress() {
         final int expandRadius = 6;
         final boolean shrink = true;
+        final List<Point> pointList = new ArrayList<>();
         Point point0 = new Point(0,0);
         Point point1 = new Point(2,1);
         Point[] points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
-        FillUtils.polygonScan(points);
+        LogUtils.e(TAG, "testAllProgress() points: " + Arrays.deepToString(points));
+        FillUtils.polygonScan(points, pointList);
+        LogUtils.e(TAG, "testAllProgress() pointList: " + pointList);
     }
 
     @Override

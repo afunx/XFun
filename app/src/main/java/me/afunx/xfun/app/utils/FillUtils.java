@@ -6,23 +6,67 @@ import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
 
+import java.util.List;
+
 public class FillUtils {
 
     private static final boolean DEBUG = false;
 
     private static final String TAG = "FillUtils";
 
-    public static void polygonScan(@NonNull Point[] points) {
-        int num = points.length;
+    /**
+     * 多边形扫描
+     *
+     * @param vertexPoints    多边形的顶点
+     * @param bitmapPointList bitmap需要绘制的点（存在少量重复点）
+     */
+    public static void polygonScan(@NonNull Point[] vertexPoints, @NonNull List<Point> bitmapPointList) {
+        if (!bitmapPointList.isEmpty()) {
+            throw new IllegalArgumentException("bitmapPointList should be empty");
+        }
+        int num = vertexPoints.length;
         if (num < 3) {
             throw new IllegalArgumentException("num: " + num + " < 3");
         }
-        // 计算最高点和最低点y坐标
-        int minY = points[0].y;
-        int maxY = points[0].y;
+        int minX = vertexPoints[0].x;
+        int minY = vertexPoints[0].y;
         for (int i = 1; i < num; i++) {
-            minY = Math.min(minY, points[i].y);
-            maxY = Math.max(maxY, points[i].y);
+            minX = Math.min(minX, vertexPoints[i].x);
+            minY = Math.min(minY, vertexPoints[i].y);
+        }
+        int dx = minX < 0 ? -minX : 0;
+        int dy = minY < 0 ? -minY : 0;
+        if (dx > 0 || dy > 0) {
+            for (Point point : vertexPoints) {
+                point.x += dx;
+                point.y += dy;
+            }
+        }
+        _polygonScan(vertexPoints, dx, dy, bitmapPointList);
+        if (dx > 0 || dy > 0) {
+            for (Point point : vertexPoints) {
+                point.x -= dx;
+                point.y -= dy;
+            }
+        }
+        // 不要忘记vertexPoints本身
+        PointPool pointPool = PointPool.get();
+        for (Point point : vertexPoints) {
+            Point _point = pointPool.acquire();
+            _point.x = point.x;
+            _point.y = point.y;
+            bitmapPointList.add(_point);
+        }
+    }
+
+    public static void _polygonScan(@NonNull Point[] vertexPoints, int dx, int dy, @NonNull List<Point> bitmapPointList) {
+        int num = vertexPoints.length;
+        // 计算最高点和最低点y坐标
+        int minY = vertexPoints[0].y;
+        int maxY = vertexPoints[0].y;
+        for (int i = 1; i < num; i++) {
+            minY = Math.min(minY, vertexPoints[i].y);
+            maxY = Math.max(maxY, vertexPoints[i].y);
         }
         int height = maxY - minY + 1;
         // 初始化边表和活动边表
@@ -34,16 +78,22 @@ public class FillUtils {
         Edge AET = new Edge();
         long time = System.currentTimeMillis();
         // 建立并扫描边表ET
-        buildET(points, minY, maxY, ET);
+        buildET(vertexPoints, minY, maxY, ET);
         time = System.currentTimeMillis() - time;
-        LogUtils.e(TAG, "polygonScan() consume: " + time + " ms");
-        printET(ET);
+        LogUtils.e(TAG, "_polygonScan() consume: " + time + " ms");
+        if (DEBUG) {
+            printET(ET);
+        }
         // 建立并更新活性边表AET
-        buildAET(points, minY, maxY, ET, AET);
+        buildAET(minY, maxY, ET, AET, dx, dy, bitmapPointList);
     }
 
-    private static void buildAET(@NonNull Point[] points, int minY, int maxY, @NonNull Edge[] ET, @NonNull Edge AET) {
-        LogUtils.e(TAG, "buildAET() minY: " + minY + ", maxY: " + maxY);
+    private static void buildAET(int minY, int maxY, @NonNull Edge[] ET, @NonNull Edge AET,
+                                 int dx, int dy, @NonNull List<Point> pointList) {
+        if (DEBUG) {
+            LogUtils.e(TAG, "buildAET() minY: " + minY + ", maxY: " + maxY + ", dx: " + dx + ", dy: " + dy);
+        }
+        PointPool pointPool = PointPool.get();
         Edge p;
         for (int i = minY; i <= maxY; i++) {
             if (DEBUG) {
@@ -82,20 +132,17 @@ public class FillUtils {
             // （改进算法）先从AET表中删除ymax==i的结点
             Edge q = AET;
             p = q.next;
-            // 非最后一个i，先删除ymax==i
-            if (i != maxY) {
-                while (p != null) {
-                    if (p.yMax == i) {
-                        q.next = p.next;
-                        if (DEBUG) {
-                            LogUtils.e(TAG, "buildAET() 111 delete: " + p);
-                        }
-                        // delete p
-                    } else {
-                        q = q.next;
+            while (p != null) {
+                if (p.yMax == i) {
+                    q.next = p.next;
+                    if (DEBUG) {
+                        LogUtils.e(TAG, "buildAET() 111 delete: " + p);
                     }
-                    p = q.next;
+                    // delete p
+                } else {
+                    q = q.next;
                 }
+                p = q.next;
             }
 
             // 将NET中的新点加入AET,并用插入法按X值递增排序
@@ -121,26 +168,14 @@ public class FillUtils {
             while (p != null && p.next != null) {
                 for (float j = p.x; j <= p.next.x; j++) {
                     if (DEBUG) {
-                        LogUtils.e(TAG, "buildAET() x: " + j + ", y: " + i);
+                        LogUtils.e(TAG, "buildAET() x: " + (j-dx) + ", y: " + (i-dy));
                     }
+                    Point point = pointPool.acquire();
+                    point.x = Math.round(j) - dx;
+                    point.y = i - dy;
+                    pointList.add(point);
                 }
                 p = p.next.next;
-            }
-
-            // 最后一个i，后删除ymax==i
-            if (i == maxY) {
-                while (p != null) {
-                    if (p.yMax == i) {
-                        q.next = p.next;
-                        if (DEBUG) {
-                            LogUtils.e(TAG, "buildAET() 222 delete: " + p);
-                        }
-                        // delete p
-                    } else {
-                        q = q.next;
-                    }
-                    p = q.next;
-                }
             }
         }
     }
