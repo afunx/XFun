@@ -1,5 +1,7 @@
 package me.afunx.xfun.app.utils;
 
+import androidx.annotation.NonNull;
+
 /**
  * 直线方程：y = kx + b
  */
@@ -34,6 +36,7 @@ public class FunctionKB {
         return (y - this.b) / this.k;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "FunctionKB{" +

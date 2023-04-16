@@ -32,7 +32,9 @@ public class LineUtils {
         final float k = (p0.y - p1.y) / (p0.x - p1.x);
         // b = y0 - k*x0
         final float b = p0.y - k * p0.x;
-        return new FunctionKB(k, b);
+        FunctionKB functionKB = new FunctionKB(k, b);
+        LogUtils.i(TAG, "parseFunctionKB() p0: " + p0 + ", p1: " + p1 + ", functionKB: " + functionKB);
+        return functionKB;
     }
 
     /**
@@ -51,7 +53,9 @@ public class LineUtils {
         final float k = 1.0f * (p0.y - p1.y) / (p0.x - p1.x);
         // b = y0 - k*x0
         final float b = p0.y - k * p0.x;
-        return new FunctionKB(k, b);
+        FunctionKB functionKB = new FunctionKB(k, b);
+        LogUtils.i(TAG, "parseFunctionKB() p0: " + p0 + ", p1: " + p1 + ", functionKB: " + functionKB);
+        return functionKB;
     }
 
     /**
@@ -66,7 +70,9 @@ public class LineUtils {
         if (k == 0) {
             throw new IllegalArgumentException("k = 0");
         }
-        return new FunctionNormal(k, p0.x, p0.y);
+        FunctionNormal functionNormal = new FunctionNormal(k, p0.x, p0.y);
+        LogUtils.i(TAG, "parseFunctionNormal() k: " + k + ", p0: " + p0 + ", functionNormal: " + functionNormal);
+        return functionNormal;
     }
 
     /**
@@ -81,7 +87,9 @@ public class LineUtils {
         if (k == 0) {
             throw new IllegalArgumentException("k = 0");
         }
-        return new FunctionNormal(k, p0.x, p0.y);
+        FunctionNormal functionNormal = new FunctionNormal(k, p0.x, p0.y);
+        LogUtils.i(TAG, "parseFunctionNormal() k: " + k + ", p0: " + p0 + ", functionNormal: " + functionNormal);
+        return functionNormal;
     }
 
     /**
@@ -205,6 +213,7 @@ public class LineUtils {
         points[2].y = points[1].y - 2 * dy;
         points[3].x = points[2].x - x01;
         points[3].y = points[2].y - y01;
+        LogUtils.i(TAG, "parsePolygon() points: " + Arrays.deepToString(points));
         return points;
     }
 

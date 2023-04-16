@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_goto_demo).setOnClickListener(this);
 
-        testParsePolygon();
+        testAllProgress();
     }
 
     private void testPolygonScan() {
@@ -95,6 +95,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         point1.y = 1;
         points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
         LogUtils.e(TAG, Arrays.deepToString(points));
+    }
+
+    private void testAllProgress() {
+        final int expandRadius = 6;
+        final boolean shrink = true;
+        Point point0 = new Point(0,0);
+        Point point1 = new Point(2,1);
+        Point[] points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
+        FillUtils.polygonScan(points);
     }
 
     @Override

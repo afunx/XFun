@@ -1,5 +1,7 @@
 package me.afunx.xfun.app.utils;
 
+import androidx.annotation.NonNull;
+
 /**
  * 法线方程：y-y0 = (-1/k) * (x-x0)
  * (k!=0)
@@ -39,6 +41,7 @@ public class FunctionNormal {
         return -1 * this.k * (y-this.y0) + this.x0;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "FunctionNormal{" +

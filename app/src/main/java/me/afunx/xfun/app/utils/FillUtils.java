@@ -8,7 +8,7 @@ import com.afunx.xfun.common.utils.LogUtils;
 
 public class FillUtils {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private static final String TAG = "FillUtils";
 
@@ -36,7 +36,7 @@ public class FillUtils {
         // 建立并扫描边表ET
         buildET(points, minY, maxY, ET);
         time = System.currentTimeMillis() - time;
-        LogUtils.e(TAG, "consume1: " + time);
+        LogUtils.e(TAG, "polygonScan() consume: " + time + " ms");
         printET(ET);
         // 建立并更新活性边表AET
         buildAET(points, minY, maxY, ET, AET);
@@ -49,14 +49,18 @@ public class FillUtils {
             if (DEBUG) {
                 LogUtils.e(TAG, "buildAET() y(i): " + i);
             }
-            printAET(AET);
+            if (DEBUG) {
+                printAET(AET);
+            }
             // 计算新的交点x，更新AET
             p = AET.next;
             while (p != null) {
                 p.x += p.dx;
                 p = p.next;
             }
-            printAET(AET);
+            if (DEBUG) {
+                printAET(AET);
+            }
             // AET排序
             // 断表排序，不再开辟空间（按照x升序排序）
             Edge tq = AET;
@@ -72,7 +76,9 @@ public class FillUtils {
                 p = s;
                 tq = AET;
             }
-            printAET(AET);
+            if (DEBUG) {
+                printAET(AET);
+            }
             // （改进算法）先从AET表中删除ymax==i的结点
             Edge q = AET;
             p = q.next;
@@ -81,7 +87,9 @@ public class FillUtils {
                 while (p != null) {
                     if (p.yMax == i) {
                         q.next = p.next;
-                        LogUtils.e(TAG, "buildAET() 111 delete: " + p);
+                        if (DEBUG) {
+                            LogUtils.e(TAG, "buildAET() 111 delete: " + p);
+                        }
                         // delete p
                     } else {
                         q = q.next;
@@ -105,12 +113,16 @@ public class FillUtils {
             }
             // 配对填充颜色
             p = AET.next;
-            if (p!= null) {
-                LogUtils.e(TAG, "@@@@@@@@@@@@@@@@@@@@@p.next: " + p.next);
+            if (p != null) {
+                if (DEBUG) {
+                    LogUtils.e(TAG, "buildAET() p.next: " + p.next);
+                }
             }
             while (p != null && p.next != null) {
                 for (float j = p.x; j <= p.next.x; j++) {
-                    LogUtils.e(TAG, "printAET() #########################x: " + j + ", y: " + i);
+                    if (DEBUG) {
+                        LogUtils.e(TAG, "buildAET() x: " + j + ", y: " + i);
+                    }
                 }
                 p = p.next.next;
             }
@@ -120,7 +132,9 @@ public class FillUtils {
                 while (p != null) {
                     if (p.yMax == i) {
                         q.next = p.next;
-                        LogUtils.e(TAG, "buildAET() 222 delete: " + p);
+                        if (DEBUG) {
+                            LogUtils.e(TAG, "buildAET() 222 delete: " + p);
+                        }
                         // delete p
                     } else {
                         q = q.next;
