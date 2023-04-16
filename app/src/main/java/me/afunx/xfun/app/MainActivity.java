@@ -110,6 +110,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LogUtils.e(TAG, "testAllProgress() points: " + Arrays.deepToString(points));
         FillUtils.polygonScan(points, pointList);
         LogUtils.e(TAG, "testAllProgress() pointList: " + pointList);
+        pointList.clear();
+        FillUtils.polygonScan(points, pointList);
+        LogUtils.e(TAG, "testAllProgress() pointList: " + pointList);
     }
 
     @Override

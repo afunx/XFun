@@ -60,6 +60,7 @@ public class FillUtils {
     }
 
     public static void _polygonScan(@NonNull Point[] vertexPoints, int dx, int dy, @NonNull List<Point> bitmapPointList) {
+        final EdgePool edgePool = EdgePool.get();
         int num = vertexPoints.length;
         // 计算最高点和最低点y坐标
         int minY = vertexPoints[0].y;
@@ -72,10 +73,10 @@ public class FillUtils {
         // 初始化边表和活动边表
         Edge[] ET = new Edge[height + 1];
         for (int i = 0; i < ET.length; i++) {
-            ET[i] = new Edge();
+            ET[i] = edgePool.acquire();
             ET[i].next = null;
         }
-        Edge AET = new Edge();
+        Edge AET = edgePool.acquire();
         long time = System.currentTimeMillis();
         // 建立并扫描边表ET
         buildET(vertexPoints, minY, maxY, ET);
@@ -86,6 +87,16 @@ public class FillUtils {
         }
         // 建立并更新活性边表AET
         buildAET(minY, maxY, ET, AET, dx, dy, bitmapPointList);
+        // 释放Edge
+        for (Edge edge : ET) {
+            edgePool.release(edge);
+        }
+        Edge aet = AET;
+        while (aet != null) {
+            Edge tmp = aet.next;
+            edgePool.release(aet);
+            aet = tmp;
+        }
     }
 
     private static void buildAET(int minY, int maxY, @NonNull Edge[] ET, @NonNull Edge AET,
@@ -94,6 +105,7 @@ public class FillUtils {
             LogUtils.e(TAG, "buildAET() minY: " + minY + ", maxY: " + maxY + ", dx: " + dx + ", dy: " + dy);
         }
         PointPool pointPool = PointPool.get();
+        EdgePool edgePool = EdgePool.get();
         Edge p;
         for (int i = minY; i <= maxY; i++) {
             if (DEBUG) {
@@ -139,6 +151,7 @@ public class FillUtils {
                         LogUtils.e(TAG, "buildAET() 111 delete: " + p);
                     }
                     // delete p
+                    edgePool.release(p);
                 } else {
                     q = q.next;
                 }
@@ -199,13 +212,14 @@ public class FillUtils {
     }
 
     private static void buildET(@NonNull Point[] points, int minY, int maxY, @NonNull Edge[] ET) {
+        EdgePool edgePool = EdgePool.get();
         for (int i = minY; i <= maxY; i++) {
             for (int j = 0; j < points.length; j++) {
                 if (points[j].y == i) {
                     int j1 = (j - 1 + points.length) % points.length;
                     // 和前面一点形成的线段
                     if (points[j1].y > points[j].y) {
-                        Edge edge = new Edge();
+                        Edge edge = edgePool.acquire();
                         edge.x = points[j].x;
                         edge.yMax = points[j1].y;
                         edge.dx = 1.0f * (points[j1].x - points[j].x) / (points[j1].y - points[j].y);
@@ -215,7 +229,7 @@ public class FillUtils {
                     int j2 = (j + 1 + points.length) % points.length;
                     // 和后面一点形成的线段
                     if (points[j2].y > points[j].y) {
-                        Edge edge = new Edge();
+                        Edge edge = edgePool.acquire();
                         edge.x = points[j].x;
                         edge.yMax = points[j2].y;
                         edge.dx = 1.0f * (points[j2].x - points[j].x) / (points[j2].y - points[j].y);
