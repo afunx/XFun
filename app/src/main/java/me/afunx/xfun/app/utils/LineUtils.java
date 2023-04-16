@@ -159,9 +159,9 @@ public class LineUtils {
         if (DEBUG) {
             LogUtils.i(TAG, "parsePolygon() k: " + k + ", m: " + m + ", n: " + n);
         }
-        // |k| >= 1 时，结果按照x收缩；否则，结果按照y收缩
+        // |k| <= 1 时，结果按照x收缩；否则，结果按照y收缩
         int x, y;
-        if (Math.abs(k) >= 1.0f) {
+        if (Math.abs(k) <= 1.0f) {
             int x1 = (int) Math.floor(m + point0.x);
             int x2 = (int) Math.ceil(m + point0.x);
             if (Math.abs(x1 - point0.x) <= Math.abs(x2 - point0.x)) {
