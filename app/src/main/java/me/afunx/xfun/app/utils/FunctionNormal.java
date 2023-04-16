@@ -28,6 +28,17 @@ public class FunctionNormal {
         return (-1 / this.k) * (x - this.x0) + this.y0;
     }
 
+    /**
+     * 根据y，求解x
+     * y-y0 = (-1/k) * (x-x0)
+     *
+     * @param y y
+     * @return x = -k * (y-y0) + x0
+     */
+    public float calculateX(float y) {
+        return -1 * this.k * (y-this.y0) + this.x0;
+    }
+
     @Override
     public String toString() {
         return "FunctionNormal{" +

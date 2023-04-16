@@ -77,7 +77,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void testParsePolygon() {
-        //public static Point[] parsePolygon(@NonNull Point point0, @NonNull Point point1, boolean shrink, int expandRadius)
         final int expandRadius = 6;
         final boolean shrink = true;
         Point point0 = new Point(3,-2);
@@ -88,6 +87,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         point0.y = -2;
         point1.x = -1;
         point1.y = -2;
+        points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
+        LogUtils.e(TAG, Arrays.deepToString(points));
+        point0.x = 0;
+        point0.y = 0;
+        point1.x = 2;
+        point1.y = 1;
         points = LineUtils.parsePolygon(point0, point1, shrink, expandRadius);
         LogUtils.e(TAG, Arrays.deepToString(points));
     }
