@@ -145,7 +145,6 @@ public class LineUtils {
             LogUtils.i(TAG, "parsePolygon() " + functionKB);
         }
         final float k = functionKB.k;
-        final float b = functionKB.b;
         // y - y0 = (-1/k) * (x - x0)
         FunctionNormal functionNormal = parseFunctionNormal(k, point0);
         if (DEBUG) {
@@ -159,9 +158,9 @@ public class LineUtils {
         if (DEBUG) {
             LogUtils.i(TAG, "parsePolygon() k: " + k + ", m: " + m + ", n: " + n);
         }
-        // |k| >= 1 时，结果按照x收缩；否则，结果按照y收缩
+        // |k| <= 1 时，结果按照x收缩；否则，结果按照y收缩
         int x, y;
-        if (Math.abs(k) >= 1.0f) {
+        if (Math.abs(k) <= 1.0f) {
             int x1 = (int) Math.floor(m + point0.x);
             int x2 = (int) Math.ceil(m + point0.x);
             if (Math.abs(x1 - point0.x) <= Math.abs(x2 - point0.x)) {
@@ -169,7 +168,7 @@ public class LineUtils {
             } else {
                 x = shrink ? x2 : x1;
             }
-            y = Math.round(functionNormal.calculateY(x));
+            y = Math.round(n + point0.y);
             if (DEBUG) {
                 LogUtils.i(TAG, "parsePolygon() x1: " + x1 + ", x2: " + x2 + ", x: " + x + ", y: " + y);
             }
@@ -181,25 +180,14 @@ public class LineUtils {
             } else {
                 y = shrink ? y2 : y1;
             }
-            x = Math.round(functionNormal.calculateX(y));
+            x = Math.round(m + point0.y);
             if (DEBUG) {
                 LogUtils.i(TAG, "parsePolygon() y1: " + y1 + ", y2: " + y2 + ", x: " + x + ", y: " + y);
             }
         }
-        // 已知点P(x,y)求它经过中垂线的点Q。已知P、Q的中垂线经过point0和point1
-        // 联立方程组: y=k*x+b, (y-y0)/(x-x0) = -1/k
-        // (k*x+b-y0)/(x-x0)=-1/k，得:
-        // x = (y0-b+x0/k)/(k+1/k)
-        // (xq, pq)为PQ的中垂线与y=kx+b的交点
-        float xq = (point0.y - b + point0.x / k) / (k + 1 / k);
-        float yq = functionKB.calculateX(xq);
-        float _yq = functionNormal.calculateX(xq);
-        if (DEBUG) {
-            LogUtils.i(TAG, "parsePolygon() xq: " + xq + ", yq: " + yq + ", _yq: " + _yq);
-        }
         // 向量: x - xq
-        int dx = Math.round(x - xq);
-        int dy = Math.round(y - yq);
+        int dx = Math.round(x - point0.x);
+        int dy = Math.round(y - point0.y);
         // 向量: point1 - point0
         int x01 = point1.x - point0.x;
         int y01 = point1.y - point0.y;
