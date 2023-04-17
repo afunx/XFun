@@ -159,7 +159,7 @@ public class FillUtils {
             }
 
             // 将NET中的新点加入AET,并用插入法按X值递增排序
-            p = ET[i].next;
+            p = ET[i - minY].next;
             q = AET;
             while (p != null) {
                 while (q.next != null && p.x >= q.next.x) {
@@ -223,8 +223,8 @@ public class FillUtils {
                         edge.x = points[j].x;
                         edge.yMax = points[j1].y;
                         edge.dx = 1.0f * (points[j1].x - points[j].x) / (points[j1].y - points[j].y);
-                        edge.next = ET[i].next;
-                        ET[i].next = edge;
+                        edge.next = ET[i - minY].next;
+                        ET[i - minY].next = edge;
                     }
                     int j2 = (j + 1 + points.length) % points.length;
                     // 和后面一点形成的线段
@@ -233,8 +233,8 @@ public class FillUtils {
                         edge.x = points[j].x;
                         edge.yMax = points[j2].y;
                         edge.dx = 1.0f * (points[j2].x - points[j].x) / (points[j2].y - points[j].y);
-                        edge.next = ET[i].next;
-                        ET[i].next = edge;
+                        edge.next = ET[i - minY].next;
+                        ET[i - minY].next = edge;
                     }
                 }
             }
