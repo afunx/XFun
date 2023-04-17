@@ -212,6 +212,9 @@ public class FillUtils {
     }
 
     private static void buildET(@NonNull Point[] points, int minY, int maxY, @NonNull Edge[] ET) {
+        if (DEBUG) {
+            LogUtils.i(TAG, "buildET() minY: " + minY + ", maxY: " + maxY + ", ET.length: " + ET.length);
+        }
         EdgePool edgePool = EdgePool.get();
         for (int i = minY; i <= maxY; i++) {
             for (int j = 0; j < points.length; j++) {

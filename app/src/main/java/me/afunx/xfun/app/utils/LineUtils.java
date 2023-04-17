@@ -180,10 +180,13 @@ public class LineUtils {
             } else {
                 y = shrink ? y2 : y1;
             }
-            x = Math.round(m + point0.y);
+            x = Math.round(m + point0.x);
             if (DEBUG) {
                 LogUtils.i(TAG, "parsePolygon() y1: " + y1 + ", y2: " + y2 + ", x: " + x + ", y: " + y);
             }
+        }
+        if (DEBUG) {
+            LogUtils.i(TAG, "parsePolygon() x: " + x + ", y: " + y);
         }
         // 向量: x - xq
         int dx = Math.round(x - point0.x);
