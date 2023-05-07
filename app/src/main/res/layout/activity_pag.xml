@@ -15,19 +15,13 @@
         android:layout_marginTop="50dp" />
 
     <org.libpag.PAGImageView
+        android:id="@+id/pag_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <org.libpag.PAGView
         android:id="@+id/pag_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <org.libpag.PAGImageView
-        android:id="@+id/pag_view1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="100dp" />
-
-    <org.libpag.PAGImageView
-        android:id="@+id/pag_view2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="200dp" />
 </FrameLayout>
