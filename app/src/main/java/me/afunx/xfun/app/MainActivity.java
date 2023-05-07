@@ -1,7 +1,5 @@
 package me.afunx.xfun.app;
 
-import me.afunx.xfun.demo.DemoMainActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +18,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_goto_demo) {
-            Intent intent = new Intent(this, DemoMainActivity.class);
+            Intent intent = new Intent(this, PagActivity.class);
             startActivity(intent);
         }
     }
