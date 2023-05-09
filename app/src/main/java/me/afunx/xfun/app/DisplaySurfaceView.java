@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.SystemClock;
@@ -44,6 +45,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         super(context, attrs);
         mPaint = new Paint();
         mContent0Matrix = new Matrix();
+        mContent0Matrix.postScale(3.75f, 3.75f);
         mContent0Ids = new int[386];
         mContent0Ids[0] = R.drawable.particle001;
         for (int i = 1; i < mContent0Ids.length; i++) {
@@ -124,6 +126,9 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void drawContent(@NonNull Canvas canvas) {
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.BLACK);
+        canvas.drawRect(0, 0, 1920, 1200, mPaint);
         drawContent0(canvas);
     }
 
