@@ -18,7 +18,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_goto_demo) {
-            Intent intent = new Intent(this, PagActivity.class);
+            Intent intent = new Intent(this, DisplayActivity.class);
             startActivity(intent);
         }
     }
