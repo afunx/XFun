@@ -1,11 +1,8 @@
 package me.afunx.xfun.app;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -27,18 +24,14 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private static final String TAG = "DisplaySurfaceView";
 
+    private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
+
+    private static final int PARTICLE_TRACE_COLOR = Color.parseColor("#FFFF0000");
+
     private static final boolean FRAME_RATE_ENABLED = true;
 
     private boolean mIsDrawing;
     private DisplayFrameRateListener mFrameRateListener;
-
-    private int mContent0Index = 0;
-
-    private final int[] mContent0Ids;
-
-    private Bitmap mContent0Bitmap;
-
-    private final Matrix mContent0Matrix;
 
     private final Paint mPaint;
 
@@ -47,13 +40,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
-        mContent0Matrix = new Matrix();
-        mContent0Matrix.postScale(3.75f, 3.75f);
-        mContent0Ids = new int[386];
-        mContent0Ids[0] = R.drawable.particle001;
-        for (int i = 1; i < mContent0Ids.length; i++) {
-            mContent0Ids[i] = mContent0Ids[0] + i;
-        }
         initView();
     }
 
@@ -68,7 +54,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void addParticles() {
-        displayParticleCreator.createParticles(mDisplayParticleList);
+        DisplayParticleCreator.createParticles(mDisplayParticleList);
     }
 
 
@@ -137,24 +123,19 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         mPaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, 1920, 1200, mPaint);
         drawParticles(canvas);
-        //drawContent0(canvas);
-    }
-
-    private void drawContent0(@NonNull Canvas canvas) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
-        options.inBitmap = mContent0Bitmap;
-
-        mContent0Bitmap = BitmapFactory.decodeResource(getResources(), mContent0Ids[mContent0Index], options);
-        canvas.drawBitmap(mContent0Bitmap, mContent0Matrix, mPaint);
-        mContent0Index = (mContent0Index + 1) % mContent0Ids.length;
     }
 
     private void drawParticles(@NonNull Canvas canvas) {
-        mPaint.setColor(Color.parseColor("#FF88FFC2"));
+        mPaint.setColor(PARTICLE_COLOR);
         long elapsedRealTime = SystemClock.elapsedRealtime();
         for (DisplayParticle particle : mDisplayParticleList) {
+            if (particle == DisplayParticleCreator.TraceParticle) {
+                mPaint.setColor(PARTICLE_TRACE_COLOR);
+            }
             particle.onDraw(elapsedRealTime, canvas, mPaint);
+            if (particle == DisplayParticleCreator.TraceParticle) {
+                mPaint.setColor(PARTICLE_COLOR);
+            }
         }
     }
 

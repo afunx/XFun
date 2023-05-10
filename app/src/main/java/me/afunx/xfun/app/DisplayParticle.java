@@ -30,6 +30,10 @@ public class DisplayParticle {
     private final long mStartTime;
     // 粒子结束时间，单位：ms
     private final long mEndTime;
+    // 粒子进入时间，单位：ms
+    private final long mEntranceTime;
+    // 粒子退出时间，单位：ms
+    private final long mExitTime;
 
     private long mElapsedRealTime = 0;
 
@@ -56,15 +60,20 @@ public class DisplayParticle {
         long spentRealTime = elapsedRealTime - mElapsedRealTime;
         // 动画所处的时间(0<=durationTime<mInterval)
         long durationTime = spentRealTime % mInterval;
+        // 去除进入时间后的时间
+        long realDurationTime = durationTime - mEntranceTime;
         // 是否在有效时间内
-        if (mStartTime <= durationTime && durationTime <= mEndTime) {
-            float input = 1.0f * (durationTime - mStartTime) / (mEndTime - mStartTime);
+        if (mStartTime <= realDurationTime && durationTime <= mExitTime && realDurationTime <= mEndTime) {
+            float input = 1.0f * (realDurationTime - mStartTime) / (mEndTime - mStartTime);
             float fraction = mTimeInterpolator.getInterpolation(input);
             PointF current = mPointFEvaluator.evaluate(fraction, mStartPoint, mEndPoint);
-            float left = current.x - mRadius / 2;
-            float top = current.y - mRadius / 2;
-            float right = left + mRadius;
-            float bottom = top + mRadius;
+            if (this == DisplayParticleCreator.TraceParticle) {
+                LogUtils.e(TAG, "TraceParticle fraction: " + fraction + ", current: " + current);
+            }
+            float left = current.x - mRadius;
+            float top = current.y - mRadius;
+            float right = left + mRadius * 2;
+            float bottom = top + mRadius * 2;
             canvas.drawOval(left, top, right, bottom, paint);
         }
         if (DEBUG) {
@@ -73,13 +82,30 @@ public class DisplayParticle {
         }
     }
 
-    private DisplayParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime) {
+    private DisplayParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime, long entranceTime, long exitTime) {
         mStartPoint = new PointF(startX, startY);
         mEndPoint = new PointF(endX, endY);
         mRadius = radius;
         mInterval = interval;
         mStartTime = startTime;
         mEndTime = endTime;
+        mEntranceTime = entranceTime;
+        mExitTime = exitTime;
+    }
+
+    public DisplayParticle clone(String entranceTime, String exitTime) {
+        return new Builder()
+                .setStartX(mStartPoint.x)
+                .setStartY(mStartPoint.y)
+                .setEndX(mEndPoint.x)
+                .setEndY(mEndPoint.y)
+                .setRadius(mRadius)
+                .setInterval(mInterval)
+                .setStartTime(mStartTime)
+                .setEndTime(mEndTime)
+                .setEntranceTime(entranceTime)
+                .setExitTime(exitTime)
+                .build();
     }
 
     public static class Builder {
@@ -91,6 +117,10 @@ public class DisplayParticle {
         private long interval;
         private long startTime;
         private long endTime;
+
+        private long entranceTime;
+
+        private long exitTime;
 
         public Builder setStartX(float startX) {
             this.startX = startX;
@@ -122,13 +152,33 @@ public class DisplayParticle {
             return this;
         }
 
-        public Builder setStartTime(long startTime) {
+        public Builder setStartTime(String startTime) {
+            this.startTime = parseTime(startTime);
+            return this;
+        }
+
+        private Builder setStartTime(long startTime) {
             this.startTime = startTime;
             return this;
         }
 
-        public Builder setEndTime(long endTime) {
+        public Builder setEndTime(String endTime) {
+            this.endTime = parseTime(endTime);
+            return this;
+        }
+
+        private Builder setEndTime(long endTime) {
             this.endTime = endTime;
+            return this;
+        }
+
+        public Builder setEntranceTime(String entranceTime) {
+            this.entranceTime = parseTime(entranceTime);
+            return this;
+        }
+
+        public Builder setExitTime(String exitTime) {
+            this.exitTime = parseTime(exitTime);
             return this;
         }
 
@@ -136,13 +186,16 @@ public class DisplayParticle {
             if (this.startTime < 0) {
                 throw new IllegalArgumentException("startTime: " + this.startTime + " < 0");
             }
-            if (this.endTime > this.interval) {
-                throw new IllegalArgumentException("endTime: " + this.endTime + " > interval: " + this.interval);
+            if (this.entranceTime < 0) {
+                throw new IllegalArgumentException("entranceTime: " + this.entranceTime + " < 0");
+            }
+            if (this.exitTime > this.interval) {
+                throw new IllegalArgumentException("exitTime: " + this.exitTime + " > interval: " + this.interval);
             }
             if (this.radius <= 0) {
                 throw new IllegalArgumentException("radius: " + this.radius + " <= 0");
             }
-            return new DisplayParticle(startX, startY, endX, endY, radius, interval, startTime, endTime);
+            return new DisplayParticle(startX, startY, endX, endY, radius, interval, startTime, endTime, entranceTime, exitTime);
         }
     }
 

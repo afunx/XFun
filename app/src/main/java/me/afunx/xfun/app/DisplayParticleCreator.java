@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class displayParticleCreator {
+public class DisplayParticleCreator {
+    
+    static DisplayParticle TraceParticle = null;
 
     public static void createParticles(@NonNull List<DisplayParticle> displayParticleList) {
         displayParticleList.clear();
@@ -12,6 +14,8 @@ public class displayParticleCreator {
         createParticlesRight(displayParticleList);
         // 左融合
         createParticlesLeft(displayParticleList);
+        // 裂变
+        createParticlesFission(displayParticleList);
     }
 
     private static void createParticlesRight(@NonNull List<DisplayParticle> displayParticleList) {
@@ -23,9 +27,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(691.5f)
                         .setRadius(30.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("15:12"))
-                        .setEndTime(DisplayParticle.parseTime("17:05"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("15:12")
+                        .setEndTime("17:05")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         // 2
         displayParticleList.add(
@@ -35,9 +41,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(691.5f)
                         .setRadius(20.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("13:00"))
-                        .setEndTime(DisplayParticle.parseTime("14:17"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("13:00")
+                        .setEndTime("14:17")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         // 3
         displayParticleList.add(
@@ -47,9 +55,11 @@ public class displayParticleCreator {
                         .setEndX(1242.8f)
                         .setEndY(691.5f)
                         .setRadius(32.5f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("11:19"))
-                        .setEndTime(DisplayParticle.parseTime("13:12"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("11:19")
+                        .setEndTime("13:12")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         // 4
         displayParticleList.add(
@@ -59,9 +69,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(691.5f)
                         .setRadius(30.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("10:14"))
-                        .setEndTime(DisplayParticle.parseTime("12:07"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("10:14")
+                        .setEndTime("12:07")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         // 5
         displayParticleList.add(
@@ -71,9 +83,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(619.5f)
                         .setRadius(20.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("08:02"))
-                        .setEndTime(DisplayParticle.parseTime("09:19"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("08:02")
+                        .setEndTime("09:19")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         // 6
         displayParticleList.add(
@@ -83,9 +97,11 @@ public class displayParticleCreator {
                         .setEndX(1242.8f)
                         .setEndY(691.5f)
                         .setRadius(32.5f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("06:21"))
-                        .setEndTime(DisplayParticle.parseTime("08:14"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("06:21")
+                        .setEndTime("08:14")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
 
         // 7
@@ -96,9 +112,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(691.5f)
                         .setRadius(30.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("05:18"))
-                        .setEndTime(DisplayParticle.parseTime("07:11"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("05:18")
+                        .setEndTime("07:11")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
 
         // 8
@@ -109,9 +127,11 @@ public class displayParticleCreator {
                         .setEndX(1182.8f)
                         .setEndY(691.5f)
                         .setRadius(20.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("03:06"))
-                        .setEndTime(DisplayParticle.parseTime("04:23"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("03:06")
+                        .setEndTime("04:23")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
 
         // 9
@@ -122,9 +142,11 @@ public class displayParticleCreator {
                         .setEndX(1242.8f)
                         .setEndY(691.5f)
                         .setRadius(32.5f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("02:01"))
-                        .setEndTime(DisplayParticle.parseTime("03:18"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("02:01")
+                        .setEndTime("03:18")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
     }
 
@@ -137,9 +159,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("13:22"))
-                        .setEndTime(DisplayParticle.parseTime("15:15"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("13:22")
+                        .setEndTime("15:15")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  2
         displayParticleList.add(
@@ -149,9 +173,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("12:11"))
-                        .setEndTime(DisplayParticle.parseTime("14:04"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("12:11")
+                        .setEndTime("14:04")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  3
         displayParticleList.add(
@@ -161,9 +187,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("11:02"))
-                        .setEndTime(DisplayParticle.parseTime("12:19"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("11:02")
+                        .setEndTime("12:19")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  4
         displayParticleList.add(
@@ -173,9 +201,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("09:00"))
-                        .setEndTime(DisplayParticle.parseTime("10:17"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("09:00")
+                        .setEndTime("10:17")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  5
         displayParticleList.add(
@@ -185,9 +215,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("07:13"))
-                        .setEndTime(DisplayParticle.parseTime("09:06"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("07:13")
+                        .setEndTime("09:06")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  6
         displayParticleList.add(
@@ -197,9 +229,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("06:04"))
-                        .setEndTime(DisplayParticle.parseTime("07:21"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("06:04")
+                        .setEndTime("07:21")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  7
         displayParticleList.add(
@@ -209,9 +243,11 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("04:04"))
-                        .setEndTime(DisplayParticle.parseTime("05:21"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("04:04")
+                        .setEndTime("05:21")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
         //  8
         displayParticleList.add(
@@ -221,10 +257,13 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("02:17"))
-                        .setEndTime(DisplayParticle.parseTime("04:10"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("02:17")
+                        .setEndTime("04:10")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
+
         //  9
         displayParticleList.add(
                 new DisplayParticle.Builder()
@@ -233,10 +272,25 @@ public class displayParticleCreator {
                         .setEndX(662.8f)
                         .setEndY(691.5f)
                         .setRadius(40.0f)
-                        .setInterval(20 * 1000L)
-                        .setStartTime(DisplayParticle.parseTime("01:08"))
-                        .setEndTime(DisplayParticle.parseTime("03:01"))
+                        .setInterval(16 * 1000L)
+                        .setStartTime("01:08")
+                        .setEndTime("03:01")
+                        .setEntranceTime("00:00")
+                        .setExitTime("16:00")
                         .build());
     }
 
+    private static void createParticlesFission(List<DisplayParticle> displayParticleList) {
+        int size = displayParticleList.size();
+        for (int i = 0; i < size; i++) {
+            DisplayParticle particle = displayParticleList.get(i);
+            displayParticleList.add(particle.clone("02:22", "16:00"));
+            displayParticleList.add(particle.clone("00:21", "16:00"));
+        }
+    }
+
+    // 追踪最后一个粒子
+    private static void traceLastParticle(List<DisplayParticle> displayParticleList) {
+        TraceParticle = displayParticleList.get(displayParticleList.size() - 1);
+    }
 }
