@@ -16,7 +16,8 @@ import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
@@ -41,6 +42,8 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private final Paint mPaint;
 
+    private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
+
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
@@ -60,7 +63,12 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void initView() {
         LogUtils.i(TAG, "initView()");
+        addParticles();
         getHolder().addCallback(this);
+    }
+
+    private void addParticles() {
+        displayParticleCreator.createParticles(mDisplayParticleList);
     }
 
 
@@ -84,7 +92,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     @Override
     public void run() {
-
         final long interval = 1000;
         long lastTimestamp = 0;
         int frameCount = -1;
@@ -129,7 +136,8 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, 1920, 1200, mPaint);
-        drawContent0(canvas);
+        drawParticles(canvas);
+        //drawContent0(canvas);
     }
 
     private void drawContent0(@NonNull Canvas canvas) {
@@ -141,4 +149,13 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         canvas.drawBitmap(mContent0Bitmap, mContent0Matrix, mPaint);
         mContent0Index = (mContent0Index + 1) % mContent0Ids.length;
     }
+
+    private void drawParticles(@NonNull Canvas canvas) {
+        mPaint.setColor(Color.parseColor("#FF88FFC2"));
+        long elapsedRealTime = SystemClock.elapsedRealtime();
+        for (DisplayParticle particle : mDisplayParticleList) {
+            particle.onDraw(elapsedRealTime, canvas, mPaint);
+        }
+    }
+
 }
