@@ -1,14 +1,18 @@
 package me.afunx.xfun.app;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
+
+import com.afunx.xfun.common.utils.LogUtils;
 
 import java.util.List;
 
 public class DisplayParticleCreator {
 
-    static DisplayParticle TraceParticle = null;
+    private static final String TAG = "DisplayParticleCreator";
 
-    static DisplayParticle TraceParticle2 = null;
+    private static final boolean DEBUG = true;
 
     public static void createParticles(@NonNull List<DisplayParticle> displayParticleList) {
         displayParticleList.clear();
@@ -307,15 +311,22 @@ public class DisplayParticleCreator {
             displayParticleList.add(particle.clone("02:22", "16:00"));
             displayParticleList.add(particle.clone("00:21", "16:00"));
         }
-    }
-
-    // 追踪最后一个粒子
-    private static void traceLastParticle(List<DisplayParticle> displayParticleList) {
-        TraceParticle = displayParticleList.get(displayParticleList.size() - 1);
-    }
-
-    // 追踪最后一个粒子
-    private static void traceLastParticle2(List<DisplayParticle> displayParticleList) {
-        TraceParticle2 = displayParticleList.get(displayParticleList.size() - 1);
+        if (DEBUG) {
+            for (int i = 0; i < displayParticleList.size(); i++) {
+                DisplayParticle particle = displayParticleList.get(i);
+                LogUtils.i(TAG, i + " :: " + particle.toString());
+                // i<size/2 bad
+                // i<size/4 bad
+                // i<size/8 good
+                if (displayParticleList.size() / 4 < i && i < displayParticleList.size() / 2) {
+                    LogUtils.e(TAG, "i: " + i);
+                    particle._color = Color.parseColor("#FF00FF00");
+                }
+                // 14 - 26
+                if (14 <= i && i<=21) {
+                    particle._color = Color.parseColor("#FF0000FF");
+                }
+            }
+        }
     }
 }

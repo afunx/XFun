@@ -24,7 +24,10 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private static final String TAG = "DisplaySurfaceView";
 
-    private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
+    //private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
+    private static final int PARTICLE_COLOR = Color.parseColor("#FFFF0000");
+
+    private static final int ROUND_RECT_COLOR = Color.parseColor("#FF88FFC2");
 
     private static final int PARTICLE_TRACE_COLOR = Color.parseColor("#FFFF0000");
     private static final int PARTICLE_TRACE2_COLOR = Color.parseColor("#FF00FF00");
@@ -38,9 +41,12 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
 
+    private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
+
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
+        mPaint.setAntiAlias(true);
         initView();
     }
 
@@ -120,25 +126,23 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void drawContent(@NonNull Canvas canvas) {
+        long elapsedRealTime = SystemClock.elapsedRealtime();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, 1920, 1200, mPaint);
-        drawParticles(canvas);
+        drawParticles(elapsedRealTime, canvas);
+        drawRoundRects(elapsedRealTime, canvas);
     }
 
-    private void drawParticles(@NonNull Canvas canvas) {
+    private void drawRoundRects(long elapsedRealTime, @NonNull Canvas canvas) {
+        mPaint.setColor(ROUND_RECT_COLOR);
+        mDisplayRoundRect.onDraw(elapsedRealTime, canvas, mPaint);
+    }
+
+    private void drawParticles(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(PARTICLE_COLOR);
-        long elapsedRealTime = SystemClock.elapsedRealtime();
         for (DisplayParticle particle : mDisplayParticleList) {
-            if (particle == DisplayParticleCreator.TraceParticle) {
-                mPaint.setColor(PARTICLE_TRACE_COLOR);
-            } else if (particle == DisplayParticleCreator.TraceParticle2) {
-                mPaint.setColor(PARTICLE_TRACE2_COLOR);
-            }
             particle.onDraw(elapsedRealTime, canvas, mPaint);
-            if (particle == DisplayParticleCreator.TraceParticle || particle == DisplayParticleCreator.TraceParticle2) {
-                mPaint.setColor(PARTICLE_COLOR);
-            }
         }
     }
 

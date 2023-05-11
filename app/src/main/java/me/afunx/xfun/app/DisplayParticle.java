@@ -37,10 +37,23 @@ public class DisplayParticle {
 
     private long mElapsedRealTime = 0;
 
-    // 时间差值器
-    private final TimeInterpolator mTimeInterpolator = new AccelerateDecelerateInterpolator();
-    // 位置估值器
-    private final PointFEvaluator mPointFEvaluator = new PointFEvaluator();
+    private double _distance;
+
+    private long _realDuration;
+
+    int _color = 0;
+
+    int _oldColor = 0;
+
+    private static final TimeInterpolator sTimeInterpolator;
+
+    private static final PointFEvaluator sPointFEvaluator;
+
+    static {
+        sTimeInterpolator = new AccelerateDecelerateInterpolator();
+        sPointFEvaluator = new PointFEvaluator();
+    }
+
 
     /**
      * 绘制回调
@@ -65,13 +78,31 @@ public class DisplayParticle {
         // 是否在有效时间内
         if (mStartTime <= realDurationTime && durationTime <= mExitTime && realDurationTime <= mEndTime) {
             float input = 1.0f * (realDurationTime - mStartTime) / (mEndTime - mStartTime);
-            float fraction = mTimeInterpolator.getInterpolation(input);
-            PointF current = mPointFEvaluator.evaluate(fraction, mStartPoint, mEndPoint);
+            float fraction = sTimeInterpolator.getInterpolation(input);
+            PointF current = sPointFEvaluator.evaluate(fraction, mStartPoint, mEndPoint);
             float left = current.x - mRadius;
             float top = current.y - mRadius;
             float right = left + mRadius * 2;
             float bottom = top + mRadius * 2;
+            if (_color != 0) {
+                _oldColor = paint.getColor();
+                paint.setColor(_color);
+            }
             canvas.drawOval(left, top, right, bottom, paint);
+            if (_color != 0) {
+                paint.setColor(_oldColor);
+            }
+
+            double distance = distance(current, mEndPoint);
+            if (realDurationTime > _realDuration && distance > _distance) {
+                LogUtils.e(TAG, "afunx realDurationTime: " + realDurationTime
+                        + ", _realDuration: " + _realDuration
+                        + ", distance: " + distance
+                        + ", _distance: " + _distance);
+            }
+
+            _distance = distance;
+            _realDuration = realDurationTime;
         }
         if (DEBUG) {
             long consume = TimeDiffUtil.end();
@@ -88,6 +119,13 @@ public class DisplayParticle {
         mEndTime = endTime;
         mEntranceTime = entranceTime;
         mExitTime = exitTime;
+
+        _realDuration = 0;
+        _distance = distance(mStartPoint, mEndPoint);
+    }
+
+    private double distance(PointF p0, PointF p1) {
+        return Math.sqrt((p1.y - p0.y) * (p1.y - p0.y) + (p1.x - p0.x) * (p1.x - p0.x));
     }
 
     public DisplayParticle clone(String entranceTime, String exitTime) {
@@ -211,5 +249,20 @@ public class DisplayParticle {
         long t1 = Long.parseLong(time.substring(0, 2));
         long t2 = Long.parseLong(time.substring(3, 5));
         return t1 * 1000L + t2 * 1000L / 24;
+    }
+
+    @Override
+    public String toString() {
+        return "DisplayParticle{" +
+                "mStartPoint=" + mStartPoint +
+                ", mEndPoint=" + mEndPoint +
+                ", mRadius=" + mRadius +
+                ", mInterval=" + mInterval +
+                ", mStartTime=" + mStartTime +
+                ", mEndTime=" + mEndTime +
+                ", mEntranceTime=" + mEntranceTime +
+                ", mExitTime=" + mExitTime +
+                ", mElapsedRealTime=" + mElapsedRealTime +
+                '}';
     }
 }
