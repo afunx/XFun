@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 
@@ -68,9 +67,6 @@ public class DisplayParticle {
             float input = 1.0f * (realDurationTime - mStartTime) / (mEndTime - mStartTime);
             float fraction = mTimeInterpolator.getInterpolation(input);
             PointF current = mPointFEvaluator.evaluate(fraction, mStartPoint, mEndPoint);
-            if (this == DisplayParticleCreator.TraceParticle) {
-                LogUtils.e(TAG, "TraceParticle fraction: " + fraction + ", current: " + current);
-            }
             float left = current.x - mRadius;
             float top = current.y - mRadius;
             float right = left + mRadius * 2;
@@ -122,6 +118,8 @@ public class DisplayParticle {
         private long entranceTime;
 
         private long exitTime;
+
+        private long clipStartTime = 0;
 
         public Builder setStartX(float startX) {
             this.startX = startX;
@@ -183,6 +181,11 @@ public class DisplayParticle {
             return this;
         }
 
+        public Builder setClipStartTime(String clipStartTime) {
+            this.clipStartTime = parseTime(clipStartTime);
+            return this;
+        }
+
         public DisplayParticle build() {
             if (this.startTime < 0) {
                 throw new IllegalArgumentException("startTime: " + this.startTime + " < 0");
@@ -196,7 +199,7 @@ public class DisplayParticle {
             if (this.radius <= 0) {
                 throw new IllegalArgumentException("radius: " + this.radius + " <= 0");
             }
-            return new DisplayParticle(startX, startY, endX, endY, radius, interval, startTime, endTime, entranceTime, exitTime);
+            return new DisplayParticle(startX, startY, endX, endY, radius, interval, startTime - clipStartTime, endTime - clipStartTime, entranceTime, exitTime);
         }
     }
 

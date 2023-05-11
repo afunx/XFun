@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 public class DisplayParticleCreator {
-    
+
     static DisplayParticle TraceParticle = null;
 
     static DisplayParticle TraceParticle2 = null;
@@ -34,6 +34,7 @@ public class DisplayParticleCreator {
                         .setEndTime("17:05")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         // 2
         displayParticleList.add(
@@ -48,6 +49,7 @@ public class DisplayParticleCreator {
                         .setEndTime("14:17")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         // 3
         displayParticleList.add(
@@ -62,6 +64,7 @@ public class DisplayParticleCreator {
                         .setEndTime("13:12")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         // 4
         displayParticleList.add(
@@ -76,6 +79,7 @@ public class DisplayParticleCreator {
                         .setEndTime("12:07")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         // 5
         displayParticleList.add(
@@ -90,6 +94,7 @@ public class DisplayParticleCreator {
                         .setEndTime("09:19")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         // 6
         displayParticleList.add(
@@ -104,6 +109,7 @@ public class DisplayParticleCreator {
                         .setEndTime("08:14")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
 
         // 7
@@ -119,6 +125,7 @@ public class DisplayParticleCreator {
                         .setEndTime("07:11")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
 
         // 8
@@ -134,6 +141,7 @@ public class DisplayParticleCreator {
                         .setEndTime("04:23")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
 
         // 9
@@ -149,6 +157,7 @@ public class DisplayParticleCreator {
                         .setEndTime("03:18")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
     }
 
@@ -166,6 +175,7 @@ public class DisplayParticleCreator {
                         .setEndTime("15:15")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  2
         displayParticleList.add(
@@ -180,6 +190,7 @@ public class DisplayParticleCreator {
                         .setEndTime("14:04")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  3
         displayParticleList.add(
@@ -194,6 +205,7 @@ public class DisplayParticleCreator {
                         .setEndTime("12:19")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  4
         displayParticleList.add(
@@ -208,6 +220,7 @@ public class DisplayParticleCreator {
                         .setEndTime("10:17")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  5
         displayParticleList.add(
@@ -222,6 +235,7 @@ public class DisplayParticleCreator {
                         .setEndTime("09:06")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  6
         displayParticleList.add(
@@ -236,6 +250,7 @@ public class DisplayParticleCreator {
                         .setEndTime("07:21")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  7
         displayParticleList.add(
@@ -250,6 +265,7 @@ public class DisplayParticleCreator {
                         .setEndTime("05:21")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
         //  8
         displayParticleList.add(
@@ -264,6 +280,7 @@ public class DisplayParticleCreator {
                         .setEndTime("04:10")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
 
         //  9
@@ -279,6 +296,7 @@ public class DisplayParticleCreator {
                         .setEndTime("03:01")
                         .setEntranceTime("00:00")
                         .setExitTime("16:00")
+                        .setClipStartTime("01:08")
                         .build());
     }
 
