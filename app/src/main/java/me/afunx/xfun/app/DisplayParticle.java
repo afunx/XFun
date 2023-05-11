@@ -16,6 +16,7 @@ import me.afunx.xfun.app.util.TimeDiffUtil;
 public class DisplayParticle {
     private static final String TAG = "DisplayParticle";
     private static final boolean DEBUG = false;
+    private static final boolean TRACE = true;
 
     // 粒子初始位置点，单位：像素
     private final PointF mStartPoint;
@@ -37,8 +38,7 @@ public class DisplayParticle {
 
     private long mElapsedRealTime = 0;
 
-    private double _distance;
-
+    int _idx;
     private long _realDuration;
 
     int _color = 0;
@@ -93,15 +93,9 @@ public class DisplayParticle {
                 paint.setColor(_oldColor);
             }
 
-            double distance = distance(current, mEndPoint);
-            if (realDurationTime > _realDuration && distance > _distance) {
-                LogUtils.e(TAG, "afunx realDurationTime: " + realDurationTime
-                        + ", _realDuration: " + _realDuration
-                        + ", distance: " + distance
-                        + ", _distance: " + _distance);
+            if (TRACE && realDurationTime != _realDuration) {
+                LogUtils.i(TAG, "idx: " + _idx + ", current: " + current);
             }
-
-            _distance = distance;
             _realDuration = realDurationTime;
         }
         if (DEBUG) {
@@ -119,9 +113,7 @@ public class DisplayParticle {
         mEndTime = endTime;
         mEntranceTime = entranceTime;
         mExitTime = exitTime;
-
         _realDuration = 0;
-        _distance = distance(mStartPoint, mEndPoint);
     }
 
     private double distance(PointF p0, PointF p1) {

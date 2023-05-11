@@ -20,7 +20,7 @@ public class DisplayRoundRect {
         // 大
         final float bigWidth = 459.9f;
         final float bigHeight = 485f;
-        float left = 301;
+        float left = 302;
         float top = 348;
         float right = left + bigWidth;
         float bottom = top + bigHeight;

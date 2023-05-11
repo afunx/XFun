@@ -5,15 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MotionEvent;
 import android.widget.TextView;
 
+import com.afunx.xfun.common.utils.LogUtils;
+
 public class DisplayActivity extends AppCompatActivity implements DisplaySurfaceView.DisplayFrameRateListener {
+
+    private static final String TAG = "DisplayActivity";
 
     private DisplaySurfaceView mDisplaySurfaceView;
 
     private TextView mTvFrameRate;
 
     private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +31,16 @@ public class DisplayActivity extends AppCompatActivity implements DisplaySurface
 
         mDisplaySurfaceView = findViewById(R.id.display_view);
         mDisplaySurfaceView.setFrameRateListener(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
+            mDisplaySurfaceView.updateElapsedTime(count * 100L);
+            LogUtils.e(TAG, "DisplayParticle count: " + count + ", ev: " + ev);
+            ++count;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

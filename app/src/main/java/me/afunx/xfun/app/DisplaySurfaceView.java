@@ -27,7 +27,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     //private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
     private static final int PARTICLE_COLOR = Color.parseColor("#FFFF0000");
 
-    private static final int ROUND_RECT_COLOR = Color.parseColor("#FF88FFC2");
+    private static final int ROUND_RECT_COLOR = Color.parseColor("#8088FFC2");
 
     private static final int PARTICLE_TRACE_COLOR = Color.parseColor("#FFFF0000");
     private static final int PARTICLE_TRACE2_COLOR = Color.parseColor("#FF00FF00");
@@ -43,11 +43,19 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
 
+
+    private static final boolean TOUCH_MODE = false;
+    private volatile long mElapsedTime = -1;
+
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         initView();
+    }
+
+    public void updateElapsedTime(long elapsedTime) {
+        mElapsedTime = elapsedTime;
     }
 
     public void setFrameRateListener(DisplayFrameRateListener frameRateListener) {
@@ -127,6 +135,13 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void drawContent(@NonNull Canvas canvas) {
         long elapsedRealTime = SystemClock.elapsedRealtime();
+        if (TOUCH_MODE) {
+            if (mElapsedTime < 0) {
+                return;
+            } else {
+                elapsedRealTime = mElapsedTime;
+            }
+        }
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, 1920, 1200, mPaint);

@@ -311,21 +311,16 @@ public class DisplayParticleCreator {
             displayParticleList.add(particle.clone("02:22", "16:00"));
             displayParticleList.add(particle.clone("00:21", "16:00"));
         }
+        for (int i = 0; i<displayParticleList.size(); i++) {
+            displayParticleList.get(i)._idx = i;
+            if (i == 6) {
+                displayParticleList.get(i)._color = Color.parseColor("#FF00FF00");
+            }
+        }
         if (DEBUG) {
             for (int i = 0; i < displayParticleList.size(); i++) {
                 DisplayParticle particle = displayParticleList.get(i);
                 LogUtils.i(TAG, i + " :: " + particle.toString());
-                // i<size/2 bad
-                // i<size/4 bad
-                // i<size/8 good
-                if (displayParticleList.size() / 4 < i && i < displayParticleList.size() / 2) {
-                    LogUtils.e(TAG, "i: " + i);
-                    particle._color = Color.parseColor("#FF00FF00");
-                }
-                // 14 - 26
-                if (14 <= i && i<=21) {
-                    particle._color = Color.parseColor("#FF0000FF");
-                }
             }
         }
     }
