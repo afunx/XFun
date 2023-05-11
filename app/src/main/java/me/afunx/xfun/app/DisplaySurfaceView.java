@@ -27,6 +27,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
 
     private static final int PARTICLE_TRACE_COLOR = Color.parseColor("#FFFF0000");
+    private static final int PARTICLE_TRACE2_COLOR = Color.parseColor("#FF00FF00");
 
     private static final boolean FRAME_RATE_ENABLED = true;
 
@@ -131,9 +132,11 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         for (DisplayParticle particle : mDisplayParticleList) {
             if (particle == DisplayParticleCreator.TraceParticle) {
                 mPaint.setColor(PARTICLE_TRACE_COLOR);
+            } else if (particle == DisplayParticleCreator.TraceParticle2) {
+                mPaint.setColor(PARTICLE_TRACE2_COLOR);
             }
             particle.onDraw(elapsedRealTime, canvas, mPaint);
-            if (particle == DisplayParticleCreator.TraceParticle) {
+            if (particle == DisplayParticleCreator.TraceParticle || particle == DisplayParticleCreator.TraceParticle2) {
                 mPaint.setColor(PARTICLE_COLOR);
             }
         }

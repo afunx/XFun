@@ -5,6 +5,7 @@ import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,7 @@ public class DisplayParticle {
     private long mElapsedRealTime = 0;
 
     // 时间差值器
-    private final TimeInterpolator mTimeInterpolator = new LinearInterpolator();
+    private final TimeInterpolator mTimeInterpolator = new AccelerateDecelerateInterpolator();
     // 位置估值器
     private final PointFEvaluator mPointFEvaluator = new PointFEvaluator();
 

@@ -8,6 +8,8 @@ public class DisplayParticleCreator {
     
     static DisplayParticle TraceParticle = null;
 
+    static DisplayParticle TraceParticle2 = null;
+
     public static void createParticles(@NonNull List<DisplayParticle> displayParticleList) {
         displayParticleList.clear();
         // 右融合
@@ -292,5 +294,10 @@ public class DisplayParticleCreator {
     // 追踪最后一个粒子
     private static void traceLastParticle(List<DisplayParticle> displayParticleList) {
         TraceParticle = displayParticleList.get(displayParticleList.size() - 1);
+    }
+
+    // 追踪最后一个粒子
+    private static void traceLastParticle2(List<DisplayParticle> displayParticleList) {
+        TraceParticle2 = displayParticleList.get(displayParticleList.size() - 1);
     }
 }
