@@ -12,7 +12,7 @@ public class DisplayParticleCreator {
 
     private static final String TAG = "DisplayParticleCreator";
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public static void createParticles(@NonNull List<DisplayParticle> displayParticleList) {
         displayParticleList.clear();
@@ -310,12 +310,6 @@ public class DisplayParticleCreator {
             DisplayParticle particle = displayParticleList.get(i);
             displayParticleList.add(particle.clone("02:22", "16:00"));
             displayParticleList.add(particle.clone("00:21", "16:00"));
-        }
-        for (int i = 0; i<displayParticleList.size(); i++) {
-            displayParticleList.get(i)._idx = i;
-            if (i == 6) {
-                displayParticleList.get(i)._color = Color.parseColor("#FF00FF00");
-            }
         }
         if (DEBUG) {
             for (int i = 0; i < displayParticleList.size(); i++) {
