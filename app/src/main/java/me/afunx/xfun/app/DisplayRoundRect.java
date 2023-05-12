@@ -1,5 +1,7 @@
 package me.afunx.xfun.app;
 
+import static me.afunx.xfun.app.DisplayParticle.BLACK_HOLE_VISIBLE;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -56,6 +58,10 @@ public class DisplayRoundRect {
     public void onDraw(long elapsedRealTime, @NonNull Canvas canvas, @NonNull Paint paint) {
         canvas.drawRoundRect(mBigLeftRectF, mBigRadius, mBigRadius, paint);
         canvas.drawRoundRect(mBigRightRectF, mBigRadius, mBigRadius, paint);
+        if (BLACK_HOLE_VISIBLE) {
+            // 正在绘制黑洞，不必绘制small圆角矩形
+            return;
+        }
         paint.setColor(Color.BLACK);
         canvas.drawRoundRect(mSmallLeftRectF, mSmallRadius, mSmallRadius, paint);
         canvas.drawRoundRect(mSmallRightRectF, mSmallRadius, mSmallRadius, paint);

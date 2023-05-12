@@ -3,8 +3,10 @@ package me.afunx.xfun.app;
 import android.animation.PointFEvaluator;
 import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.NonNull;
@@ -16,7 +18,15 @@ import me.afunx.xfun.app.util.TimeDiffUtil;
 public class DisplayParticle {
     private static final String TAG = "DisplayParticle";
     private static final boolean DEBUG = false;
-    private static final boolean TRACE = true;
+    private static final boolean TRACE = false;
+    // 是否绘制黑洞，仅在调试时使用
+    static final boolean BLACK_HOLE_VISIBLE = false;
+    // 左边的黑洞矩形
+    private static final RectF sBlackHoleLeft;
+    // 右边的黑洞矩形
+    private static final RectF sBlackHoleRight;
+    // 黑洞的半径
+    private static final float sBlackHoleRadius = 150.0f;
 
     // 粒子初始位置点，单位：像素
     private final PointF mStartPoint;
@@ -37,9 +47,11 @@ public class DisplayParticle {
     private final long mExitTime;
 
     private long mElapsedRealTime = 0;
-
+    // 是否被黑洞抓住，被黑洞抓住，则不再绘制
+    private boolean mCaughtInBlackHole = false;
+    // 上一次的realDuration
+    private long mLastRealDuration;
     int _idx;
-    private long _realDuration;
 
     int _color = 0;
 
@@ -52,6 +64,13 @@ public class DisplayParticle {
     static {
         sTimeInterpolator = new AccelerateDecelerateInterpolator();
         sPointFEvaluator = new PointFEvaluator();
+
+        float centerX = 531.95f;
+        float centerY = 590.5f;
+        sBlackHoleLeft = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
+
+        centerX += 396.1f +459.9f;
+        sBlackHoleRight = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
     }
 
 
@@ -84,24 +103,43 @@ public class DisplayParticle {
             float top = current.y - mRadius;
             float right = left + mRadius * 2;
             float bottom = top + mRadius * 2;
-            if (_color != 0) {
-                _oldColor = paint.getColor();
-                paint.setColor(_color);
+            if (realDurationTime < mLastRealDuration) {
+                mCaughtInBlackHole = false;
             }
-            canvas.drawOval(left, top, right, bottom, paint);
-            if (_color != 0) {
-                paint.setColor(_oldColor);
+            if (!mCaughtInBlackHole) {
+                mCaughtInBlackHole = caughtBlackHoles(current);
             }
-
-            if (TRACE && realDurationTime != _realDuration) {
-                LogUtils.i(TAG, "idx: " + _idx + ", current: " + current);
+            if (!mCaughtInBlackHole) {
+                // 更换颜色，仅在调试中使用
+                if (_color != 0) {
+                    _oldColor = paint.getColor();
+                    paint.setColor(_color);
+                }
+                canvas.drawOval(left, top, right, bottom, paint);
+                if (_color != 0) {
+                    paint.setColor(_oldColor);
+                }
+                if (TRACE && realDurationTime != mLastRealDuration) {
+                    LogUtils.i(TAG, "idx: " + _idx + ", current: " + current);
+                }
             }
-            _realDuration = realDurationTime;
+            mLastRealDuration = realDurationTime;
         }
+        if (BLACK_HOLE_VISIBLE) {
+            paint.setColor(Color.YELLOW);
+            canvas.drawRect(sBlackHoleLeft, paint);
+            canvas.drawRect(sBlackHoleRight, paint);
+        }
+        // 绘制
         if (DEBUG) {
             long consume = TimeDiffUtil.end();
             LogUtils.d(TAG, "onDraw() consume: " + consume + " ms");
         }
+    }
+
+    // 是否被黑洞的捕捉
+    private boolean caughtBlackHoles(@NonNull PointF current) {
+        return sBlackHoleLeft.contains(current.x, current.y) || sBlackHoleRight.contains(current.x, current.y);
     }
 
     private DisplayParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime, long entranceTime, long exitTime) {
@@ -113,7 +151,7 @@ public class DisplayParticle {
         mEndTime = endTime;
         mEntranceTime = entranceTime;
         mExitTime = exitTime;
-        _realDuration = 0;
+        mLastRealDuration = 0;
     }
 
     private double distance(PointF p0, PointF p1) {
