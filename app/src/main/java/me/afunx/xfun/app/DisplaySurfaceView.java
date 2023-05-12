@@ -24,16 +24,11 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private static final String TAG = "DisplaySurfaceView";
 
-    //private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
-    private static final int PARTICLE_COLOR = Color.parseColor("#FFFF0000");
+    private static final boolean DEBUG_TOUCH_MODE = false;
+    private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
 
-    private static final int ROUND_RECT_COLOR = Color.parseColor("#8088FFC2");
-
-    private static final int PARTICLE_TRACE_COLOR = Color.parseColor("#FFFF0000");
-    private static final int PARTICLE_TRACE2_COLOR = Color.parseColor("#FF00FF00");
-
-    private static final boolean FRAME_RATE_ENABLED = true;
-
+    private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
+    private static final int ROUND_RECT_COLOR = Color.parseColor("#FF88FFC2");
     private boolean mIsDrawing;
     private DisplayFrameRateListener mFrameRateListener;
 
@@ -42,9 +37,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
 
     private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
-
-
-    private static final boolean TOUCH_MODE = false;
     private volatile long mElapsedTime = -1;
 
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
@@ -98,20 +90,18 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         int frameCount = -1;
 
         while (mIsDrawing) {
-            if (FRAME_RATE_ENABLED) {
+            if (DEBUG_FRAME_RATE_ENABLED) {
                 long current = SystemClock.elapsedRealtime();
                 if (lastTimestamp == 0) {
                     lastTimestamp = current;
                 } else {
+                    ++frameCount;
                     if (current - lastTimestamp >= interval) {
-                        ++frameCount;
                         if (mFrameRateListener != null) {
                             mFrameRateListener.onFrameRate(frameCount);
                         }
                         frameCount = -1;
                         lastTimestamp = current;
-                    } else {
-                        ++frameCount;
                     }
                 }
             }
@@ -135,7 +125,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void drawContent(@NonNull Canvas canvas) {
         long elapsedRealTime = SystemClock.elapsedRealtime();
-        if (TOUCH_MODE) {
+        if (DEBUG_TOUCH_MODE) {
             if (mElapsedTime < 0) {
                 return;
             } else {

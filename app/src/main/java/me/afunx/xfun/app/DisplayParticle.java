@@ -18,9 +18,8 @@ import me.afunx.xfun.app.util.TimeDiffUtil;
 public class DisplayParticle {
     private static final String TAG = "DisplayParticle";
     private static final boolean DEBUG = false;
-    private static final boolean TRACE = false;
     // 是否绘制黑洞，仅在调试时使用
-    static final boolean BLACK_HOLE_VISIBLE = false;
+    static final boolean DEBUG_BLACK_HOLE_VISIBLE = false;
     // 左边的黑洞矩形
     private static final RectF sBlackHoleLeft;
     // 右边的黑洞矩形
@@ -119,13 +118,10 @@ public class DisplayParticle {
                 if (_color != 0) {
                     paint.setColor(_oldColor);
                 }
-                if (TRACE && realDurationTime != mLastRealDuration) {
-                    LogUtils.i(TAG, "idx: " + _idx + ", current: " + current);
-                }
             }
             mLastRealDuration = realDurationTime;
         }
-        if (BLACK_HOLE_VISIBLE) {
+        if (DEBUG_BLACK_HOLE_VISIBLE) {
             paint.setColor(Color.YELLOW);
             canvas.drawRect(sBlackHoleLeft, paint);
             canvas.drawRect(sBlackHoleRight, paint);

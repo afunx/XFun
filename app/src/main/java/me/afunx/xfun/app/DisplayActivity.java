@@ -36,7 +36,7 @@ public class DisplayActivity extends AppCompatActivity implements DisplaySurface
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
-            mDisplaySurfaceView.updateElapsedTime(count * 100L);
+            mDisplaySurfaceView.updateElapsedTime(count * 20L);
             LogUtils.e(TAG, "DisplayParticle count: " + count + ", ev: " + ev);
             ++count;
         }
