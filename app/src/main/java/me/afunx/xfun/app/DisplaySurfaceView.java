@@ -134,7 +134,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         }
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
-        canvas.drawRect(0, 0, 1920, 1200, mPaint);
+        canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
         drawParticles(elapsedRealTime, canvas);
         drawRoundRects(elapsedRealTime, canvas);
     }

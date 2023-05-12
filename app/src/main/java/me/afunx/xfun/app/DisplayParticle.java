@@ -2,6 +2,7 @@ package me.afunx.xfun.app;
 
 import android.animation.PointFEvaluator;
 import android.animation.TimeInterpolator;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +13,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
+import com.afunx.xfun.common.utils.MetricsFUtils;
 
 import me.afunx.xfun.app.util.TimeDiffUtil;
 
@@ -25,7 +27,7 @@ public class DisplayParticle {
     // 右边的黑洞矩形
     private static final RectF sBlackHoleRight;
     // 黑洞的半径
-    private static final float sBlackHoleRadius = 150.0f;
+    private static final float sBlackHoleRadius;
 
     // 粒子初始位置点，单位：像素
     private final PointF mStartPoint;
@@ -61,14 +63,18 @@ public class DisplayParticle {
     private static final PointFEvaluator sPointFEvaluator;
 
     static {
+        final Context context = MainApplication.getAppContext();
+
         sTimeInterpolator = new AccelerateDecelerateInterpolator();
         sPointFEvaluator = new PointFEvaluator();
 
-        float centerX = 531.95f;
-        float centerY = 590.5f;
+        sBlackHoleRadius = MetricsFUtils.dp2px(context, 75.0f);
+
+        float centerX =  MetricsFUtils.dp2px(context, 265.975f);
+        float centerY = MetricsFUtils.dp2px(context, 295.25f);
         sBlackHoleLeft = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
 
-        centerX += 396.1f +459.9f;
+        centerX += MetricsFUtils.dp2px(context, 198.05f + 229.95f);
         sBlackHoleRight = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
     }
 

@@ -2,12 +2,15 @@ package me.afunx.xfun.app;
 
 import static me.afunx.xfun.app.DisplayParticle.DEBUG_BLACK_HOLE_VISIBLE;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
+
+import com.afunx.xfun.common.utils.MetricsFUtils;
 
 public class DisplayRoundRect {
 
@@ -19,21 +22,23 @@ public class DisplayRoundRect {
     private final float mSmallRadius;
 
     public DisplayRoundRect() {
+        final Context context = MainApplication.getAppContext();
+
         // 大
-        final float bigWidth = 459.9f;
-        final float bigHeight = 485f;
-        float left = 302;
-        float top = 348;
+        final float bigWidth = MetricsFUtils.dp2px(context, 229.95f);
+        final float bigHeight = MetricsFUtils.dp2px(context, 242.5f);
+        float left = MetricsFUtils.dp2px(context, 151f);
+        float top = MetricsFUtils.dp2px(context, 174f);
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         mBigLeftRectF = new RectF(left, top, right, bottom);
-        left += 396.1f + bigWidth;
-        right += 396.1f + bigWidth;
+        left += MetricsFUtils.dp2px(context, 198.05f) + bigWidth;
+        right += MetricsFUtils.dp2px(context, 198.05f) + bigWidth;
         mBigRightRectF = new RectF(left, top, right, bottom);
-        mBigRadius = 166.58f;
+        mBigRadius = MetricsFUtils.dp2px(context, 83.29f);
 
         // 小
-        final float smallDiff = 40f;
+        final float smallDiff = MetricsFUtils.dp2px(context, 20f);
         left = mBigLeftRectF.left + smallDiff;
         top = mBigLeftRectF.top + smallDiff;
         right = mBigLeftRectF.right - smallDiff;
@@ -45,7 +50,7 @@ public class DisplayRoundRect {
         bottom = mBigRightRectF.bottom - smallDiff;
         mSmallRightRectF = new RectF(left, top, right, bottom);
 
-        mSmallRadius = 132f;
+        mSmallRadius = MetricsFUtils.dp2px(context, 66f);
     }
 
     /**
