@@ -140,7 +140,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         drawBackGround(canvas);
         //drawParticles(elapsedRealTime, canvas);
         drawWave(elapsedRealTime, canvas);
-        drawRoundRects(elapsedRealTime, canvas);
+        //drawRoundRects(elapsedRealTime, canvas);
     }
 
     private void drawBackGround(@NonNull Canvas canvas) {

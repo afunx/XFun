@@ -45,7 +45,8 @@ public class DisplayWave {
     private float mWaveTranslateX = 0;
     private Path mWavePath = null;
     private Paint mPaint = null;
-    private Bitmap mMaskBitmap = null;
+    private Bitmap mBitmap1 = null;
+    private Bitmap mBitmap2 = null;
 
     private static final float WAVE_HEIGHT_DP = 18.75f;
     private static final float WAVE_WIDTH_DP = 146.25f;
@@ -126,25 +127,38 @@ public class DisplayWave {
         }
 
         // dest
-        if (mMaskBitmap == null) {
+        if (mBitmap1 == null) {
             mPaint = new Paint();
-            mPaint.setColor(paint.getColor());
-            mMaskBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas bmpCanvas = new Canvas(mMaskBitmap);
-            bmpCanvas.drawPath(mWavePath, mPaint);
-            Shader shader = new BitmapShader(mMaskBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            mPaint.setShader(shader);
+            mBitmap1 = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         }
 
-        //paint.setColor(Color.parseColor("#80ff0000"));
-        canvas.save();
-        canvas.translate(mWaveTranslateX, 0);
-        canvas.drawPath(mWavePath, paint);
-        //canvas.drawRoundRect(mBigLeftRectF, mBigRadius, mBigRadius, mPaint);
-        //canvas.drawRoundRect(mBigRightRectF, mBigRadius, mBigRadius, mPaint);
-        canvas.restore();
-        //paint.setColor(Color.parseColor("#8000ff00"));
-        //canvas.drawRoundRect(mBigLeftRectF, mBigRadius, mBigRadius, mPaint);
+        int sc = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+        Canvas bmpCanvas = new Canvas(mBitmap1);
+        mPaint.setColor(paint.getColor());
+        bmpCanvas.drawRoundRect(mBigLeftRectF, 0, 0, mPaint);
+        canvas.drawBitmap(mBitmap1, 0, 0, mPaint);
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        mPaint.setColor(paint.getColor());
+        bmpCanvas.drawPath(mWavePath, mPaint);
+        canvas.drawBitmap(mBitmap1, 0, 0, mPaint);
+        mPaint.setXfermode(null);
+
+        if (mBitmap2 == null) {
+//            mBitmap2 = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+//            Canvas bmpCanvas = new Canvas(mBitmap2);
+//            mPaint.setColor(paint.getColor());
+//            bmpCanvas.drawPath(mWavePath, mPaint);
+        }
+
+        canvas.restoreToCount(sc);
+        ///canvas.save();
+//        canvas.drawBitmap(mBitmap1, 0, 0, mPaint);
+//        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+//        canvas.drawBitmap(mBitmap2, 0, 0, mPaint);
+//        mPaint.setXfermode(null);
+        //canvas.drawPath(mWavePath, paint);
+        //anvas.drawBitmap(mMaskBitmap, 0, 0, null);
+        ///canvas.restore();
     }
 
     private Path getLeftTopPath() {
