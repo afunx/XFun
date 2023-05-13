@@ -1,8 +1,11 @@
 package me.afunx.xfun.app;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -28,14 +31,15 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
 
     private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
-    private static final int ROUND_RECT_COLOR = Color.parseColor("#FF88FFC2");
+    private static final int ROUND_RECT_COLOR = Color.parseColor("#8088FFC2");
+    private static final int WAVE_COLOR = Color.parseColor("#FF88FFC2");
     private boolean mIsDrawing;
     private DisplayFrameRateListener mFrameRateListener;
 
     private final Paint mPaint;
 
     private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
-
+    private final DisplayWave mDisplayWave = new DisplayWave();
     private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
     private volatile long mElapsedTime = -1;
 
@@ -132,11 +136,22 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
                 elapsedRealTime = mElapsedTime;
             }
         }
+
+        drawBackGround(canvas);
+        //drawParticles(elapsedRealTime, canvas);
+        drawWave(elapsedRealTime, canvas);
+        drawRoundRects(elapsedRealTime, canvas);
+    }
+
+    private void drawBackGround(@NonNull Canvas canvas) {
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
-        drawParticles(elapsedRealTime, canvas);
-        drawRoundRects(elapsedRealTime, canvas);
+    }
+
+    private void drawWave(long elapsedRealTime, @NonNull Canvas canvas) {
+        mPaint.setColor(WAVE_COLOR);
+        mDisplayWave.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
     private void drawRoundRects(long elapsedRealTime, @NonNull Canvas canvas) {

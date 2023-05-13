@@ -21,24 +21,34 @@ public class DisplayRoundRect {
     private final RectF mSmallRightRectF;
     private final float mSmallRadius;
 
+    static final float BIG_WIDTH_DP = 229.95f;
+    static final float BIG_HEIGHT_DP = 242.5f;
+    static final float BIG_LEFT_MARGIN_DP = 151f;
+    static final float BIG_TOP_MARGIN_DP = 174f;
+    static final float BIG_BETWEEN_MARGIN_DP = 198.05f;
+    static final float BIG_RADIUS_DP = 83.29f;
+
+    private static final float THICKNESS_DP = 20f;
+    private static final float SMALL_RADIUS_DP = 66f;
+
     public DisplayRoundRect() {
         final Context context = MainApplication.getAppContext();
 
         // 大
-        final float bigWidth = MetricsFUtils.dp2px(context, 229.95f);
-        final float bigHeight = MetricsFUtils.dp2px(context, 242.5f);
-        float left = MetricsFUtils.dp2px(context, 151f);
-        float top = MetricsFUtils.dp2px(context, 174f);
+        final float bigWidth = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
+        final float bigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
+        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
+        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         mBigLeftRectF = new RectF(left, top, right, bottom);
-        left += MetricsFUtils.dp2px(context, 198.05f) + bigWidth;
-        right += MetricsFUtils.dp2px(context, 198.05f) + bigWidth;
+        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
+        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
         mBigRightRectF = new RectF(left, top, right, bottom);
-        mBigRadius = MetricsFUtils.dp2px(context, 83.29f);
+        mBigRadius = MetricsFUtils.dp2px(context, BIG_RADIUS_DP);
 
         // 小
-        final float smallDiff = MetricsFUtils.dp2px(context, 20f);
+        final float smallDiff = MetricsFUtils.dp2px(context, THICKNESS_DP);
         left = mBigLeftRectF.left + smallDiff;
         top = mBigLeftRectF.top + smallDiff;
         right = mBigLeftRectF.right - smallDiff;
@@ -50,7 +60,7 @@ public class DisplayRoundRect {
         bottom = mBigRightRectF.bottom - smallDiff;
         mSmallRightRectF = new RectF(left, top, right, bottom);
 
-        mSmallRadius = MetricsFUtils.dp2px(context, 66f);
+        mSmallRadius = MetricsFUtils.dp2px(context, SMALL_RADIUS_DP);
     }
 
     /**
