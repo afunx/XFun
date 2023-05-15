@@ -152,7 +152,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void drawWave(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(WAVE_COLOR);
-        mPaint.setColor(Color.RED);
         mDisplayWave.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
@@ -169,7 +168,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void drawMask(long elapsedRealTime, Canvas canvas) {
-        //mPaint.setColor(0x80FF0000);
         mPaint.setColor(MASK_COLOR);
         mDisplayMask.onDraw(elapsedRealTime, canvas, mPaint);
     }

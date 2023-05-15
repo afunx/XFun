@@ -3,14 +3,13 @@ package me.afunx.xfun.app;
 import static me.afunx.xfun.app.DisplayRoundRect.BIG_BETWEEN_MARGIN_DP;
 import static me.afunx.xfun.app.DisplayRoundRect.BIG_HEIGHT_DP;
 import static me.afunx.xfun.app.DisplayRoundRect.BIG_LEFT_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_RADIUS_DP;
 import static me.afunx.xfun.app.DisplayRoundRect.BIG_TOP_MARGIN_DP;
 import static me.afunx.xfun.app.DisplayRoundRect.BIG_WIDTH_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.SMALL_TRIANGLE_SIDE_DP;
 import static me.afunx.xfun.app.DisplayRoundRect.THICKNESS_DP;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -24,41 +23,31 @@ public class DisplayWave {
 
     private static final String TAG = "DisplayWave";
     private static final boolean DEBUG = false;
-    private final RectF mBigLeftRectF;
-    private final RectF mBigRightRectF;
-    private final float mBigRadius;
-    private final RectF mLeftRectF;
-    private final RectF mRightRectF;
-    private final RectF mSmallLeftRectF;
-    private final RectF mSmallRightRectF;
-    private final float mSmallTriangleSide;
+    private final float mBigHeight;
+    private final float mWaveThickness;
+    private final RectF mWaveLeftRectF;
+    private final RectF mWaveRightRectF;
+    private final RectF mPowerLeftRectF;
+    private final RectF mPowerRightRectF;
     private final int mWaveCount;
     private final float mWaveHeight;
     private final float mWaveWidth;
     private final float mWaveSpeedPerSecond;
     private long mElapsedRealTime = 0;
     private float mWaveTranslateX = 0;
-    private float mWaveTranslateY = 30;
-    private Path mWavePath = null;
+    //private float mWaveTranslateY = 0;
+    private Path mSolidWavePath = null;
+    private Path mHollowWavePath = null;
     private static final float WAVE_HEIGHT_DP = 18.75f;
     private static final float WAVE_WIDTH_DP = 146.25f;
     private static final float WAVE_SPEED_DP_PER_SECOND = 135f;
 
     public DisplayWave() {
         final Context context = MainApplication.getAppContext();
-
-        final float bigWidth = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
-        final float bigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
-        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
-        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
-        float right = left + bigWidth;
-        float bottom = top + bigHeight;
-        mBigLeftRectF = new RectF(left, top, right, bottom);
-        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
-        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
-        mBigRightRectF = new RectF(left, top, right, bottom);
-        mBigRadius = MetricsFUtils.dp2px(context, BIG_RADIUS_DP);
-
+        // 总共波浪厚度
+        mBigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
+        // 单层波浪厚度
+        mWaveThickness = MetricsFUtils.dp2px(context, THICKNESS_DP);
         // 波浪高度
         mWaveHeight = MetricsFUtils.dp2px(context, WAVE_HEIGHT_DP);
         // 波浪宽度
@@ -69,34 +58,21 @@ public class DisplayWave {
             LogUtils.i(TAG, "DisplayWave() mWaveHeight: " + mWaveHeight + ", mWaveWidth: " + mWaveWidth +
                     ", mWaveSpeedPerSecond: " + mWaveSpeedPerSecond);
         }
-
         final float width = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
         final float height = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
-        left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
-        top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
-        right = left + width;
-        bottom = top + height;
-        mLeftRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
+        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
+        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
+        float right = left + width;
+        float bottom = top + height;
+        mWaveLeftRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
         left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + width;
         right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + width;
-        mRightRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
+        mWaveRightRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
 
         mWaveCount = (int) Math.ceil(width / mWaveWidth);
 
-        // 小
-        final float smallDiff = MetricsFUtils.dp2px(context, THICKNESS_DP);
-        left = mBigLeftRectF.left + smallDiff;
-        top = mBigLeftRectF.top + smallDiff;
-        right = mBigLeftRectF.right - smallDiff;
-        bottom = mBigLeftRectF.bottom - smallDiff;
-        mSmallLeftRectF = new RectF(left, top, right, bottom);
-        left = mBigRightRectF.left + smallDiff;
-        top = mBigRightRectF.top + smallDiff;
-        right = mBigRightRectF.right - smallDiff;
-        bottom = mBigRightRectF.bottom - smallDiff;
-        mSmallRightRectF = new RectF(left, top, right, bottom);
-
-        mSmallTriangleSide = MetricsFUtils.dp2px(context, SMALL_TRIANGLE_SIDE_DP);
+        mPowerLeftRectF = new RectF(mWaveLeftRectF.left, mWaveLeftRectF.bottom, mWaveLeftRectF.right, mWaveLeftRectF.bottom + height);
+        mPowerRightRectF = new RectF(mWaveRightRectF.left, mWaveRightRectF.bottom, mWaveRightRectF.right, mWaveRightRectF.bottom + height);
     }
 
     /**
@@ -121,72 +97,88 @@ public class DisplayWave {
             mWaveTranslateX -= mWaveWidth;
         }
         mElapsedRealTime = elapsedRealTime;
-        // 绘制柱体
-        //canvas.drawRect(mLeftRectF, paint);
-        //canvas.drawRect(mRightRectF, paint);
-        // 绘制波浪
-        if (mWavePath == null) {
-            mWavePath = new Path();
-            mWavePath.addPath(getLeftTopPath());
-            mWavePath.addPath(getLeftBottomPath());
-            mWavePath.addPath(getRightTopPath());
-            mWavePath.addPath(getRightBottomPath());
+        if (mSolidWavePath == null) {
+            mSolidWavePath = new Path();
+            mSolidWavePath.addPath(getSolidLeftBottomPath());
+            mSolidWavePath.addPath(getSolidRightBottomPath());
         }
+        if (mHollowWavePath == null) {
+            mHollowWavePath = new Path();
+            mHollowWavePath.addPath(getHollowLeftBottomPath());
+            mHollowWavePath.addPath(getHollowRightBottomPath());
+        }
+
+        final float waveTranslateY = -getWaveTranslateY(30);
+
+        // 绘制柱体
         canvas.save();
-        canvas.translate(mWaveTranslateX, -mWaveTranslateY);
-        canvas.drawPath(mWavePath, paint);
+        canvas.translate(0, waveTranslateY);
+        canvas.drawRect(mPowerLeftRectF, paint);
+        canvas.drawRect(mPowerRightRectF, paint);
+        canvas.restore();
+
+        // 绘制波浪
+        canvas.save();
+        canvas.translate(mWaveTranslateX, waveTranslateY);
+        // 绘制实心波浪
+        canvas.drawPath(mSolidWavePath, paint);
+        // 绘制空心波浪
+        int color = paint.getColor();
+        paint.setColor(Color.BLACK);
+        canvas.drawPath(mHollowWavePath, paint);
+        paint.setColor(color);
         canvas.restore();
     }
 
-    private Path getLeftTopPath() {
+    private Path getSolidLeftBottomPath() {
         Path path = new Path();
-        final float waveHeight = mWaveHeight;
         final float waveWidth = mWaveWidth;
-        path.moveTo(mLeftRectF.left - waveWidth, mLeftRectF.top);
+        path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rQuadTo(waveWidth / 4, waveHeight * 2, waveWidth / 2, 0);
-            path.rQuadTo(waveWidth / 4, -waveHeight * 2, waveWidth / 2, 0);
+            path.rLineTo( waveWidth / 2, 0);
+            path.rQuadTo(waveWidth / 4, -mWaveHeight * 2, waveWidth / 2, 0);
         }
         path.close();
         return path;
     }
 
-    private Path getLeftBottomPath() {
+    private Path getSolidRightBottomPath() {
         Path path = new Path();
-        final float waveHeight = mWaveHeight;
         final float waveWidth = mWaveWidth;
-        path.moveTo(mLeftRectF.left - waveWidth, mLeftRectF.bottom);
+        path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rQuadTo(waveWidth / 4, waveHeight * 2, waveWidth / 2, 0);
-            path.rQuadTo(waveWidth / 4, -waveHeight * 2, waveWidth / 2, 0);
+            path.rLineTo(waveWidth / 2, 0);
+            path.rQuadTo(waveWidth / 4, -mWaveHeight * 2, waveWidth / 2, 0);
         }
         path.close();
         return path;
     }
 
-    private Path getRightTopPath() {
+    private Path getHollowLeftBottomPath() {
         Path path = new Path();
-        final float waveHeight = mWaveHeight;
         final float waveWidth = mWaveWidth;
-        path.moveTo(mRightRectF.left - waveWidth, mRightRectF.top);
+        path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rQuadTo(waveWidth / 4, waveHeight * 2, waveWidth / 2, 0);
-            path.rQuadTo(waveWidth / 4, -waveHeight * 2, waveWidth / 2, 0);
+            path.rQuadTo(waveWidth / 4, mWaveHeight * 2, waveWidth / 2, 0);
+            path.rLineTo(waveWidth / 2, 0);
         }
         path.close();
         return path;
     }
 
-    private Path getRightBottomPath() {
+    private Path getHollowRightBottomPath() {
         Path path = new Path();
-        final float waveHeight = mWaveHeight;
         final float waveWidth = mWaveWidth;
-        path.moveTo(mRightRectF.left - waveWidth, mRightRectF.bottom);
+        path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rQuadTo(waveWidth / 4, waveHeight * 2, waveWidth / 2, 0);
-            path.rQuadTo(waveWidth / 4, -waveHeight * 2, waveWidth / 2, 0);
+            path.rQuadTo(waveWidth / 4, mWaveHeight * 2, waveWidth / 2, 0);
+            path.rLineTo(waveWidth / 2, 0);
         }
         path.close();
         return path;
+    }
+
+    private float getWaveTranslateY(int percent) {
+        return -mWaveThickness + mBigHeight * percent / 100.0f;
     }
 }
