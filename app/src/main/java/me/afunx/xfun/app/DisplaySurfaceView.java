@@ -39,6 +39,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private final Paint mPaint;
 
     private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
+    private final DisplayMask mDisplayMask = new DisplayMask();
     private final DisplayWave mDisplayWave = new DisplayWave();
     private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
     private volatile long mElapsedTime = -1;
@@ -139,8 +140,9 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
         drawBackGround(canvas);
         //drawParticles(elapsedRealTime, canvas);
-        drawWave(elapsedRealTime, canvas);
-        //drawRoundRects(elapsedRealTime, canvas);
+        drawRoundRects(elapsedRealTime, canvas);
+        //drawWave(elapsedRealTime, canvas);
+        drawMask(elapsedRealTime, canvas);
     }
 
     private void drawBackGround(@NonNull Canvas canvas) {
@@ -166,4 +168,8 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         }
     }
 
+    private void drawMask(long elapsedRealTime, Canvas canvas) {
+        mPaint.setColor(0x80FF0000);
+        mDisplayMask.onDraw(elapsedRealTime, canvas, mPaint);
+    }
 }

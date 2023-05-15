@@ -28,8 +28,12 @@ public class DisplayRoundRect {
     static final float BIG_BETWEEN_MARGIN_DP = 198.05f;
     static final float BIG_RADIUS_DP = 83.29f;
 
-    private static final float THICKNESS_DP = 20f;
+    static final float THICKNESS_DP = 20f;
+    // 由于机器性能原因，故只能采用最原始的绘制覆盖方式实现波浪的遮罩。
+    // 该尺寸为覆盖时，小的矩形四个角缺的四个等腰直角三角形边长。
+    static final float SMALL_TRIANGLE_SIDE_DP = 15f;
     private static final float SMALL_RADIUS_DP = 66f;
+
 
     public DisplayRoundRect() {
         final Context context = MainApplication.getAppContext();
