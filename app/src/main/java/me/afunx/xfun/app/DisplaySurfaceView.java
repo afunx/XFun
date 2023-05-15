@@ -1,11 +1,8 @@
 package me.afunx.xfun.app;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -30,9 +27,11 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private static final boolean DEBUG_TOUCH_MODE = false;
     private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
 
-    private static final int PARTICLE_COLOR = Color.parseColor("#FF88FFC2");
-    private static final int ROUND_RECT_COLOR = Color.parseColor("#8088FFC2");
-    private static final int WAVE_COLOR = Color.parseColor("#FF88FFC2");
+    private static final int PARTICLE_COLOR = 0xFF88FFC2;
+    private static final int ROUND_RECT_COLOR_BIG = 0xFF88FFC2;
+    private static final int ROUND_RECT_COLOR_SMALL = Color.BLACK;
+    private static final int WAVE_COLOR = 0xFF88FFC2;
+    private static final int MASK_COLOR = Color.BLACK;
     private boolean mIsDrawing;
     private DisplayFrameRateListener mFrameRateListener;
 
@@ -139,10 +138,10 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         }
 
         drawBackGround(canvas);
-        //drawParticles(elapsedRealTime, canvas);
-        drawRoundRects(elapsedRealTime, canvas);
-        //drawWave(elapsedRealTime, canvas);
+        drawWave(elapsedRealTime, canvas);
         drawMask(elapsedRealTime, canvas);
+        drawParticles(elapsedRealTime, canvas);
+        drawRoundRectRing(elapsedRealTime, canvas);
     }
 
     private void drawBackGround(@NonNull Canvas canvas) {
@@ -153,11 +152,12 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void drawWave(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(WAVE_COLOR);
+        mPaint.setColor(Color.RED);
         mDisplayWave.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
-    private void drawRoundRects(long elapsedRealTime, @NonNull Canvas canvas) {
-        mPaint.setColor(ROUND_RECT_COLOR);
+    private void drawRoundRectRing(long elapsedRealTime, @NonNull Canvas canvas) {
+        mPaint.setColor(ROUND_RECT_COLOR_BIG);
         mDisplayRoundRect.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
@@ -169,7 +169,8 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void drawMask(long elapsedRealTime, Canvas canvas) {
-        mPaint.setColor(0x80FF0000);
+        //mPaint.setColor(0x80FF0000);
+        mPaint.setColor(MASK_COLOR);
         mDisplayMask.onDraw(elapsedRealTime, canvas, mPaint);
     }
 }
