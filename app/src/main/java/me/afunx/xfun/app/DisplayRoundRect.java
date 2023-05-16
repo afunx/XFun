@@ -1,7 +1,5 @@
 package me.afunx.xfun.app;
 
-import static me.afunx.xfun.app.DisplayParticle.DEBUG_BLACK_HOLE_VISIBLE;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,7 +34,7 @@ public class DisplayRoundRect {
     // 由于机器性能原因，故只能采用最原始的绘制覆盖方式实现波浪的遮罩。
     // 该尺寸为覆盖时，小的矩形四个角缺的四个等腰直角三角形边长。
     static final float SMALL_TRIANGLE_SIDE_DP = 20f;
-    private static final float SMALL_RADIUS_DP = 66f;
+    static final float SMALL_RADIUS_DP = 66f;
     private Picture mPictureRing = null;
 
 
@@ -90,12 +88,10 @@ public class DisplayRoundRect {
             Canvas pictureCanvas = mPictureRing.beginRecording(canvas.getWidth(), canvas.getHeight());
             pictureCanvas.drawRoundRect(mBigLeftRectF, mBigRadius, mBigRadius, paint);
             pictureCanvas.drawRoundRect(mBigRightRectF, mBigRadius, mBigRadius, paint);
-            // 正在绘制黑洞，不必绘制small圆角矩形
-            if (!DEBUG_BLACK_HOLE_VISIBLE) {
-                paint.setColor(Color.BLACK);
-                pictureCanvas.drawRoundRect(mSmallLeftRectF, mSmallRadius, mSmallRadius, paint);
-                pictureCanvas.drawRoundRect(mSmallRightRectF, mSmallRadius, mSmallRadius, paint);
-            }
+
+            paint.setColor(Color.BLACK);
+            pictureCanvas.drawRoundRect(mSmallLeftRectF, mSmallRadius, mSmallRadius, paint);
+            pictureCanvas.drawRoundRect(mSmallRightRectF, mSmallRadius, mSmallRadius, paint);
             mPictureRing.endRecording();
         }
         canvas.drawPicture(mPictureRing);
@@ -125,10 +121,6 @@ public class DisplayRoundRect {
      * @param paint
      */
     public void onDrawSmall(long elapsedRealTime, @NonNull Canvas canvas, @NonNull Paint paint) {
-        if (DEBUG_BLACK_HOLE_VISIBLE) {
-            // 正在绘制黑洞，不必绘制small圆角矩形
-            return;
-        }
         canvas.drawRoundRect(mSmallLeftRectF, mSmallRadius, mSmallRadius, paint);
         canvas.drawRoundRect(mSmallRightRectF, mSmallRadius, mSmallRadius, paint);
     }

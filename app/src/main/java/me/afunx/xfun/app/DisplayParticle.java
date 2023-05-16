@@ -1,10 +1,17 @@
 package me.afunx.xfun.app;
 
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_BETWEEN_MARGIN_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_HEIGHT_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_LEFT_MARGIN_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_RADIUS_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_TOP_MARGIN_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.BIG_WIDTH_DP;
+import static me.afunx.xfun.app.DisplayRoundRect.THICKNESS_DP;
+
 import android.animation.PointFEvaluator;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -20,15 +27,6 @@ import me.afunx.xfun.app.util.TimeDiffUtil;
 public class DisplayParticle {
     private static final String TAG = "DisplayParticle";
     private static final boolean DEBUG = false;
-    // 是否绘制黑洞，仅在调试时使用
-    static final boolean DEBUG_BLACK_HOLE_VISIBLE = false;
-    // 左边的黑洞矩形
-    private static final RectF sBlackHoleLeft;
-    // 右边的黑洞矩形
-    private static final RectF sBlackHoleRight;
-    // 黑洞的半径
-    private static final float sBlackHoleRadius;
-
     // 粒子初始位置点，单位：像素
     private final PointF mStartPoint;
     // 粒子最终位置点，单位：像素
@@ -52,6 +50,11 @@ public class DisplayParticle {
     private boolean mCaughtInBlackHole = false;
     // 上一次的realDuration
     private long mLastRealDuration;
+    private static final RectF sLeftRectF;
+    private static final RectF sRightRectF;
+    private static final float sThickness;
+    private static final float sBigRadius;
+
     int _idx;
 
     int _color = 0;
@@ -68,16 +71,24 @@ public class DisplayParticle {
         sTimeInterpolator = new AccelerateDecelerateInterpolator();
         sPointFEvaluator = new PointFEvaluator();
 
-        sBlackHoleRadius = MetricsFUtils.dp2px(context, 75.0f);
+        sThickness = MetricsFUtils.dp2px(context, THICKNESS_DP);
 
-        float centerX =  MetricsFUtils.dp2px(context, 265.975f);
-        float centerY = MetricsFUtils.dp2px(context, 295.25f);
-        sBlackHoleLeft = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
+        // 大
+        final float bigWidth = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
+        final float bigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
+        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
+        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
+        float right = left + bigWidth;
+        float bottom = top + bigHeight;
+        RectF bigLeftRectF = new RectF(left, top, right, bottom);
+        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
+        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
+        RectF bigRightRectF = new RectF(left, top, right, bottom);
+        sBigRadius = MetricsFUtils.dp2px(context, BIG_RADIUS_DP);
 
-        centerX += MetricsFUtils.dp2px(context, 198.05f + 229.95f);
-        sBlackHoleRight = new RectF(centerX - sBlackHoleRadius, centerY - sBlackHoleRadius, centerX + sBlackHoleRadius, centerY + sBlackHoleRadius);
+        sLeftRectF = new RectF(bigLeftRectF.left + sThickness / 2, bigLeftRectF.top + sThickness / 2, bigLeftRectF.right - sThickness / 2, bigLeftRectF.bottom - sThickness / 2);
+        sRightRectF = new RectF(bigRightRectF.left + sThickness / 2, bigRightRectF.top + sThickness / 2, bigRightRectF.right - sThickness / 2, bigRightRectF.bottom - sThickness / 2);
     }
-
 
     /**
      * 绘制回调
@@ -112,9 +123,6 @@ public class DisplayParticle {
                 mCaughtInBlackHole = false;
             }
             if (!mCaughtInBlackHole) {
-                mCaughtInBlackHole = caughtBlackHoles(current);
-            }
-            if (!mCaughtInBlackHole) {
                 // 更换颜色，仅在调试中使用
                 if (_color != 0) {
                     _oldColor = paint.getColor();
@@ -124,13 +132,10 @@ public class DisplayParticle {
                 if (_color != 0) {
                     paint.setColor(_oldColor);
                 }
+                // 第一次被黑洞捕捉时，显示一次先，所以mCaughtInBlackHole更新在显示之后
+                mCaughtInBlackHole = caughtBlackHoles(current);
             }
             mLastRealDuration = realDurationTime;
-        }
-        if (DEBUG_BLACK_HOLE_VISIBLE) {
-            paint.setColor(Color.YELLOW);
-            canvas.drawRect(sBlackHoleLeft, paint);
-            canvas.drawRect(sBlackHoleRight, paint);
         }
         // 绘制
         if (DEBUG) {
@@ -139,9 +144,89 @@ public class DisplayParticle {
         }
     }
 
-    // 是否被黑洞的捕捉
+    /**
+     * 调试绘制回调
+     *
+     * @param canvas
+     * @param paint
+     */
+    static void _onDebugDraw(@NonNull Canvas canvas, @NonNull Paint paint) {
+        Paint.Style style = paint.getStyle();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(0xFFFF0000);
+        paint.setStrokeWidth(1);
+        // 左边
+        // 左圆
+        float cx = sLeftRectF.left + sBigRadius - 0.3f * sThickness;
+        float cy = sLeftRectF.bottom - sBigRadius + 0.3f * sThickness;
+        float radius = sBigRadius;
+        canvas.drawCircle(cx, cy, radius, paint);
+        // 右圆
+        float cx2 = sLeftRectF.right - sBigRadius + 0.3f * sThickness;
+        canvas.drawCircle(cx2, cy, radius, paint);
+        // 下矩形
+        // canvas.drawRect(cx, cy + radius - 0.5f * sThickness, cx2, cy + radius, paint);
+
+        // 右边
+        // 左圆
+        cx = sRightRectF.left + sBigRadius - 0.3f * sThickness;
+        cy = sRightRectF.bottom - sBigRadius + 0.3f * sThickness;
+        canvas.drawCircle(cx, cy, radius, paint);
+        // 右圆
+        cx2 = sRightRectF.right - sBigRadius + 0.3f * sThickness;
+        canvas.drawCircle(cx2, cy, radius, paint);
+        // 下矩形
+        // canvas.drawRect(cx, cy + radius - 0.5f * sThickness, cx2, cy + radius, paint);
+        paint.setStyle(style);
+    }
+
+    private final PointF _center = new PointF();
+
+    /**
+     * 由于无法绘制出完全拟合的图形，故采用近似拟合的图形判定黑洞捕捉情况。
+     * 可调用{@link #_onDebugDraw(Canvas, Paint)}调试代码查看黑洞的范围。
+     *
+     * @param current 当前位置
+     * @return 是否被黑洞捕捉
+     */
     private boolean caughtBlackHoles(@NonNull PointF current) {
-        return sBlackHoleLeft.contains(current.x, current.y) || sBlackHoleRight.contains(current.x, current.y);
+        // 左边
+        // 左圆
+        float cx = sLeftRectF.left + sBigRadius - 0.3f * sThickness;
+        float cy = sLeftRectF.bottom - sBigRadius + 0.3f * sThickness;
+        float radius = sBigRadius;
+        _center.x = cx;
+        _center.y = cy;
+        if (distance(current, _center) <= mRadius + radius) {
+            return true;
+        }
+        // canvas.drawCircle(cx, cy, radius, paint);
+        // 右圆
+        float cx2 = sLeftRectF.right - sBigRadius + 0.3f * sThickness;
+        _center.x = cx2;
+        if (distance(current, _center) <= mRadius + radius) {
+            return true;
+        }
+        // canvas.drawCircle(cx2, cy, radius, paint);
+
+        // 右边
+        // 左圆
+        cx = sRightRectF.left + sBigRadius - 0.3f * sThickness;
+        cy = sRightRectF.bottom - sBigRadius + 0.3f * sThickness;
+        _center.x = cx;
+        _center.y = cy;
+        if (distance(current, _center) <= mRadius + radius) {
+            return true;
+        }
+        // canvas.drawCircle(cx, cy, radius, paint);
+        // 右圆
+        cx2 = sRightRectF.right - sBigRadius + 0.3f * sThickness;
+        _center.x = cx2;
+        if (distance(current, _center) <= mRadius + radius) {
+            return true;
+        }
+        // canvas.drawCircle(cx2, cy, radius, paint);
+        return false;
     }
 
     private DisplayParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime, long entranceTime, long exitTime) {
