@@ -16,6 +16,9 @@ public class DisplayMetrics {
         initThickness();
         initSmallTriangleSide();
         initSmallRadius();
+        initWaveHeight();
+        initWaveWidth();
+        initWaveSpeedPerSecond();
     }
 
     private static float sDensity = 0;
@@ -131,6 +134,42 @@ public class DisplayMetrics {
             throw new IllegalStateException("Please call init(Context) first");
         }
         return sSmallRadius;
+    }
+
+    private static final float WAVE_HEIGHT_DP = 18.75f;
+    private static float sWaveHeight = 0;
+    private static void initWaveHeight() {
+        sWaveHeight = dp2px(WAVE_HEIGHT_DP);
+    }
+    public static float waveHeight() {
+        if (sWaveHeight == 0) {
+            throw new IllegalStateException("Please call init(Context) first");
+        }
+        return sWaveHeight;
+    }
+
+    private static final float WAVE_WIDTH_DP = 146.25f;
+    private static float sWaveWidth = 0;
+    private static void initWaveWidth() {
+        sWaveWidth = dp2px(WAVE_WIDTH_DP);
+    }
+    public static float waveWidth() {
+        if (sWaveWidth == 0) {
+            throw new IllegalStateException("Please call init(Context) first");
+        }
+        return sWaveWidth;
+    }
+
+    private static final float WAVE_SPEED_DP_PER_SECOND = 135f;
+    private static float sWaveSpeedPerSecond = 0;
+    private static void initWaveSpeedPerSecond() {
+        sWaveSpeedPerSecond = dp2px(WAVE_SPEED_DP_PER_SECOND);
+    }
+    public static float waveSpeedPerSecond() {
+        if (sWaveSpeedPerSecond == 0) {
+            throw new IllegalStateException("Please call init(Context) first");
+        }
+        return sWaveSpeedPerSecond;
     }
 
     public static float dp2px(float dp) {

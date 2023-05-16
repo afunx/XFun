@@ -2,7 +2,6 @@ package me.afunx.xfun.app;
 
 import static me.afunx.xfun.app.DisplaySurfaceView.HOLLOW_WAVE_COLOR;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -11,7 +10,6 @@ import android.graphics.RectF;
 import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
-import com.afunx.xfun.common.utils.MetricsFUtils;
 
 public class DisplayWave {
 
@@ -31,24 +29,20 @@ public class DisplayWave {
     private float mWaveTranslateX = 0;
     private Path mSolidWavePath = null;
     private Path mHollowWavePath = null;
-    private static final float WAVE_HEIGHT_DP = 18.75f;
-    private static final float WAVE_WIDTH_DP = 146.25f;
-    private static final float WAVE_SPEED_DP_PER_SECOND = 135f;
 
     private volatile int mBatteryPercent = 0;
 
     public DisplayWave() {
-        final Context context = MainApplication.getAppContext();
         // 总共波浪厚度
         mBigHeight = DisplayMetrics.bigHeight();
         // 单层波浪厚度
         mWaveThickness = DisplayMetrics.thickness();
         // 波浪高度
-        mWaveHeight = MetricsFUtils.dp2px(context, WAVE_HEIGHT_DP);
+        mWaveHeight = DisplayMetrics.waveHeight();
         // 波浪宽度
-        mWaveWidth = MetricsFUtils.dp2px(context, WAVE_WIDTH_DP);
+        mWaveWidth = DisplayMetrics.waveWidth();
         // 波浪速度
-        mWaveSpeedPerSecond = MetricsFUtils.dp2px(context, WAVE_SPEED_DP_PER_SECOND);
+        mWaveSpeedPerSecond = DisplayMetrics.waveSpeedPerSecond();
         if (DEBUG) {
             LogUtils.i(TAG, "DisplayWave() mWaveHeight: " + mWaveHeight + ", mWaveWidth: " + mWaveWidth +
                     ", mWaveSpeedPerSecond: " + mWaveSpeedPerSecond);
