@@ -38,13 +38,17 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private final Paint mPaint;
 
     private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
-    private final DisplayMask mDisplayMask = new DisplayMask();
-    private final DisplayWave mDisplayWave = new DisplayWave();
-    private final DisplayRoundRect mDisplayRoundRect = new DisplayRoundRect();
+    private final DisplayMask mDisplayMask;
+    private final DisplayWave mDisplayWave;
+    private final DisplayRoundRect mDisplayRoundRect;
     private volatile long mElapsedTime = -1;
 
     public DisplaySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        DisplayMetrics.init(context);
+        mDisplayMask = new DisplayMask();
+        mDisplayWave = new DisplayWave();
+        mDisplayRoundRect = new DisplayRoundRect();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         initView();

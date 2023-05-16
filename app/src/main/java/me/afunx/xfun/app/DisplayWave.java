@@ -1,12 +1,5 @@
 package me.afunx.xfun.app;
 
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_BETWEEN_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_HEIGHT_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_LEFT_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_TOP_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_WIDTH_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.THICKNESS_DP;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -45,9 +38,9 @@ public class DisplayWave {
     public DisplayWave() {
         final Context context = MainApplication.getAppContext();
         // 总共波浪厚度
-        mBigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
+        mBigHeight = DisplayMetrics.bigHeight();
         // 单层波浪厚度
-        mWaveThickness = MetricsFUtils.dp2px(context, THICKNESS_DP);
+        mWaveThickness = DisplayMetrics.thickness();
         // 波浪高度
         mWaveHeight = MetricsFUtils.dp2px(context, WAVE_HEIGHT_DP);
         // 波浪宽度
@@ -58,15 +51,15 @@ public class DisplayWave {
             LogUtils.i(TAG, "DisplayWave() mWaveHeight: " + mWaveHeight + ", mWaveWidth: " + mWaveWidth +
                     ", mWaveSpeedPerSecond: " + mWaveSpeedPerSecond);
         }
-        final float width = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
-        final float height = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
-        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
-        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
+        final float width = DisplayMetrics.bigWidth();
+        final float height = DisplayMetrics.bigHeight();
+        float left = DisplayMetrics.bigLeftMargin();
+        float top = DisplayMetrics.bigTopMargin();
         float right = left + width;
         float bottom = top + height;
         mWaveLeftRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
-        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + width;
-        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + width;
+        left += DisplayMetrics.bigBetweenMargin() + width;
+        right += DisplayMetrics.bigBetweenMargin() + width;
         mWaveRightRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
 
         mWaveCount = (int) Math.ceil(width / mWaveWidth);

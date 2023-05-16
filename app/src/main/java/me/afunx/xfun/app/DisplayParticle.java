@@ -1,16 +1,7 @@
 package me.afunx.xfun.app;
 
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_BETWEEN_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_HEIGHT_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_LEFT_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_RADIUS_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_TOP_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_WIDTH_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.THICKNESS_DP;
-
 import android.animation.PointFEvaluator;
 import android.animation.TimeInterpolator;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -20,7 +11,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
-import com.afunx.xfun.common.utils.MetricsFUtils;
 
 import me.afunx.xfun.app.util.TimeDiffUtil;
 
@@ -66,25 +56,23 @@ public class DisplayParticle {
     private static final PointFEvaluator sPointFEvaluator;
 
     static {
-        final Context context = MainApplication.getAppContext();
-
         sTimeInterpolator = new AccelerateDecelerateInterpolator();
         sPointFEvaluator = new PointFEvaluator();
 
-        sThickness = MetricsFUtils.dp2px(context, THICKNESS_DP);
+        sThickness = DisplayMetrics.thickness();
 
         // 大
-        final float bigWidth = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
-        final float bigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
-        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
-        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
+        final float bigWidth = DisplayMetrics.bigWidth();
+        final float bigHeight = DisplayMetrics.bigHeight();
+        float left = DisplayMetrics.bigLeftMargin();
+        float top = DisplayMetrics.bigTopMargin();
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         RectF bigLeftRectF = new RectF(left, top, right, bottom);
-        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
-        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
+        left += DisplayMetrics.bigBetweenMargin() + bigWidth;
+        right += DisplayMetrics.bigBetweenMargin() + bigWidth;
         RectF bigRightRectF = new RectF(left, top, right, bottom);
-        sBigRadius = MetricsFUtils.dp2px(context, BIG_RADIUS_DP);
+        sBigRadius =DisplayMetrics.bigRadius();
 
         sLeftRectF = new RectF(bigLeftRectF.left + sThickness / 2, bigLeftRectF.top + sThickness / 2, bigLeftRectF.right - sThickness / 2, bigLeftRectF.bottom - sThickness / 2);
         sRightRectF = new RectF(bigRightRectF.left + sThickness / 2, bigRightRectF.top + sThickness / 2, bigRightRectF.right - sThickness / 2, bigRightRectF.bottom - sThickness / 2);

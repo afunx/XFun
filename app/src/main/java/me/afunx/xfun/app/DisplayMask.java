@@ -1,22 +1,11 @@
 package me.afunx.xfun.app;
 
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_BETWEEN_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_HEIGHT_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_LEFT_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_TOP_MARGIN_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.BIG_WIDTH_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.SMALL_TRIANGLE_SIDE_DP;
-import static me.afunx.xfun.app.DisplayRoundRect.THICKNESS_DP;
-
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
-
-import com.afunx.xfun.common.utils.MetricsFUtils;
 
 public class DisplayMask {
 
@@ -26,21 +15,20 @@ public class DisplayMask {
     private Path mMaskPath = null;
 
     public DisplayMask() {
-        final Context context = MainApplication.getAppContext();
         // 大
-        final float bigWidth = MetricsFUtils.dp2px(context, BIG_WIDTH_DP);
-        final float bigHeight = MetricsFUtils.dp2px(context, BIG_HEIGHT_DP);
-        float left = MetricsFUtils.dp2px(context, BIG_LEFT_MARGIN_DP);
-        float top = MetricsFUtils.dp2px(context, BIG_TOP_MARGIN_DP);
+        final float bigWidth = DisplayMetrics.bigWidth();
+        final float bigHeight = DisplayMetrics.bigHeight();
+        float left = DisplayMetrics.bigLeftMargin();
+        float top = DisplayMetrics.bigTopMargin();
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         RectF bigLeftRectF = new RectF(left, top, right, bottom);
-        left += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
-        right += MetricsFUtils.dp2px(context, BIG_BETWEEN_MARGIN_DP) + bigWidth;
+        left += DisplayMetrics.bigBetweenMargin() + bigWidth;
+        right += DisplayMetrics.bigBetweenMargin() + bigWidth;
         RectF bigRightRectF = new RectF(left, top, right, bottom);
 
         // 小
-        final float smallDiff = MetricsFUtils.dp2px(context, THICKNESS_DP);
+        final float smallDiff = DisplayMetrics.thickness();
         left = bigLeftRectF.left + smallDiff;
         top = bigLeftRectF.top + smallDiff;
         right = bigLeftRectF.right - smallDiff;
@@ -52,7 +40,7 @@ public class DisplayMask {
         bottom = bigRightRectF.bottom - smallDiff;
         mSmallRightRectF = new RectF(left, top, right, bottom);
 
-        mSmallTriangleSide = MetricsFUtils.dp2px(context, SMALL_TRIANGLE_SIDE_DP);
+        mSmallTriangleSide = DisplayMetrics.smallTriangleSide();
     }
 
     /**
