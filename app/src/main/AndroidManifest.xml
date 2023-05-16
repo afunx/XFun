@@ -13,9 +13,6 @@
         <activity
             android:name=".DisplayActivity"
             android:exported="false" />
-        <activity
-            android:name=".PagActivity"
-            android:exported="false" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
