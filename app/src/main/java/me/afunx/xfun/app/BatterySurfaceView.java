@@ -44,6 +44,9 @@ public class BatterySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private final BatteryRoundRect mBatteryRoundRect;
     private volatile long mElapsedTime = -1;
 
+    public BatterySurfaceView(Context context) {
+        this(context, null);
+    }
     public BatterySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         BatteryMetrics.init(context);
