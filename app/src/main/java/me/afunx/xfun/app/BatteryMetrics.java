@@ -3,7 +3,7 @@ package me.afunx.xfun.app;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-public class DisplayMetrics {
+public class BatteryMetrics {
 
     public static void init(@NonNull Context context) {
         initDensity(context);

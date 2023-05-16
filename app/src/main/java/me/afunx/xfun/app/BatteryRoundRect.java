@@ -6,27 +6,27 @@ import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
-public class DisplayRoundRect {
+public class BatteryRoundRect {
     private final float mBigRadius;
     private final float mThickness;
     private final RectF mLeftRectF;
     private final RectF mRightRectF;
 
-    public DisplayRoundRect() {
-        mThickness = DisplayMetrics.thickness();
+    public BatteryRoundRect() {
+        mThickness = BatteryMetrics.thickness();
 
         // 大
-        final float bigWidth = DisplayMetrics.bigWidth();
-        final float bigHeight = DisplayMetrics.bigHeight();
-        float left = DisplayMetrics.bigLeftMargin();
-        float top = DisplayMetrics.bigTopMargin();
+        final float bigWidth = BatteryMetrics.bigWidth();
+        final float bigHeight = BatteryMetrics.bigHeight();
+        float left = BatteryMetrics.bigLeftMargin();
+        float top = BatteryMetrics.bigTopMargin();
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         RectF bigLeftRectF = new RectF(left, top, right, bottom);
-        left += DisplayMetrics.bigBetweenMargin() + bigWidth;
-        right += DisplayMetrics.bigBetweenMargin() + bigWidth;
+        left += BatteryMetrics.bigBetweenMargin() + bigWidth;
+        right += BatteryMetrics.bigBetweenMargin() + bigWidth;
         RectF bigRightRectF = new RectF(left, top, right, bottom);
-        mBigRadius = DisplayMetrics.bigRadius();
+        mBigRadius = BatteryMetrics.bigRadius();
 
         mLeftRectF = new RectF(bigLeftRectF.left + mThickness / 2, bigLeftRectF.top + mThickness / 2, bigLeftRectF.right - mThickness / 2, bigLeftRectF.bottom - mThickness / 2);
         mRightRectF = new RectF(bigRightRectF.left + mThickness / 2, bigRightRectF.top + mThickness / 2, bigRightRectF.right - mThickness / 2, bigRightRectF.bottom - mThickness / 2);

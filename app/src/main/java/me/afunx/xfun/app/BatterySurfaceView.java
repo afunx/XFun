@@ -16,13 +16,13 @@ import com.afunx.xfun.common.utils.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class BatterySurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
     public interface DisplayFrameRateListener {
         void onFrameRate(int frameRate);
     }
 
-    private static final String TAG = "DisplaySurfaceView";
+    private static final String TAG = "BatterySurfaceView";
 
     private static final boolean DEBUG_TOUCH_MODE = false;
     private static final boolean DEBUG_FRAME_RATE_ENABLED = false;
@@ -38,18 +38,18 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private final Paint mPaint;
 
-    private final List<DisplayParticle> mDisplayParticleList = new ArrayList<>();
-    private final DisplayMask mDisplayMask;
-    private final DisplayWave mDisplayWave;
-    private final DisplayRoundRect mDisplayRoundRect;
+    private final List<BatteryParticle> mDisplayParticleList = new ArrayList<>();
+    private final BatteryMask mBatteryMask;
+    private final BatteryWave mBatteryWave;
+    private final BatteryRoundRect mBatteryRoundRect;
     private volatile long mElapsedTime = -1;
 
-    public DisplaySurfaceView(Context context, AttributeSet attrs) {
+    public BatterySurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DisplayMetrics.init(context);
-        mDisplayMask = new DisplayMask();
-        mDisplayWave = new DisplayWave();
-        mDisplayRoundRect = new DisplayRoundRect();
+        BatteryMetrics.init(context);
+        mBatteryMask = new BatteryMask();
+        mBatteryWave = new BatteryWave();
+        mBatteryRoundRect = new BatteryRoundRect();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         initView();
@@ -70,7 +70,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void addParticles() {
-        DisplayParticleCreator.createParticles(mDisplayParticleList);
+        BatteryParticleCreator.createParticles(mDisplayParticleList);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
      * @param percent 电量百分比，有效值为[0,100]
      */
     public void updateBatteryPercent(int percent) {
-        mDisplayWave.updateBatteryPercent(percent);
+        mBatteryWave.updateBatteryPercent(percent);
     }
 
     private void drawContent(@NonNull Canvas canvas) {
@@ -167,23 +167,23 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
     private void drawWave(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(WAVE_COLOR);
-        mDisplayWave.onDraw(elapsedRealTime, canvas, mPaint);
+        mBatteryWave.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
     private void drawRoundRectRing(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(ROUND_RECT_RING_COLOR);
-        mDisplayRoundRect.onDraw(elapsedRealTime, canvas, mPaint);
+        mBatteryRoundRect.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
     private void drawParticles(long elapsedRealTime, @NonNull Canvas canvas) {
         mPaint.setColor(PARTICLE_COLOR);
-        for (DisplayParticle particle : mDisplayParticleList) {
+        for (BatteryParticle particle : mDisplayParticleList) {
             particle.onDraw(elapsedRealTime, canvas, mPaint);
         }
     }
 
     private void drawMask(long elapsedRealTime, Canvas canvas) {
         mPaint.setColor(MASK_COLOR);
-        mDisplayMask.onDraw(elapsedRealTime, canvas, mPaint);
+        mBatteryMask.onDraw(elapsedRealTime, canvas, mPaint);
     }
 }

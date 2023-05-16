@@ -7,28 +7,28 @@ import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
-public class DisplayMask {
+public class BatteryMask {
 
     private final RectF mSmallLeftRectF;
     private final RectF mSmallRightRectF;
     private final float mSmallTriangleSide;
     private Path mMaskPath = null;
 
-    public DisplayMask() {
+    public BatteryMask() {
         // 大
-        final float bigWidth = DisplayMetrics.bigWidth();
-        final float bigHeight = DisplayMetrics.bigHeight();
-        float left = DisplayMetrics.bigLeftMargin();
-        float top = DisplayMetrics.bigTopMargin();
+        final float bigWidth = BatteryMetrics.bigWidth();
+        final float bigHeight = BatteryMetrics.bigHeight();
+        float left = BatteryMetrics.bigLeftMargin();
+        float top = BatteryMetrics.bigTopMargin();
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         RectF bigLeftRectF = new RectF(left, top, right, bottom);
-        left += DisplayMetrics.bigBetweenMargin() + bigWidth;
-        right += DisplayMetrics.bigBetweenMargin() + bigWidth;
+        left += BatteryMetrics.bigBetweenMargin() + bigWidth;
+        right += BatteryMetrics.bigBetweenMargin() + bigWidth;
         RectF bigRightRectF = new RectF(left, top, right, bottom);
 
         // 小
-        final float smallDiff = DisplayMetrics.thickness();
+        final float smallDiff = BatteryMetrics.thickness();
         left = bigLeftRectF.left + smallDiff;
         top = bigLeftRectF.top + smallDiff;
         right = bigLeftRectF.right - smallDiff;
@@ -40,7 +40,7 @@ public class DisplayMask {
         bottom = bigRightRectF.bottom - smallDiff;
         mSmallRightRectF = new RectF(left, top, right, bottom);
 
-        mSmallTriangleSide = DisplayMetrics.smallTriangleSide();
+        mSmallTriangleSide = BatteryMetrics.smallTriangleSide();
     }
 
     /**

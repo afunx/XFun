@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import com.afunx.xfun.common.utils.LogUtils;
 
-public class DisplayActivity extends AppCompatActivity implements DisplaySurfaceView.DisplayFrameRateListener {
+public class DisplayActivity extends AppCompatActivity implements BatterySurfaceView.DisplayFrameRateListener {
 
     private static final String TAG = "DisplayActivity";
 
-    private DisplaySurfaceView mDisplaySurfaceView;
+    private BatterySurfaceView mBatterySurfaceView;
 
     private TextView mTvFrameRate;
 
@@ -29,15 +29,15 @@ public class DisplayActivity extends AppCompatActivity implements DisplaySurface
 
         mTvFrameRate = findViewById(R.id.tv_frame_rate);
 
-        mDisplaySurfaceView = findViewById(R.id.display_view);
-        mDisplaySurfaceView.updateBatteryPercent(30);
-        mDisplaySurfaceView.setFrameRateListener(this);
+        mBatterySurfaceView = findViewById(R.id.display_view);
+        mBatterySurfaceView.updateBatteryPercent(30);
+        mBatterySurfaceView.setFrameRateListener(this);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
-            mDisplaySurfaceView.updateElapsedTime(count * 20L);
+            mBatterySurfaceView.updateElapsedTime(count * 20L);
             LogUtils.e(TAG, "DisplayParticle count: " + count + ", ev: " + ev);
             ++count;
         }

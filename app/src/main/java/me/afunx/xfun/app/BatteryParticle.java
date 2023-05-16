@@ -14,8 +14,8 @@ import com.afunx.xfun.common.utils.LogUtils;
 
 import me.afunx.xfun.app.util.TimeDiffUtil;
 
-public class DisplayParticle {
-    private static final String TAG = "DisplayParticle";
+public class BatteryParticle {
+    private static final String TAG = "BatteryParticle";
     private static final boolean DEBUG = false;
     // 粒子初始位置点，单位：像素
     private final PointF mStartPoint;
@@ -59,20 +59,20 @@ public class DisplayParticle {
         sTimeInterpolator = new AccelerateDecelerateInterpolator();
         sPointFEvaluator = new PointFEvaluator();
 
-        sThickness = DisplayMetrics.thickness();
+        sThickness = BatteryMetrics.thickness();
 
         // 大
-        final float bigWidth = DisplayMetrics.bigWidth();
-        final float bigHeight = DisplayMetrics.bigHeight();
-        float left = DisplayMetrics.bigLeftMargin();
-        float top = DisplayMetrics.bigTopMargin();
+        final float bigWidth = BatteryMetrics.bigWidth();
+        final float bigHeight = BatteryMetrics.bigHeight();
+        float left = BatteryMetrics.bigLeftMargin();
+        float top = BatteryMetrics.bigTopMargin();
         float right = left + bigWidth;
         float bottom = top + bigHeight;
         RectF bigLeftRectF = new RectF(left, top, right, bottom);
-        left += DisplayMetrics.bigBetweenMargin() + bigWidth;
-        right += DisplayMetrics.bigBetweenMargin() + bigWidth;
+        left += BatteryMetrics.bigBetweenMargin() + bigWidth;
+        right += BatteryMetrics.bigBetweenMargin() + bigWidth;
         RectF bigRightRectF = new RectF(left, top, right, bottom);
-        sBigRadius =DisplayMetrics.bigRadius();
+        sBigRadius = BatteryMetrics.bigRadius();
 
         sLeftRectF = new RectF(bigLeftRectF.left + sThickness / 2, bigLeftRectF.top + sThickness / 2, bigLeftRectF.right - sThickness / 2, bigLeftRectF.bottom - sThickness / 2);
         sRightRectF = new RectF(bigRightRectF.left + sThickness / 2, bigRightRectF.top + sThickness / 2, bigRightRectF.right - sThickness / 2, bigRightRectF.bottom - sThickness / 2);
@@ -217,7 +217,7 @@ public class DisplayParticle {
         return false;
     }
 
-    private DisplayParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime, long entranceTime, long exitTime) {
+    private BatteryParticle(float startX, float startY, float endX, float endY, float radius, long interval, long startTime, long endTime, long entranceTime, long exitTime) {
         mStartPoint = new PointF(startX, startY);
         mEndPoint = new PointF(endX, endY);
         mRadius = radius;
@@ -233,7 +233,7 @@ public class DisplayParticle {
         return Math.sqrt((p1.y - p0.y) * (p1.y - p0.y) + (p1.x - p0.x) * (p1.x - p0.x));
     }
 
-    public DisplayParticle clone(String entranceTime, String exitTime) {
+    public BatteryParticle clone(String entranceTime, String exitTime) {
         return new Builder()
                 .setStartX(mStartPoint.x)
                 .setStartY(mStartPoint.y)
@@ -329,7 +329,7 @@ public class DisplayParticle {
             return this;
         }
 
-        public DisplayParticle build() {
+        public BatteryParticle build() {
             if (this.startTime < 0) {
                 throw new IllegalArgumentException("startTime: " + this.startTime + " < 0");
             }
@@ -342,7 +342,7 @@ public class DisplayParticle {
             if (this.radius <= 0) {
                 throw new IllegalArgumentException("radius: " + this.radius + " <= 0");
             }
-            return new DisplayParticle(startX, startY, endX, endY, radius, interval, startTime - clipStartTime, endTime - clipStartTime, entranceTime, exitTime);
+            return new BatteryParticle(startX, startY, endX, endY, radius, interval, startTime - clipStartTime, endTime - clipStartTime, entranceTime, exitTime);
         }
     }
 

@@ -1,6 +1,6 @@
 package me.afunx.xfun.app;
 
-import static me.afunx.xfun.app.DisplaySurfaceView.HOLLOW_WAVE_COLOR;
+import static me.afunx.xfun.app.BatterySurfaceView.HOLLOW_WAVE_COLOR;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 
 import com.afunx.xfun.common.utils.LogUtils;
 
-public class DisplayWave {
+public class BatteryWave {
 
-    private static final String TAG = "DisplayWave";
+    private static final String TAG = "BatteryWave";
     private static final boolean DEBUG = false;
     private final float mBigHeight;
     private final float mWaveThickness;
@@ -32,30 +32,30 @@ public class DisplayWave {
 
     private volatile int mBatteryPercent = 0;
 
-    public DisplayWave() {
+    public BatteryWave() {
         // 总共波浪厚度
-        mBigHeight = DisplayMetrics.bigHeight();
+        mBigHeight = BatteryMetrics.bigHeight();
         // 单层波浪厚度
-        mWaveThickness = DisplayMetrics.thickness();
+        mWaveThickness = BatteryMetrics.thickness();
         // 波浪高度
-        mWaveHeight = DisplayMetrics.waveHeight();
+        mWaveHeight = BatteryMetrics.waveHeight();
         // 波浪宽度
-        mWaveWidth = DisplayMetrics.waveWidth();
+        mWaveWidth = BatteryMetrics.waveWidth();
         // 波浪速度
-        mWaveSpeedPerSecond = DisplayMetrics.waveSpeedPerSecond();
+        mWaveSpeedPerSecond = BatteryMetrics.waveSpeedPerSecond();
         if (DEBUG) {
             LogUtils.i(TAG, "DisplayWave() mWaveHeight: " + mWaveHeight + ", mWaveWidth: " + mWaveWidth +
                     ", mWaveSpeedPerSecond: " + mWaveSpeedPerSecond);
         }
-        final float width = DisplayMetrics.bigWidth();
-        final float height = DisplayMetrics.bigHeight();
-        float left = DisplayMetrics.bigLeftMargin();
-        float top = DisplayMetrics.bigTopMargin();
+        final float width = BatteryMetrics.bigWidth();
+        final float height = BatteryMetrics.bigHeight();
+        float left = BatteryMetrics.bigLeftMargin();
+        float top = BatteryMetrics.bigTopMargin();
         float right = left + width;
         float bottom = top + height;
         mWaveLeftRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
-        left += DisplayMetrics.bigBetweenMargin() + width;
-        right += DisplayMetrics.bigBetweenMargin() + width;
+        left += BatteryMetrics.bigBetweenMargin() + width;
+        right += BatteryMetrics.bigBetweenMargin() + width;
         mWaveRightRectF = new RectF(left, top + mWaveHeight, right, bottom - mWaveHeight);
 
         mWaveCount = (int) Math.ceil(width / mWaveWidth);
