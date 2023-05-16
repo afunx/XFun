@@ -30,6 +30,7 @@ public class DisplayActivity extends AppCompatActivity implements DisplaySurface
         mTvFrameRate = findViewById(R.id.tv_frame_rate);
 
         mDisplaySurfaceView = findViewById(R.id.display_view);
+        mDisplaySurfaceView.updateBatteryPercent(30);
         mDisplaySurfaceView.setFrameRateListener(this);
     }
 

@@ -1,8 +1,9 @@
 package me.afunx.xfun.app;
 
+import static me.afunx.xfun.app.DisplaySurfaceView.HOLLOW_WAVE_COLOR;
+
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -28,12 +29,13 @@ public class DisplayWave {
     private final float mWaveSpeedPerSecond;
     private long mElapsedRealTime = 0;
     private float mWaveTranslateX = 0;
-    //private float mWaveTranslateY = 0;
     private Path mSolidWavePath = null;
     private Path mHollowWavePath = null;
     private static final float WAVE_HEIGHT_DP = 18.75f;
     private static final float WAVE_WIDTH_DP = 146.25f;
     private static final float WAVE_SPEED_DP_PER_SECOND = 135f;
+
+    private volatile int mBatteryPercent = 0;
 
     public DisplayWave() {
         final Context context = MainApplication.getAppContext();
@@ -69,6 +71,19 @@ public class DisplayWave {
     }
 
     /**
+     * 更新电量百分比
+     *
+     * @param percent 电量百分比，有效值为[0,100]
+     */
+    public void updateBatteryPercent(int percent) {
+        // 电量百分比的有效范围是[0,100]
+        int batteryPercent = Math.max(0, percent);
+        batteryPercent = Math.min(batteryPercent, 100);
+        LogUtils.i(TAG, "updateBatteryPercent() percent: " + percent + ", batteryPercent: " + batteryPercent);
+        mBatteryPercent = batteryPercent;
+    }
+
+    /**
      * 绘制回调
      *
      * @param elapsedRealTime 绘制该帧时，SystemClock.elapsedRealtime
@@ -101,7 +116,7 @@ public class DisplayWave {
             mHollowWavePath.addPath(getHollowRightBottomPath());
         }
 
-        final float waveTranslateY = -getWaveTranslateY(30);
+        final float waveTranslateY = -getWaveTranslateY(mBatteryPercent);
 
         // 绘制柱体
         canvas.save();
@@ -117,7 +132,7 @@ public class DisplayWave {
         canvas.drawPath(mSolidWavePath, paint);
         // 绘制空心波浪
         int color = paint.getColor();
-        paint.setColor(Color.BLACK);
+        paint.setColor(HOLLOW_WAVE_COLOR);
         canvas.drawPath(mHollowWavePath, paint);
         paint.setColor(color);
         canvas.restore();

@@ -25,13 +25,14 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     private static final String TAG = "DisplaySurfaceView";
 
     private static final boolean DEBUG_TOUCH_MODE = false;
-    private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
+    private static final boolean DEBUG_FRAME_RATE_ENABLED = false;
 
     private static final int PARTICLE_COLOR = 0xFF88FFC2;
-    private static final int ROUND_RECT_COLOR_BIG = 0xFF88FFC2;
-    private static final int ROUND_RECT_COLOR_SMALL = Color.BLACK;
+    private static final int ROUND_RECT_RING_COLOR = 0xFF88FFC2;
     private static final int WAVE_COLOR = 0xFF88FFC2;
     private static final int MASK_COLOR = Color.BLACK;
+
+    static final int HOLLOW_WAVE_COLOR = Color.BLACK;
     private boolean mIsDrawing;
     private DisplayFrameRateListener mFrameRateListener;
 
@@ -72,7 +73,6 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         DisplayParticleCreator.createParticles(mDisplayParticleList);
     }
 
-
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         LogUtils.i(TAG, "surfaceCreated()");
@@ -97,6 +97,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
         long lastTimestamp = 0;
         int frameCount = -1;
 
+        LogUtils.i(TAG, "run() E");
         while (mIsDrawing) {
             if (DEBUG_FRAME_RATE_ENABLED) {
                 long current = SystemClock.elapsedRealtime();
@@ -129,6 +130,16 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
                 }
             }
         }
+        LogUtils.i(TAG, "run() X");
+    }
+
+    /**
+     * 更新电量百分比
+     *
+     * @param percent 电量百分比，有效值为[0,100]
+     */
+    public void updateBatteryPercent(int percent) {
+        mDisplayWave.updateBatteryPercent(percent);
     }
 
     private void drawContent(@NonNull Canvas canvas) {
@@ -160,7 +171,7 @@ public class DisplaySurfaceView extends SurfaceView implements SurfaceHolder.Cal
     }
 
     private void drawRoundRectRing(long elapsedRealTime, @NonNull Canvas canvas) {
-        mPaint.setColor(ROUND_RECT_COLOR_BIG);
+        mPaint.setColor(ROUND_RECT_RING_COLOR);
         mDisplayRoundRect.onDraw(elapsedRealTime, canvas, mPaint);
     }
 
