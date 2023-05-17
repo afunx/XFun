@@ -29,6 +29,10 @@ public class BatteryWave {
     private float mWaveTranslateX = 0;
     private Path mSolidWavePath = null;
     private Path mHollowWavePath = null;
+    // 实心波浪线，解决绘制空隙问题
+    private Path mSolidWaveLinePath = null;
+    // 空心波浪线，解决绘制空隙问题
+    private Path mHollowWaveLinePath = null;
 
     private volatile int mBatteryPercent = 0;
 
@@ -104,10 +108,20 @@ public class BatteryWave {
             mSolidWavePath.addPath(getSolidLeftBottomPath());
             mSolidWavePath.addPath(getSolidRightBottomPath());
         }
+        if (mSolidWaveLinePath == null) {
+            mSolidWaveLinePath = new Path();
+            mSolidWaveLinePath.addPath(getSolidLineLeftBottomPath());
+            mSolidWaveLinePath.addPath(getSolidLineRightBottomPath());
+        }
         if (mHollowWavePath == null) {
             mHollowWavePath = new Path();
             mHollowWavePath.addPath(getHollowLeftBottomPath());
             mHollowWavePath.addPath(getHollowRightBottomPath());
+        }
+        if (mHollowWaveLinePath == null) {
+            mHollowWaveLinePath = new Path();
+            mHollowWaveLinePath.addPath(getHollowLineLeftBottomPath());
+            mHollowWaveLinePath.addPath(getHollowLineRightBottomPath());
         }
 
         final float waveTranslateY = -getWaveTranslateY(mBatteryPercent);
@@ -124,10 +138,12 @@ public class BatteryWave {
         canvas.translate(mWaveTranslateX, waveTranslateY);
         // 绘制实心波浪
         canvas.drawPath(mSolidWavePath, paint);
+        canvas.drawPath(mSolidWaveLinePath, paint);
         // 绘制空心波浪
         int color = paint.getColor();
         paint.setColor(HOLLOW_WAVE_COLOR);
         canvas.drawPath(mHollowWavePath, paint);
+        canvas.drawPath(mHollowWaveLinePath, paint);
         paint.setColor(color);
         canvas.restore();
     }
@@ -137,7 +153,7 @@ public class BatteryWave {
         final float waveWidth = mWaveWidth;
         path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rLineTo( waveWidth / 2, 0);
+            path.rMoveTo(waveWidth / 2, 0);
             path.rQuadTo(waveWidth / 4, -mWaveHeight * 2, waveWidth / 2, 0);
         }
         path.close();
@@ -149,10 +165,42 @@ public class BatteryWave {
         final float waveWidth = mWaveWidth;
         path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
-            path.rLineTo(waveWidth / 2, 0);
+            path.rMoveTo(waveWidth / 2, 0);
             path.rQuadTo(waveWidth / 4, -mWaveHeight * 2, waveWidth / 2, 0);
         }
         path.close();
+        return path;
+    }
+
+    private Path getSolidLineLeftBottomPath() {
+        Path path = new Path();
+        final float waveWidth = mWaveWidth;
+        path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
+        for (int i = -1; i < mWaveCount; i++) {
+            path.rMoveTo(waveWidth / 2, 0);
+            path.rMoveTo(0, -1);
+            path.rLineTo(0, 2);
+            path.rLineTo(waveWidth / 2, 0);
+            path.rLineTo(0, -2);
+            path.close();
+            path.rMoveTo(0, 1);
+        }
+        return path;
+    }
+
+    private Path getSolidLineRightBottomPath() {
+        Path path = new Path();
+        final float waveWidth = mWaveWidth;
+        path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
+        for (int i = -1; i < mWaveCount; i++) {
+            path.rMoveTo(waveWidth / 2, 0);
+            path.rMoveTo(0, -1);
+            path.rLineTo(0, 2);
+            path.rLineTo(waveWidth / 2, 0);
+            path.rLineTo(0, -2);
+            path.close();
+            path.rMoveTo(0, 1);
+        }
         return path;
     }
 
@@ -162,7 +210,7 @@ public class BatteryWave {
         path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
             path.rQuadTo(waveWidth / 4, mWaveHeight * 2, waveWidth / 2, 0);
-            path.rLineTo(waveWidth / 2, 0);
+            path.rMoveTo(waveWidth / 2, 0);
         }
         path.close();
         return path;
@@ -174,9 +222,41 @@ public class BatteryWave {
         path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
         for (int i = -1; i < mWaveCount; i++) {
             path.rQuadTo(waveWidth / 4, mWaveHeight * 2, waveWidth / 2, 0);
-            path.rLineTo(waveWidth / 2, 0);
+            path.rMoveTo(waveWidth / 2, 0);
         }
         path.close();
+        return path;
+    }
+
+    private Path getHollowLineLeftBottomPath() {
+        Path path = new Path();
+        final float waveWidth = mWaveWidth;
+        path.moveTo(mWaveLeftRectF.left - waveWidth, mWaveLeftRectF.bottom);
+        for (int i = -1; i < mWaveCount; i++) {
+            path.rMoveTo(0, -1);
+            path.rLineTo(0, 2);
+            path.rLineTo(waveWidth / 2, 0);
+            path.rLineTo(0, -2);
+            path.close();
+            path.rMoveTo(0, 1);
+            path.rMoveTo(waveWidth / 2, 0);
+        }
+        return path;
+    }
+
+    private Path getHollowLineRightBottomPath() {
+        Path path = new Path();
+        final float waveWidth = mWaveWidth;
+        path.moveTo(mWaveRightRectF.left - waveWidth, mWaveRightRectF.bottom);
+        for (int i = -1; i < mWaveCount; i++) {
+            path.rMoveTo(0, -1);
+            path.rLineTo(0, 2);
+            path.rLineTo(waveWidth / 2, 0);
+            path.rLineTo(0, -2);
+            path.close();
+            path.rMoveTo(0, 1);
+            path.rMoveTo(waveWidth / 2, 0);
+        }
         return path;
     }
 
