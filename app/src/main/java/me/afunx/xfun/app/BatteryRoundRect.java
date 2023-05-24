@@ -46,6 +46,7 @@ public class BatteryRoundRect {
     public void onDraw(long elapsedRealTime, @NonNull Canvas canvas, @NonNull Paint paint) {
         Paint.Style style = paint.getStyle();
         paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(mThickness);
         canvas.drawRoundRect(mLeftRectF, mBigRadius, mBigRadius, paint);
         canvas.drawRoundRect(mRightRectF, mBigRadius, mBigRadius, paint);

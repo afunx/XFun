@@ -86,7 +86,7 @@ public class BatteryMetrics {
         return sBigBetweenMargin;
     }
 
-    private static final float BIG_RADIUS_DP = 83.29f;
+    private static final float BIG_RADIUS_DP = 64f;
     private static float sBigRadius = 0;
     private static void initBigRadius() {
         sBigRadius = dp2px(BIG_RADIUS_DP);
