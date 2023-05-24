@@ -19,6 +19,7 @@ public class BatteryMetrics {
         initWaveHeight();
         initWaveWidth();
         initWaveSpeedPerSecond();
+        initContentTranslateY();
     }
 
     private static float sDensity = 0;
@@ -38,7 +39,7 @@ public class BatteryMetrics {
         return sBigWidth;
     }
 
-    private static final float BIG_HEIGHT_DP = 242.5f;
+    private static final float BIG_HEIGHT_DP = 244.5f;
     private static float sBigHeight = 0;
     private static void initBigHeight() {
         sBigHeight = dp2px(BIG_HEIGHT_DP);
@@ -50,7 +51,7 @@ public class BatteryMetrics {
         return sBigHeight;
     }
 
-    private static final float BIG_LEFT_MARGIN_DP = 151f;
+    private static final float BIG_LEFT_MARGIN_DP = 152f;
     private static float sBigLeftMargin = 0;
     private static void initBigLeftMargin() {
         sBigLeftMargin = dp2px(BIG_LEFT_MARGIN_DP);
@@ -62,7 +63,7 @@ public class BatteryMetrics {
         return sBigLeftMargin;
     }
 
-    private static final float BIG_TOP_MARGIN_DP = 174f;
+    private static final float BIG_TOP_MARGIN_DP = 173f;
     private static float sBigTopMargin = 0;
     private static void initBigTopMargin() {
         sBigTopMargin = dp2px(BIG_TOP_MARGIN_DP);
@@ -74,7 +75,7 @@ public class BatteryMetrics {
         return sBigTopMargin;
     }
 
-    private static final float BIG_BETWEEN_MARGIN_DP = 198.05f;
+    private static final float BIG_BETWEEN_MARGIN_DP = 194.00f;
     private static float sBigBetweenMargin = 0;
     private static void initBigBetweenMargin() {
         sBigBetweenMargin = dp2px(BIG_BETWEEN_MARGIN_DP);
@@ -86,7 +87,7 @@ public class BatteryMetrics {
         return sBigBetweenMargin;
     }
 
-    private static final float BIG_RADIUS_DP = 64f;
+    private static final float BIG_RADIUS_DP = 67f;
     private static float sBigRadius = 0;
     private static void initBigRadius() {
         sBigRadius = dp2px(BIG_RADIUS_DP);
@@ -170,6 +171,18 @@ public class BatteryMetrics {
             throw new IllegalStateException("Please call init(Context) first");
         }
         return sWaveSpeedPerSecond;
+    }
+
+    private static final float CONTENT_TRANSLATE_Y = 24.0f;
+    private static float sContentTranslateY = 0;
+    private static void initContentTranslateY() {
+        sContentTranslateY = dp2px(CONTENT_TRANSLATE_Y);
+    }
+    public static float contentTranslateY() {
+        if (sContentTranslateY == 0) {
+            throw new IllegalStateException("Please call init(Context) first");
+        }
+        return sContentTranslateY;
     }
 
     public static float dp2px(float dp) {
