@@ -1,6 +1,8 @@
 package me.afunx.xfun.app;
 
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -12,6 +14,7 @@ public class BatteryRoundRect {
     private final float mThickness;
     private final RectF mLeftRectF;
     private final RectF mRightRectF;
+    private final MaskFilter mMaskFilter;
 
     // 解决绘制空隙问题
     private Path mLinePath = null;
@@ -34,6 +37,8 @@ public class BatteryRoundRect {
 
         mLeftRectF = new RectF(bigLeftRectF.left + mThickness / 2, bigLeftRectF.top + mThickness / 2, bigLeftRectF.right - mThickness / 2, bigLeftRectF.bottom - mThickness / 2);
         mRightRectF = new RectF(bigRightRectF.left + mThickness / 2, bigRightRectF.top + mThickness / 2, bigRightRectF.right - mThickness / 2, bigRightRectF.bottom - mThickness / 2);
+
+        mMaskFilter = new BlurMaskFilter(BatteryMetrics.blurRadius(), BlurMaskFilter.Blur.SOLID);
     }
 
     /**
@@ -48,9 +53,14 @@ public class BatteryRoundRect {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(mThickness);
+        // 光晕绘制
+        paint.setMaskFilter(mMaskFilter);
         canvas.drawRoundRect(mLeftRectF, mBigRadius, mBigRadius, paint);
         canvas.drawRoundRect(mRightRectF, mBigRadius, mBigRadius, paint);
+        paint.setMaskFilter(null);
+
         paint.setStyle(style);
+        // 绘制空隙
         if (mLinePath == null) {
             mLinePath = getLinePath();
         }

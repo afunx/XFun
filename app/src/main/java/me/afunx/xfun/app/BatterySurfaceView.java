@@ -124,7 +124,7 @@ public class BatterySurfaceView extends SurfaceView implements SurfaceHolder.Cal
                 if (canvas == null) {
                     continue;
                 }
-                canvas.translate(0, BatteryMetrics.contentTranslateY() / 2);
+                canvas.translate(0, BatteryMetrics.contentTranslateY());
                 drawContent(canvas);
             } catch (Exception e) {
                 e.printStackTrace();

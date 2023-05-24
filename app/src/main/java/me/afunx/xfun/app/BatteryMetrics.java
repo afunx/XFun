@@ -20,6 +20,7 @@ public class BatteryMetrics {
         initWaveWidth();
         initWaveSpeedPerSecond();
         initContentTranslateY();
+        initBlurRadius();
     }
 
     private static float sDensity = 0;
@@ -173,16 +174,28 @@ public class BatteryMetrics {
         return sWaveSpeedPerSecond;
     }
 
-    private static final float CONTENT_TRANSLATE_Y = 24.0f;
+    private static final float CONTENT_TRANSLATE_Y_DP = 12.0f;
     private static float sContentTranslateY = 0;
     private static void initContentTranslateY() {
-        sContentTranslateY = dp2px(CONTENT_TRANSLATE_Y);
+        sContentTranslateY = dp2px(CONTENT_TRANSLATE_Y_DP);
     }
     public static float contentTranslateY() {
         if (sContentTranslateY == 0) {
             throw new IllegalStateException("Please call init(Context) first");
         }
         return sContentTranslateY;
+    }
+
+    private static final float BLUR_RADIUS_DP = 30.0f;
+    private static float sBlurRadius = 0;
+    private static void initBlurRadius() {
+        sBlurRadius = dp2px(BLUR_RADIUS_DP);
+    }
+    public static float blurRadius() {
+        if (sBlurRadius == 0) {
+            throw new IllegalStateException("Please call init(Context) first");
+        }
+        return sBlurRadius;
     }
 
     public static float dp2px(float dp) {
