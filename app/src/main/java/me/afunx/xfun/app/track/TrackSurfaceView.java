@@ -1,13 +1,26 @@
 package me.afunx.xfun.app.track;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import com.afunx.xfun.common.utils.LogUtils;
+
+import java.util.Objects;
+
+import me.afunx.xfun.app.R;
+
 public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
     public interface DisplayFrameRateListener {
@@ -17,10 +30,16 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private static final String TAG = "TrackSurfaceView";
 
     private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
+
+    private final Paint mPaint;
+
     private boolean mIsDrawing;
 
     private DisplayFrameRateListener mFrameRateListener;
 
+    private final TrackLeftEye mLeftEye = new TrackLeftEye();
+
+    private final TrackRightEye mRightEye = new TrackRightEye();
 
     public TrackSurfaceView(Context context) {
         this(context, null);
@@ -28,6 +47,8 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     public TrackSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
         initView();
     }
 
@@ -101,5 +122,19 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
 
     private void drawContent(Canvas canvas) {
+        long elapsedRealTime = SystemClock.elapsedRealtime();
+        drawBackGround(canvas);
+        drawEyes(elapsedRealTime, canvas, mPaint);
+    }
+
+    private void drawEyes(long elapsedRealTime, Canvas canvas, Paint paint) {
+        mLeftEye.onDraw(elapsedRealTime, canvas, paint, getContext());
+        mRightEye.onDraw(elapsedRealTime, canvas, paint, getContext());
+    }
+
+    private void drawBackGround(@NonNull Canvas canvas) {
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.BLACK);
+        canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
     }
 }
