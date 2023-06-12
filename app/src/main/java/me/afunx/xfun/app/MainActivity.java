@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.afunx.xfun.common.base.BaseActivity;
 
+import me.afunx.xfun.app.track.TrackActivity;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
@@ -18,7 +20,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_goto_demo) {
-            Intent intent = new Intent(this, DisplayActivity.class);
+             Intent intent = new Intent(this, TrackActivity.class);
+//            Intent intent = new Intent(this, DisplayActivity.class);
             startActivity(intent);
         }
     }
