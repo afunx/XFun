@@ -9,8 +9,10 @@ import android.graphics.Rect;
 
 import androidx.annotation.NonNull;
 
-public abstract class TrackAbstractEye {
+import java.util.Arrays;
 
+public abstract class TrackAbstractEye {
+    private static final float FLOAT_PRECISION = 1e-6f;
     private static final float EYE_OUT_SIZE = 600;
     private static final float EYE_IN_SIZE = 420;
 
@@ -86,6 +88,10 @@ public abstract class TrackAbstractEye {
                 (int) (mEyeCenterX + EYE_IN_SIZE / 2), (int) (mEyeCenterY + EYE_IN_SIZE / 2));
         mBottomRect = new Rect((int) (mEyeBottomX - EYE_BOTTOM_WIDTH / 2), (int) (mEyeBottomY - EYE_BOTTOM_HEIGHT / 2),
                 (int) (mEyeBottomX + EYE_BOTTOM_WIDTH / 2), (int) (mEyeBottomY + EYE_BOTTOM_HEIGHT / 2));
+
+        mMatrixEyeOut.postTranslate(mOutRect.left, mOutRect.top);
+        mMatrixEyeIn.postTranslate(mInRect.left, mInRect.top);
+        mMatrixEyeBottom.postTranslate(mBottomRect.left, mBottomRect.top);
     }
 
     private final Rect mOutRect;
@@ -96,7 +102,11 @@ public abstract class TrackAbstractEye {
     private Bitmap mBitmapEyeIn = null;
     private Bitmap mBitmapEyeOut = null;
 
-    private final Matrix mMatrix = new Matrix();
+    private final Matrix mMatrixEyeBottom = new Matrix();
+    private final Matrix mMatrixEyeIn = new Matrix();
+    private final Matrix mMatrixEyeOut = new Matrix();
+
+    private final float[] mMatrixValues = new float[9];
 
     /**
      * 绘制回调
@@ -116,18 +126,38 @@ public abstract class TrackAbstractEye {
         if (mBitmapEyeIn == null) {
             mBitmapEyeIn = eyeBitmapIn(context);
         }
-
         // bottom
-        mMatrix.reset();
-        mMatrix.postTranslate(mBottomRect.left, mBottomRect.top);
-        canvas.drawBitmap(mBitmapEyeBottom, mMatrix, null);
+        canvas.drawBitmap(mBitmapEyeBottom, mMatrixEyeBottom, null);
+        // scale(2f, 1f, mOutRect, mMatrixEyeOut, mMatrixValues);
         // out
-        mMatrix.reset();
-        mMatrix.postTranslate(mOutRect.left, mOutRect.top);
-        canvas.drawBitmap(mBitmapEyeOut, mMatrix, null);
+        canvas.drawBitmap(mBitmapEyeOut, mMatrixEyeOut, null);
         // in
-        mMatrix.reset();
-        mMatrix.postTranslate(mInRect.left, mInRect.top);
-        canvas.drawBitmap(mBitmapEyeIn, mMatrix, null);
+        canvas.drawBitmap(mBitmapEyeIn, mMatrixEyeIn, null);
     }
+
+    private void scale(float scaleX, float scaleY, @NonNull Rect rect, @NonNull Matrix matrix, @NonNull float[] matrixValues) {
+        // scaleX  skewX   translateX  (0-2)
+        // skewY   scaleY  translateY  (3-5)
+        // 0       0       1           (6-8)
+        matrix.getValues(matrixValues);
+        final float sx = matrixValues[0];
+        final float sy = matrixValues[4];
+        if (Math.abs(sx - scaleX) <= FLOAT_PRECISION && Math.abs(sy - scaleY) <= FLOAT_PRECISION) {
+            return;
+        }
+        final float tx = matrixValues[2];
+        final float ty = matrixValues[5];
+        final float px = rect.width() / 2f;
+        final float py = rect.height() / 2f;
+        matrix.postTranslate(-tx, -ty);
+        matrix.postScale(scaleX / sx, scaleY / sy, px, py);
+        matrix.postTranslate(tx, ty);
+    }
+
+    private void translate(float translateX, float translateY,  @NonNull Rect rect, @NonNull Matrix matrix, @NonNull float[] matrixValues) {
+        // sx  0   tx  (0-2)
+        // 0   sy  ty  (3-5)
+        // 0   0   1   (6-8)
+    }
+
 }
