@@ -1,25 +1,17 @@
 package me.afunx.xfun.app.track;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 import com.afunx.xfun.common.utils.LogUtils;
-
-import java.util.Objects;
-
-import me.afunx.xfun.app.R;
 
 public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
@@ -28,6 +20,7 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
 
     private static final String TAG = "TrackSurfaceView";
+    private static final int MAX_FRAME = 60;
 
     private static final boolean DEBUG_FRAME_RATE_ENABLED = true;
 
@@ -85,6 +78,8 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         long lastTimestamp = 0;
         int frameCount = -1;
 
+        long lastFrameTimestamp = 0;
+
         LogUtils.i(TAG, "run() E");
         while (mIsDrawing) {
             if (DEBUG_FRAME_RATE_ENABLED) {
@@ -102,6 +97,18 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     }
                 }
             }
+
+            // 控制帧率
+            if (lastFrameTimestamp != 0) {
+                // 如果帧率高于最大帧率，则进行休眠
+                while (1000 / MAX_FRAME - (SystemClock.elapsedRealtime() - lastFrameTimestamp) > 0) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException ignore) {
+                    }
+                }
+            }
+            lastFrameTimestamp = SystemClock.elapsedRealtime();
 
             Canvas canvas = null;
             try {
