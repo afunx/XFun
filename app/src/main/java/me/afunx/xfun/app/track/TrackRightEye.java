@@ -20,6 +20,11 @@ public class TrackRightEye extends TrackAbstractEye {
     private static final float RIGHT_EYE_BOTTOM_Y = Ae2AndroidDimenUtil.ae2androidY(790.5f);
 
     @Override
+    protected String eyeName() {
+        return "RightEye";
+    }
+
+    @Override
     protected float eyeCenterX() {
         return RIGHT_EYE_CENTER_X;
     }
