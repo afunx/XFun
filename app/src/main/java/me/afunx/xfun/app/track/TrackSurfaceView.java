@@ -30,9 +30,7 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     private DisplayFrameRateListener mFrameRateListener;
 
-    private final TrackLeftEye mLeftEye = new TrackLeftEye();
-
-    private final TrackRightEye mRightEye = new TrackRightEye();
+    private final TrackFace mTrackFace = new TrackFace();
 
     public TrackSurfaceView(Context context) {
         this(context, null);
@@ -48,6 +46,16 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private void initView() {
         LogUtils.i(TAG, "initView()");
         getHolder().addCallback(this);
+    }
+
+    /**
+     * 获取人脸跟踪控制器，控制器实时接收最新的人脸跟踪状态
+     *
+     * @return TrackController
+     */
+    @NonNull
+    public TrackController getTrackController() {
+        return mTrackFace.getTrackController();
     }
 
     public void setFrameRateListener(DisplayFrameRateListener frameRateListener) {
@@ -131,12 +139,11 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private void drawContent(Canvas canvas) {
         long elapsedRealTime = SystemClock.elapsedRealtime();
         drawBackGround(canvas);
-        drawEyes(elapsedRealTime, canvas, mPaint);
+        drawFace(elapsedRealTime, canvas, mPaint);
     }
 
-    private void drawEyes(long elapsedRealTime, Canvas canvas, Paint paint) {
-        mLeftEye.onDraw(elapsedRealTime, canvas, paint, getContext());
-        mRightEye.onDraw(elapsedRealTime, canvas, paint, getContext());
+    private void drawFace(long elapsedRealTime, Canvas canvas, Paint paint) {
+        mTrackFace.onDraw(elapsedRealTime, canvas, paint, getContext());
     }
 
     private void drawBackGround(@NonNull Canvas canvas) {

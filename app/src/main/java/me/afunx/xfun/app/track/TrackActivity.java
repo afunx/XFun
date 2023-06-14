@@ -8,8 +8,6 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-import com.afunx.xfun.common.utils.LogUtils;
-
 import me.afunx.xfun.app.R;
 
 public class TrackActivity extends AppCompatActivity implements TrackSurfaceView.DisplayFrameRateListener {
@@ -30,13 +28,24 @@ public class TrackActivity extends AppCompatActivity implements TrackSurfaceView
 
         mTrackSurfaceView = findViewById(R.id.display_view);
         mTrackSurfaceView.setFrameRateListener(this);
-        LogUtils.e("afunx", "mTrackSurfaceView: " + mTrackSurfaceView);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
-            finish();
+            if (ev.getX() <= 960) {
+                if (ev.getX() <= 480) {
+                    mTrackSurfaceView.getTrackController().translateDelta(-10, 0);
+                } else {
+                    mTrackSurfaceView.getTrackController().translateDelta(-1, 0);
+                }
+            } else {
+                if (ev.getX() >= 1440) {
+                    mTrackSurfaceView.getTrackController().translateDelta(10, 0);
+                } else {
+                    mTrackSurfaceView.getTrackController().translateDelta(1, 0);
+                }
+            }
         }
         return super.dispatchTouchEvent(ev);
     }

@@ -7,7 +7,7 @@ import android.graphics.Paint;
 
 import androidx.annotation.NonNull;
 
-public abstract class TrackAbstractEye {
+abstract class TrackAbstractEye {
     private static final float EYE_OUT_SIZE = 600;
     private static final float EYE_IN_SIZE = 420;
 
@@ -72,6 +72,21 @@ public abstract class TrackAbstractEye {
      * @return 眼睛内部图片
      */
     protected abstract Bitmap eyeBitmapIn(@NonNull Context context);
+
+    @NonNull
+    TrackPosture getOutPosture() {
+        return mOutPosture;
+    }
+
+    @NonNull
+    TrackPosture getInPosture() {
+        return mInPosture;
+    }
+
+    @NonNull
+    TrackPosture getBottomPosture() {
+        return mBottomPosture;
+    }
 
     private final float mEyeCenterX;
     private final float mEyeCenterY;

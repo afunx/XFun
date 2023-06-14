@@ -12,7 +12,7 @@ import java.util.Objects;
 import me.afunx.xfun.app.R;
 import me.afunx.xfun.app.util.Ae2AndroidDimenUtil;
 
-public class TrackRightEye extends TrackAbstractEye {
+class TrackRightEye extends TrackAbstractEye {
 
     private static final float RIGHT_EYE_CENTER_X = Ae2AndroidDimenUtil.ae2androidX(1213.0f);
     private static final float RIGHT_EYE_CENTER_Y = Ae2AndroidDimenUtil.ae2androidY(608.0f);
