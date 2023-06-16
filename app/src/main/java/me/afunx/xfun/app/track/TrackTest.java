@@ -4,10 +4,14 @@ import android.graphics.Rect;
 
 import androidx.annotation.NonNull;
 
+import com.afunx.xfun.common.utils.LogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrackTest {
+
+    private static final String TAG = "TrackTest";
 
     private List<Rect> mRectList = new ArrayList<>();
 
@@ -23,6 +27,7 @@ public class TrackTest {
                         throw new RuntimeException(e);
                     }
                     Rect rect = mRectList.remove(0);
+                    LogUtils.e(TAG, "test() rect: " + rect);
                     trackController.findFace(rect, 1280, 720);
                 }
             }

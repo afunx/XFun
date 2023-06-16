@@ -2,6 +2,8 @@ package me.afunx.xfun.app.track;
 
 import android.graphics.Rect;
 
+import androidx.annotation.NonNull;
+
 import com.afunx.xfun.common.utils.LogUtils;
 
 class TrackFaceResult {
@@ -35,6 +37,13 @@ class TrackFaceResult {
     int bitmapWidth;
     int bitmapHeight;
 
+    void copy(@NonNull TrackFaceResult faceResult) {
+        this.rect = faceResult.rect;
+        this.timestamp = faceResult.timestamp;
+        this.bitmapWidth = faceResult.bitmapWidth;
+        this.bitmapHeight = faceResult.bitmapHeight;
+    }
+
     // 根据屏幕大小及人脸结果，映射出EyeOut的TranslateX
     int trackFaceOutTranslateX() {
         if (rect == null) {
@@ -60,5 +69,16 @@ class TrackFaceResult {
             throw new NullPointerException("rect is null");
         }
         return 0;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "TrackFaceResult{" +
+                "rect=" + rect +
+                ", timestamp=" + timestamp +
+                ", bitmapWidth=" + bitmapWidth +
+                ", bitmapHeight=" + bitmapHeight +
+                '}';
     }
 }
