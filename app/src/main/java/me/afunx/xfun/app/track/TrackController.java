@@ -3,6 +3,7 @@ package me.afunx.xfun.app.track;
 import android.animation.FloatEvaluator;
 import android.animation.TimeInterpolator;
 import android.graphics.Rect;
+import android.os.SystemClock;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,7 @@ public class TrackController {
     private static final Rect RECT_MISSED = new Rect();
 
     // 人脸矩形阻塞队列
-    private final BlockingQueue<Rect> mFaceRectBlockingQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<TrackFaceResult> mFaceResultBlockingQueue = new LinkedBlockingQueue<>();
 
     // 人脸矩形阻塞队列中，人脸丢失次数
     private final AtomicInteger mFaceMissedCount = new AtomicInteger(0);
@@ -68,6 +69,10 @@ public class TrackController {
 
     private final FloatEvaluator mFloatEvaluator = new FloatEvaluator();
 
+    private final TrackFaceResultPool mFaceResultPool = new TrackFaceResultPool();
+
+    private TrackFaceResult mLastFaceResult = null;
+
     TrackController(@NonNull TrackLeftEye leftEye, @NonNull TrackRightEye rightEye) {
         mLeftEye = leftEye;
         mRightEye = rightEye;
@@ -89,31 +94,50 @@ public class TrackController {
             }
             return;
         }
-        // 存在丢失人脸，必须复原，并且，直接获取最后一个丢失人脸
         if (mFaceMissedCount.get() > 0) {
-            synchronized (mFaceRectBlockingQueue) {
-                int faceMissedCount = mFaceMissedCount.get();
-                while (faceMissedCount > 0) {
-                    Rect faceRect = mFaceRectBlockingQueue.poll();
-                    if (faceRect == RECT_MISSED) {
-                        --faceMissedCount;
-                    }
+            // 存在丢失人脸，必须复原，并且，直接获取最后一个丢失人脸
+            int faceMissedCount;
+            while ((faceMissedCount = mFaceMissedCount.get()) > 0) {
+                TrackFaceResult trackFaceResult = mFaceResultBlockingQueue.poll();
+                if (trackFaceResult == null) {
+                    throw new NullPointerException("faceMissedCount: " + faceMissedCount + ", but trackFaceResult is null");
                 }
-                mFaceMissedCount.set(0);
+                if (trackFaceResult.rect == RECT_MISSED) {
+                    mFaceMissedCount.decrementAndGet();
+                }
+                mFaceResultPool.release(trackFaceResult);
             }
             controlFaceReset(elapsedRealTime);
         } else {
-            // 每次移动必须做完，才进行下一次移动。
-
-            //
+            if (mFaceMoving) {
+                // 每次移动必须做完，才进行下一次移动。
+                boolean finished = updateAnimation(elapsedRealTime);
+                if (finished) {
+                    if (DEBUG) {
+                        LogUtils.i(TAG, "onDraw() faceMoving false");
+                    }
+                    mFaceMoving = false;
+                }
+            } else {
+                // 获取一个人脸
+                TrackFaceResult trackFaceResult = mFaceResultBlockingQueue.poll();
+                if (trackFaceResult != null) {
+                    if (trackFaceResult.rect == RECT_MISSED) {
+                        controlFaceReset(elapsedRealTime);
+                    } else {
+                        controlFaceMove(trackFaceResult, elapsedRealTime, mFaceResultBlockingQueue.isEmpty());
+                    }
+                    mFaceResultPool.release(trackFaceResult);
+                }
+            }
         }
     }
 
     /**
      * 更新动画
      *
-     * @param elapsedRealTime   时间戳
-     * @return  动画是否已完成
+     * @param elapsedRealTime 时间戳
+     * @return 动画是否已完成
      */
     private boolean updateAnimation(long elapsedRealTime) {
         boolean finished = elapsedRealTime >= mFaceEndTimestamp;
@@ -150,15 +174,33 @@ public class TrackController {
 
     private void controlFaceReset(long elapsedRealTime) {
         if (DEBUG) {
-            LogUtils.i(TAG, "controlFaceReset() faceResetting true");
+            LogUtils.i(TAG, "controlFaceReset() faceResetting true, faceMoving false");
         }
+        mFaceMoving = false;
         mFaceResetting = true;
-        animationReset();
-        setAnimation(elapsedRealTime, 300);
+        setAnimationStart(elapsedRealTime, 300);
+        setAnimationEndReset();
+    }
+
+    private void controlFaceMove(@NonNull TrackFaceResult faceResult, long elapsedRealTime, boolean isLast) {
+        mFaceMoving = true;
+        long duration = elapsedRealTime - faceResult.timestamp;
+        if (!isLast) {
+            // 如果不是最后一帧，则加速
+            duration /= 2;
+        }
+        if (DEBUG) {
+            LogUtils.i(TAG, "controlFaceMove() faceResetting false, faceMoving true, duration: " + duration + ", isLast: " + isLast);
+        }
+        setAnimationStart(elapsedRealTime, 0);
+        //setAnimationStart(elapsedRealTime, 30);
+        setAnimationEndMove(faceResult);
     }
 
     // 调用setAnimation之前，需要先设置好mLeftAnimationEnd和mRightAnimationEnd
-    private void setAnimation(long startTimestamp, long duration) {
+    private void setAnimationStart(long startTimestamp, long duration) {
+        // duration最少为1，否则，会有分母为0的问题
+        duration = Math.max(1, duration);
         mFaceStartTimestamp = startTimestamp;
         mFaceEndTimestamp = startTimestamp + duration;
         mLeftInAnimationStart.copy(mLeftEye.getInPosture().getTrackAnimation());
@@ -169,13 +211,31 @@ public class TrackController {
         mRightBottomAnimationStart.copy(mRightEye.getBottomPosture().getTrackAnimation());
     }
 
-    private void animationReset() {
+    private void setAnimationEndReset() {
         mLeftInAnimationEnd.reset();
         mLeftOutAnimationEnd.reset();
         mLeftBottomAnimationEnd.reset();
         mRightInAnimationEnd.reset();
         mRightOutAnimationEnd.reset();
         mRightBottomAnimationEnd.reset();
+    }
+
+    private void setAnimationEndMove(@NonNull TrackFaceResult faceResult) {
+        mLeftOutAnimationEnd.mTranslateX = faceResult.trackFaceOutTranslateX();
+        mLeftOutAnimationEnd.mTranslateY = faceResult.trackFaceOutTranslateY();
+        // TODO eyeIn方法暂时没有，先用eyeOut数值
+        mLeftInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
+        mLeftInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
+        mLeftBottomAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
+        mLeftBottomAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
+
+        mRightOutAnimationEnd.mTranslateX = faceResult.trackFaceOutTranslateX();
+        mRightOutAnimationEnd.mTranslateY = faceResult.trackFaceOutTranslateY();
+        // TODO eyeIn方法暂时没有，先用eyeOut数值
+        mRightInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
+        mRightInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
+        mRightBottomAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
+        mRightBottomAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
     }
 
     // 调试使用
@@ -188,29 +248,43 @@ public class TrackController {
         mRightEye.getBottomPosture().translateDelta(deltaTranslateX, deltaTranslateY);
     }
 
+    // 调试使用
+    void translateInDelta(float deltaTranslateX, float deltaTranslateY) {
+        mLeftEye.getInPosture().translateDelta(deltaTranslateX, deltaTranslateY);
+        mRightEye.getInPosture().translateDelta(deltaTranslateX, deltaTranslateY);
+    }
+
     /**
      * 发现人脸
      *
      * @param faceRect 人脸矩形
+     * @param bitmapWidth 图片宽度
+     * @param bitmapHeight 图片高度
      */
-    public void findFace(@NonNull Rect faceRect) {
+    public void findFace(@NonNull Rect faceRect, int bitmapWidth, int bitmapHeight) {
+        final long timestamp = SystemClock.elapsedRealtime();
         LogUtils.i(TAG, "findFace() faceRect: " + faceRect);
-        synchronized (mFaceRectBlockingQueue) {
-            //noinspection ResultOfMethodCallIgnored
-            mFaceRectBlockingQueue.offer(faceRect);
-        }
+        TrackFaceResult trackFaceResult = mFaceResultPool.acquire();
+        trackFaceResult.rect = faceRect;
+        trackFaceResult.timestamp = timestamp;
+        trackFaceResult.bitmapWidth = bitmapWidth;
+        trackFaceResult.bitmapHeight = bitmapHeight;
+        //noinspection ResultOfMethodCallIgnored
+        mFaceResultBlockingQueue.offer(trackFaceResult);
     }
 
     /**
      * 丢失人脸
      */
     public void missFace() {
+        final long timestamp = SystemClock.elapsedRealtime();
         LogUtils.i(TAG, "missFace()");
-        synchronized (mFaceRectBlockingQueue) {
-            //noinspection ResultOfMethodCallIgnored
-            mFaceRectBlockingQueue.offer(RECT_MISSED);
-            mFaceMissedCount.incrementAndGet();
-        }
+        TrackFaceResult trackFaceResult = mFaceResultPool.acquire();
+        trackFaceResult.rect = RECT_MISSED;
+        trackFaceResult.timestamp = timestamp;
+        //noinspection ResultOfMethodCallIgnored
+        mFaceResultBlockingQueue.offer(trackFaceResult);
+        mFaceMissedCount.incrementAndGet();
     }
 
 }

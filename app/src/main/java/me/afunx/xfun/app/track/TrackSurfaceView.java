@@ -65,8 +65,11 @@ public class TrackSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         LogUtils.i(TAG, "surfaceCreated()");
+        TrackFaceResult.setScreenWidth(getWidth());
+        TrackFaceResult.setScreenHeight(getHeight());
         mIsDrawing = true;
         new Thread(this).start();
+        new TrackTest().test(getTrackController());
     }
 
     @Override

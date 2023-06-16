@@ -37,13 +37,13 @@ public class TrackActivity extends AppCompatActivity implements TrackSurfaceView
                 if (ev.getX() <= 480) {
                     mTrackSurfaceView.getTrackController().translateDelta(-10, 0);
                 } else {
-                    mTrackSurfaceView.getTrackController().translateDelta(-1, 0);
+                    mTrackSurfaceView.getTrackController().translateInDelta(-10, 0);
                 }
             } else {
                 if (ev.getX() >= 1440) {
                     mTrackSurfaceView.getTrackController().translateDelta(10, 0);
                 } else {
-                    mTrackSurfaceView.getTrackController().translateDelta(1, 0);
+                    mTrackSurfaceView.getTrackController().translateInDelta(10, 0);
                 }
             }
         }

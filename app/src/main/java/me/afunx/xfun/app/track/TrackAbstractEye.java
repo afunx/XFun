@@ -17,7 +17,7 @@ abstract class TrackAbstractEye {
     /**
      * 获取眼睛名字，如左眼、右眼
      *
-     * @return  眼睛名字，如左眼、右眼
+     * @return 眼睛名字，如左眼、右眼
      */
     protected abstract String eyeName();
 
