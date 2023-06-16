@@ -14,6 +14,8 @@ class TrackFaceResult {
 
     // 动效和UI机器调试给的参数
     private static final int MAX_OUT_TRANSLATE_PX = 160;
+    // 动效和UI机器调试给的参数
+    private static final int MAX_IN_TRANSLATE_PX = 20;
 
     private static int sScreenWidth;
     private static int sScreenHeight;
@@ -63,8 +65,35 @@ class TrackFaceResult {
         return trackFaceOutX;
     }
 
+    // 根据屏幕大小及人脸结果，映射出EyeIn相对于EyeOut的TranslateX
+    int trackFaceInRelativeTranslateX() {
+        if (rect == null) {
+            throw new NullPointerException("rect is null");
+        }
+        int validWidth = bitmapWidth - rect.width();
+        int realFaceInX = (rect.centerX() - validWidth / 2) * MAX_IN_TRANSLATE_PX / (validWidth / 2);
+        int trackFaceInX = (int) Math.sqrt(Math.abs(realFaceInX) * MAX_IN_TRANSLATE_PX);
+        if (realFaceInX < 0) {
+            trackFaceInX *= -1;
+        }
+        if (DEBUG) {
+            LogUtils.i(TAG, "trackFaceInRelativeTranslateX() rect: " + rect + ", rect.centerX(): " + rect.centerX()
+                    + ", bitmapWidth: " + bitmapWidth + ", validWidth: " + validWidth + ", realFaceOutX: " + realFaceInX
+                    + ", trackFaceOutX: " + trackFaceInX);
+        }
+        return trackFaceInX;
+    }
+
     // 根据屏幕大小及人脸结果，映射出EyeOut的TranslateY
     int trackFaceOutTranslateY() {
+        if (rect == null) {
+            throw new NullPointerException("rect is null");
+        }
+        return 0;
+    }
+
+    // 根据屏幕大小及人脸结果，映射出EyeIn相对于EyeOut的TranslateX
+    int trackFaceInRelativeTranslateY() {
         if (rect == null) {
             throw new NullPointerException("rect is null");
         }

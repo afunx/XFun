@@ -211,16 +211,16 @@ public class TrackController {
         mLeftOutAnimationEnd.mTranslateX = faceResult.trackFaceOutTranslateX();
         mLeftOutAnimationEnd.mTranslateY = faceResult.trackFaceOutTranslateY();
         // TODO eyeIn方法暂时没有，先用eyeOut数值
-        mLeftInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
-        mLeftInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
+        mLeftInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX + faceResult.trackFaceInRelativeTranslateX();
+        mLeftInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY + faceResult.trackFaceInRelativeTranslateY();
         mLeftBottomAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
         mLeftBottomAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
 
         mRightOutAnimationEnd.mTranslateX = faceResult.trackFaceOutTranslateX();
         mRightOutAnimationEnd.mTranslateY = faceResult.trackFaceOutTranslateY();
         // TODO eyeIn方法暂时没有，先用eyeOut数值
-        mRightInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
-        mRightInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
+        mRightInAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX + faceResult.trackFaceInRelativeTranslateX();
+        mRightInAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY + faceResult.trackFaceInRelativeTranslateY();
         mRightBottomAnimationEnd.mTranslateX = mLeftOutAnimationEnd.mTranslateX;
         mRightBottomAnimationEnd.mTranslateY = mLeftOutAnimationEnd.mTranslateY;
     }
